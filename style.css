@@ -81,7 +81,7 @@ header .subtitle {
 /* ─── Scoreboard ─── */
 .scoreboard {
   background: var(--green-dark);
-  padding: 0 24px 14px;
+  padding: 24px;
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
@@ -348,6 +348,70 @@ main {
 .action-btn:disabled {
   opacity: .5;
   cursor: not-allowed;
+}
+
+/* ─── Action wrapper (btn + details) ─── */
+.action-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.action-details-row {
+  padding: 0 4px 4px 4px;
+}
+
+.details-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--green);
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px 4px 46px;
+  transition: color var(--transition);
+}
+
+.details-toggle:hover { color: var(--green-dark); }
+
+.details-toggle .toggle-icon {
+  font-size: .9rem;
+  transition: transform .25s;
+}
+
+.details-toggle.open .toggle-icon {
+  transform: rotate(20deg);
+}
+
+.details-toggle::after {
+  content: '▾';
+  font-size: .7rem;
+  transition: transform .25s;
+}
+
+.details-toggle.open::after {
+  transform: rotate(-180deg);
+}
+
+.details-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease, padding .3s ease;
+  font-size: .88rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  background: #f0faf4;
+  border-left: 3px solid var(--green-light);
+  border-radius: 0 6px 6px 0;
+  padding: 0 14px;
+  margin: 0 4px 6px 42px;
+}
+
+.details-panel.open {
+  max-height: 200px;
+  padding: 10px 14px;
 }
 
 .action-btn .action-num {

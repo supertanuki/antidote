@@ -78,14 +78,42 @@ function renderPhase() {
   const list = document.getElementById('actions-list');
   list.innerHTML = '';
   phase.actions.forEach((action, i) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'action-wrapper';
+
     const btn = document.createElement('button');
     btn.className = 'action-btn';
+    btn.dataset.index = i;
     btn.innerHTML = `
       <span class="action-num">${i + 1}</span>
-      <span>${action.label}</span>
+      <span class="action-label-text">${action.label}</span>
     `;
     btn.onclick = () => chooseAction(i);
-    list.appendChild(btn);
+
+    const detailsRow = document.createElement('div');
+    detailsRow.className = 'action-details-row';
+
+    const toggle = document.createElement('button');
+    toggle.className = 'details-toggle';
+    toggle.innerHTML = `<span class="toggle-icon">ℹ️</span> En savoir plus`;
+    toggle.setAttribute('aria-expanded', 'false');
+
+    const panel = document.createElement('div');
+    panel.className = 'details-panel';
+    panel.textContent = action.description || '';
+
+    toggle.onclick = (e) => {
+      e.stopPropagation();
+      const isOpen = panel.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      toggle.classList.toggle('open', isOpen);
+    };
+
+    detailsRow.appendChild(toggle);
+    detailsRow.appendChild(panel);
+    wrapper.appendChild(btn);
+    wrapper.appendChild(detailsRow);
+    list.appendChild(wrapper);
   });
 
   // Hide result card

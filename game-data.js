@@ -72,6 +72,7 @@ const GAME_DATA = {
       actions: [
         {
           label: "Publier une étude sur les effets environnementaux des petites bouteilles",
+          description: "Cette étude apportera des données concrètes pour sensibiliser l'opinion publique et attirer l'attention des médias, mais elle nécessite une partie importante de vos ressources.",
           scenario: "L'étude sensibilise le public, attirant l'attention médiatique, mais elle consomme une partie importante du budget.",
           effects: { public: 2, political: 0, resources: -1 },
           counterAttack: "L'industrie finance une campagne de dénigrement de l'étude, réduisant son impact.",
@@ -79,6 +80,7 @@ const GAME_DATA = {
         },
         {
           label: "Mobiliser des associations partenaires",
+          description: "S'associer avec d'autres organisations pourrait augmenter votre visibilité et apporter du soutien logistique, mais les résultats dépendront de la fiabilité et de l'engagement de ces partenaires.",
           scenario: "La visibilité et le soutien logistique augmentent, mais l'impact politique reste faible.",
           effects: { public: 1, political: 0, resources: 1 },
           counterAttack: "Certaines associations, influencées par l'industrie, se retirent, limitant le gain de ressources.",
@@ -86,6 +88,7 @@ const GAME_DATA = {
         },
         {
           label: "Lancer une pétition citoyenne",
+          description: "Une pétition peut être un moyen efficace pour attirer le soutien populaire sans investir de grandes ressources, mais son impact dépendra de votre capacité à la rendre visible.",
           scenario: "La pétition attire quelques signatures et sensibilise le public, mais manque de portée.",
           effects: { public: 1, political: 0, resources: 0 },
           counterAttack: "Le lobby industriel publie un sondage montrant que les consommateurs préfèrent les petites bouteilles.",
@@ -100,6 +103,7 @@ const GAME_DATA = {
       actions: [
         {
           label: "Organiser un événement de nettoyage",
+          description: "Cet événement mobilisera des bénévoles et créera une image positive pour la campagne, mais sa portée médiatique dépendra de votre capacité à attirer journalistes et relais d'opinion.",
           scenario: "Impact positif auprès du public, mais l'événement reçoit peu de couverture médiatique.",
           effects: { public: 1, political: 0, resources: 0 },
           counterAttack: "L'industrie publie une campagne affirmant que les bouteilles sont recyclables, réduisant l'impact de l'événement.",
@@ -107,6 +111,7 @@ const GAME_DATA = {
         },
         {
           label: "Partenariat avec des influenceurs environnementaux",
+          description: "Les influenceurs peuvent toucher un large public en peu de temps et amplifier le message de la campagne, mais leur crédibilité et leur engagement pour la cause sont déterminants.",
           scenario: "Gain de visibilité, mais l'influence politique reste limitée.",
           effects: { public: 2, political: 0, resources: 0 },
           counterAttack: "L'industrie soutient des influenceurs pro-recyclage pour contrer le message.",
@@ -114,6 +119,7 @@ const GAME_DATA = {
         },
         {
           label: "Publier un article d'opinion dans un grand journal",
+          description: "Un article dans un grand journal national permettra de toucher à la fois le grand public et les décideurs politiques, et d'asseoir la légitimité de Zéro Waste France sur ce sujet.",
           scenario: "Attire l'attention de quelques députés, mais l'industrie publie un article contradictoire.",
           effects: { public: 1, political: 1, resources: 0 },
           counterAttack: "Des experts financés par l'industrie critiquent l'article, réduisant son impact.",
@@ -128,6 +134,7 @@ const GAME_DATA = {
       actions: [
         {
           label: "Faire appel à un député écologiste",
+          description: "Solliciter le soutien d'un député écologiste permettrait d'introduire directement la cause au sein de l'hémicycle, mais ce parlementaire pourrait se retrouver sous forte pression des lobbies industriels.",
           scenario: "Augmente l'influence politique, mais sous la pression des lobbies, le député se retire.",
           effects: { public: 0, political: 1, resources: 0 },
           counterAttack: "L'industrie lance une campagne accusant les députés écologistes de nuire à l'économie.",
@@ -135,6 +142,7 @@ const GAME_DATA = {
         },
         {
           label: "Publier un dossier scientifique indépendant",
+          description: "Un dossier scientifique rigoureux et indépendant apportera des arguments solides pour convaincre les décideurs, mais sa production est coûteuse et l'industrie tentera de le décrédibiliser.",
           scenario: "Fournit des arguments supplémentaires, mais le coût réduit les ressources.",
           effects: { public: 0, political: 1, resources: -1 },
           counterAttack: "L'industrie finance une étude contradictoire pour décrédibiliser le dossier.",
@@ -142,6 +150,7 @@ const GAME_DATA = {
         },
         {
           label: "Organiser une rencontre avec des députés",
+          description: "Une rencontre directe avec des députés permettra de présenter vos arguments de façon personnalisée et de tisser des liens durables, bien que l'organisation d'un tel événement mobilise des ressources importantes.",
           scenario: "La rencontre sensibilise plusieurs députés, mais réduit les ressources.",
           effects: { public: 0, political: 2, resources: -1 },
           counterAttack: "Les industriels organisent un événement concurrent pour contrer l'impact.",
@@ -156,6 +165,7 @@ const GAME_DATA = {
       actions: [
         {
           label: "Organiser un concours vidéo avec des écoles",
+          description: "Ce concours pourrait générer des contenus viraux pour sensibiliser le public, mais il nécessitera des ressources pour son organisation.",
           scenario: "Les vidéos des élèves deviennent virales, mais les coûts sont élevés.",
           effects: { public: 2, political: 0, resources: -1 },
           counterAttack: "L'industrie lance une campagne éducative concurrente dans les écoles.",
@@ -163,6 +173,7 @@ const GAME_DATA = {
         },
         {
           label: "Recruter des ambassadeurs jeunesse dans les lycées et universités",
+          description: "Les ambassadeurs mènent des actions locales pour renforcer le soutien public sans mobiliser de grands moyens.",
           scenario: "Sensibilisation et collecte de fonds modérées.",
           effects: { public: 1, political: 0, resources: 1 },
           counterAttack: "L'industrie lance une campagne en faveur de la « liberté de choix » des jeunes.",
@@ -170,6 +181,7 @@ const GAME_DATA = {
         },
         {
           label: "Organiser une marche symbolique avec les jeunes activistes",
+          description: "Cette marche peut attirer l'attention médiatique et politique, mais elle est vulnérable aux contre-manifestations.",
           scenario: "La marche attire des médias et sensibilise les députés.",
           effects: { public: 1, political: 1, resources: 0 },
           counterAttack: "Les lobbies organisent une contre-manifestation.",
@@ -184,6 +196,7 @@ const GAME_DATA = {
       actions: [
         {
           label: "Collaborer avec une entreprise de boissons vendant des alternatives en verre",
+          description: "Ce partenariat augmentera vos ressources et votre visibilité, mais risque de susciter des accusations de favoritisme.",
           scenario: "Génère des fonds, mais Zéro Waste est accusé de favoritisme.",
           effects: { public: 1, political: 0, resources: 2 },
           counterAttack: "L'industrie critique le partenariat, qualifiant l'alternative de « luxe ».",
@@ -191,6 +204,7 @@ const GAME_DATA = {
         },
         {
           label: "Promouvoir des fontaines d'eau publiques en partenariat avec des municipalités",
+          description: "Ce projet peut inciter les citoyens à abandonner le plastique, mais nécessite des ressources pour sa mise en œuvre.",
           scenario: "Les fontaines sensibilisent le public et les élus locaux.",
           effects: { public: 1, political: 1, resources: 0 },
           counterAttack: "Les industriels lancent une campagne critiquant l'hygiène des fontaines.",
@@ -198,6 +212,7 @@ const GAME_DATA = {
         },
         {
           label: "S'associer avec une marque d'accessoires réutilisables (gourdes, etc.)",
+          description: "Ce partenariat augmente les ressources et promeut une alternative aux bouteilles plastiques, mais peut diviser l'opinion publique.",
           scenario: "Les ventes d'accessoires augmentent les fonds et sensibilisent le public.",
           effects: { public: 1, political: 0, resources: 1 },
           counterAttack: "Les lobbies critiquent le coût élevé des alternatives réutilisables.",
@@ -212,6 +227,7 @@ const GAME_DATA = {
       actions: [
         {
           label: "Rejoindre un réseau européen d'associations environnementales",
+          description: "Ce réseau renforce votre influence auprès des institutions européennes, mais il peut provoquer des critiques de la part des industriels.",
           scenario: "Le réseau renforce l'influence auprès des institutions européennes.",
           effects: { public: 1, political: 1, resources: 0 },
           counterAttack: "Les industriels accusent Zéro Waste de s'ingérer dans les affaires nationales.",
@@ -219,6 +235,7 @@ const GAME_DATA = {
         },
         {
           label: "Participer à une conférence internationale contre la pollution plastique",
+          description: "Une conférence offre une audience internationale et des contacts, mais représente un coût significatif.",
           scenario: "Permet d'influencer des décideurs, mais les fonds diminuent.",
           effects: { public: 0, political: 2, resources: -1 },
           counterAttack: "L'industrie finance des panels pro-plastique lors de la conférence.",
@@ -226,6 +243,7 @@ const GAME_DATA = {
         },
         {
           label: "Inviter des experts étrangers pour des conférences en France",
+          description: "Ces conférences attirent l'attention médiatique et renforcent la légitimité de votre campagne.",
           scenario: "Les experts renforcent la légitimité de Zéro Waste France.",
           effects: { public: 1, political: 1, resources: 0 },
           counterAttack: "L'industrie décrédibilise l'expertise étrangère.",
@@ -240,6 +258,7 @@ const GAME_DATA = {
       actions: [
         {
           label: "Faire du porte-à-porte auprès des députés sensibles à l'environnement",
+          description: "Approcher directement les députés renforce votre influence, mais cela reste vulnérable aux critiques industrielles.",
           scenario: "Renforce le soutien de certains députés malgré la pression des lobbies.",
           effects: { public: 0, political: 2, resources: 0 },
           counterAttack: "Les industriels critiquent les députés écologistes comme nuisibles à l'économie.",
@@ -247,6 +266,7 @@ const GAME_DATA = {
         },
         {
           label: "Organiser une campagne de lettres citoyennes adressées aux députés",
+          description: "Une campagne de lettres montre le soutien populaire, mais elle est vulnérable aux réponses automatisées.",
           scenario: "Renforce l'engagement citoyen et l'influence politique.",
           effects: { public: 2, political: 1, resources: 0 },
           counterAttack: "Les industriels lancent une réponse automatisée en opposition.",
@@ -254,6 +274,7 @@ const GAME_DATA = {
         },
         {
           label: "Proposer des amendements législatifs en partenariat avec des députés écologistes",
+          description: "Ces amendements visent à limiter l'impact des industriels, mais nécessitent des ressources pour les études préalables.",
           scenario: "Renforce la campagne législative mais réduit les ressources.",
           effects: { public: 0, political: 2, resources: -1 },
           counterAttack: "L'industrie fait pression pour retirer les amendements.",
@@ -268,6 +289,7 @@ const GAME_DATA = {
       actions: [
         {
           label: "Lancer un recours juridique pour violation des droits environnementaux",
+          description: "Cette action symbolique est coûteuse mais pourrait générer du soutien public.",
           scenario: "Mobilise les partisans, mais la procédure est coûteuse.",
           effects: { public: 2, political: 0, resources: -2 },
           counterAttack: "L'industrie engage une équipe juridique puissante pour contester.",
@@ -275,6 +297,7 @@ const GAME_DATA = {
         },
         {
           label: "Mobiliser des juristes pro bono pour construire un dossier solide",
+          description: "Obtenir des conseils juridiques gratuits pourrait renforcer votre dossier sans affecter le budget.",
           scenario: "Construit un dossier solide, mais avec un impact modéré.",
           effects: { public: 0, political: 1, resources: 1 },
           counterAttack: "L'industrie cherche à décrédibiliser votre recours en insinuant qu'il manque de fondement.",
@@ -282,6 +305,7 @@ const GAME_DATA = {
         },
         {
           label: "Déposer une plainte au niveau européen pour forcer une réglementation stricte",
+          description: "Cette plainte vise à faire pression sur la France via les institutions européennes.",
           scenario: "Attire l'attention des législateurs européens, mais coûte cher.",
           effects: { public: 0, political: 2, resources: -1 },
           counterAttack: "Les industriels exercent une pression pour ralentir le processus.",
