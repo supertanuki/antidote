@@ -85,6 +85,7 @@ header .subtitle {
   background: var(--green-dark);
   padding: 12px 16px;
   position: sticky;
+  top: 45px; /* hauteur du header */
   z-index: 90;
 }
 
@@ -370,7 +371,10 @@ main {
 }
 
 /* Phase jouée : cercle gris foncé avec numéro d'ordre */
-.phase-pick-btn.played .ppb-num
+.phase-pick-btn.played .ppb-num {
+  background: var(--grey);
+  border-color: var(--grey);
+  color: var(--white);
 }
 
 .phase-pick-btn.played .ppb-title {
