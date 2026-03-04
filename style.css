@@ -84,11 +84,13 @@ header .subtitle {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  position: sticky;
+  top: 57px; /* hauteur du header */
+  z-index: 90;
 }
 
 .score-item {
   flex: 1;
-  min-width: 140px;
   background: rgba(255,255,255,.1);
   border-radius: 8px;
   padding: 8px 12px;
