@@ -4,7 +4,18 @@ let currentPhaseIndex = -1;
 let actionChosen = false;
 let selectedActionIndex = null;
 let playedPhases = []; // tableau ordonné des index de phases jouées
+let phaseOrder   = []; // ordre d'affichage aléatoire des phases dans le picker
 const MAX_SCORE = 10;
+
+/* ── Fisher-Yates shuffle ── */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 /* ── Init ── */
 function startGame() {
@@ -13,6 +24,7 @@ function startGame() {
   actionChosen = false;
   selectedActionIndex = null;
   playedPhases = [];
+  phaseOrder = shuffle(GAME_DATA.phases.map((_, i) => i)); // ordre aléatoire
   showScreen('screen-game');
   renderPhasePicker();
   renderProgress();
@@ -57,7 +69,9 @@ function updateScoreboard(animateIds) {
 function renderPhasePicker() {
   const picker = document.getElementById('phase-picker');
   picker.innerHTML = '';
-  GAME_DATA.phases.forEach((phase, i) => {
+  // Afficher les phases dans l'ordre aléatoire défini en début de partie
+  phaseOrder.forEach(i => {
+    const phase     = GAME_DATA.phases[i];
     const isPlayed  = playedPhases.includes(i);
     const isActive  = i === currentPhaseIndex;
     const playOrder = isPlayed ? playedPhases.indexOf(i) + 1 : null;
