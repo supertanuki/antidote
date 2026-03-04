@@ -2,13 +2,15 @@
 let scores = {};
 let currentPhaseIndex = 0;
 let actionChosen = false;
-const MAX_SCORE = 10; // max plausible pour les barres
+let selectedActionIndex = null;
+const MAX_SCORE = 10;
 
 /* ── Init ── */
 function startGame() {
   scores = { ...GAME_DATA.initialScores };
   currentPhaseIndex = 0;
   actionChosen = false;
+  selectedActionIndex = null;
   showScreen('screen-game');
   renderPhase();
 }
@@ -39,7 +41,6 @@ function updateScoreboard(animateIds) {
     if (val <= 1) bar.classList.add('danger');
     else if (val <= 2) bar.classList.add('warning');
 
-    // Flash animation
     if (animateIds && animateIds.includes(key)) {
       el.style.transition = 'none';
       el.style.color = '#f5c842';
@@ -65,18 +66,18 @@ function renderProgress() {
 /* ── Render current phase ── */
 function renderPhase() {
   actionChosen = false;
+  selectedActionIndex = null;
   const phase = GAME_DATA.phases[currentPhaseIndex];
 
   renderProgress();
 
-  // Badge & title
   document.getElementById('phase-badge').textContent = `Phase ${phase.id} / ${GAME_DATA.phases.length}`;
   document.getElementById('phase-title').textContent = phase.title;
   document.getElementById('phase-desc').textContent = phase.description;
 
-  // Actions
   const list = document.getElementById('actions-list');
   list.innerHTML = '';
+
   phase.actions.forEach((action, i) => {
     const wrapper = document.createElement('div');
     wrapper.className = 'action-wrapper';
@@ -88,33 +89,30 @@ function renderPhase() {
       <span class="action-num">${i + 1}</span>
       <span class="action-label-text">${action.label}</span>
     `;
-    btn.onclick = () => chooseAction(i);
+    btn.onclick = () => selectAction(i);
 
-    const detailsRow = document.createElement('div');
-    detailsRow.className = 'action-details-row';
+    const desc = document.createElement('div');
+    desc.className = 'action-description';
+    desc.textContent = action.description || '';
 
-    const toggle = document.createElement('button');
-    toggle.className = 'details-toggle';
-    toggle.innerHTML = `<span class="toggle-icon">ℹ️</span> En savoir plus`;
-    toggle.setAttribute('aria-expanded', 'false');
-
-    const panel = document.createElement('div');
-    panel.className = 'details-panel';
-    panel.textContent = action.description || '';
-
-    toggle.onclick = (e) => {
-      e.stopPropagation();
-      const isOpen = panel.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      toggle.classList.toggle('open', isOpen);
-    };
-
-    detailsRow.appendChild(toggle);
-    detailsRow.appendChild(panel);
     wrapper.appendChild(btn);
-    wrapper.appendChild(detailsRow);
+    wrapper.appendChild(desc);
     list.appendChild(wrapper);
   });
+
+  // Validate button
+  const validateWrap = document.createElement('div');
+  validateWrap.className = 'validate-wrap';
+
+  const validateBtn = document.createElement('button');
+  validateBtn.className = 'btn btn-validate';
+  validateBtn.id = 'btn-validate';
+  validateBtn.disabled = true;
+  validateBtn.textContent = 'Valider l\'action choisie';
+  validateBtn.onclick = confirmAction;
+
+  validateWrap.appendChild(validateBtn);
+  list.appendChild(validateWrap);
 
   // Hide result card
   const rc = document.getElementById('result-card');
@@ -124,16 +122,38 @@ function renderPhase() {
   updateScoreboard();
 }
 
-/* ── Choose action ── */
-function chooseAction(actionIndex) {
+/* ── Select an action (no execution yet) ── */
+function selectAction(actionIndex) {
   if (actionChosen) return;
+  selectedActionIndex = actionIndex;
+
+  // Update button visual states
+  document.querySelectorAll('.action-btn').forEach((btn, i) => {
+    btn.classList.toggle('selected', i === actionIndex);
+  });
+
+  // Show description only for selected
+  document.querySelectorAll('.action-description').forEach((desc, i) => {
+    desc.classList.toggle('open', i === actionIndex);
+  });
+
+  // Enable validate button
+  const validateBtn = document.getElementById('btn-validate');
+  if (validateBtn) validateBtn.disabled = false;
+}
+
+/* ── Confirm and execute chosen action ── */
+function confirmAction() {
+  if (selectedActionIndex === null || actionChosen) return;
   actionChosen = true;
 
-  // Disable all action buttons
+  // Lock all buttons
   document.querySelectorAll('.action-btn').forEach(b => b.disabled = true);
+  const validateBtn = document.getElementById('btn-validate');
+  if (validateBtn) validateBtn.disabled = true;
 
   const phase  = GAME_DATA.phases[currentPhaseIndex];
-  const action = phase.actions[actionIndex];
+  const action = phase.actions[selectedActionIndex];
 
   // Apply effects
   applyEffects(action.effects);
@@ -145,42 +165,39 @@ function chooseAction(actionIndex) {
   rc.style.display = 'block';
   rc.classList.add('visible');
 
-  // Scenario
+  // Scroll to result
+  setTimeout(() => rc.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+
   document.getElementById('result-scenario').textContent = action.scenario;
   document.getElementById('delta-effects').innerHTML = buildDeltaChips(action.effects);
 
-  // Counter-attack — show after delay
-  const banner  = document.getElementById('counter-banner');
+  const banner   = document.getElementById('counter-banner');
   const nextWrap = document.getElementById('next-wrap');
   banner.classList.remove('visible');
   nextWrap.classList.remove('visible');
 
   setTimeout(() => {
-    // Show counter-attack
     document.getElementById('counter-text').textContent = action.counterAttack;
     document.getElementById('delta-counter').innerHTML  = buildDeltaChips(action.counterEffects);
     banner.classList.add('visible');
 
-    // Apply counter-effects
     applyEffects(action.counterEffects);
     const counterKeys = changedKeys(action.counterEffects);
     updateScoreboard(counterKeys);
 
-    // Check for game-over
     const zeroKey = checkZero();
     if (zeroKey !== null) {
       setTimeout(() => showEarlyEnd(zeroKey), 900);
       return;
     }
 
-    // Show next button (or final result)
     setTimeout(() => {
       nextWrap.classList.add('visible');
       const isLast = currentPhaseIndex === GAME_DATA.phases.length - 1;
       document.getElementById('btn-next').textContent = isLast ? '🗳️ Voir le résultat final' : 'Phase suivante →';
     }, 600);
 
-  }, 1400);
+  }, 2000);
 }
 
 /* ── Apply effects to scores ── */
@@ -220,7 +237,7 @@ function nextPhase() {
     showFinalResult();
   } else {
     renderPhase();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
   }
 }
 
@@ -241,7 +258,8 @@ function showEarlyEnd(zeroKey) {
   document.getElementById('end-cta').textContent         = data.cta;
   document.getElementById('end-scores').innerHTML        = buildScoresSummary();
 
-  showScreen('screen-end');
+  window.scrollTo({ top: 0 });
+  setTimeout(() => showScreen('screen-end'), 50);
 }
 
 /* ── Final result screen ── */
@@ -275,7 +293,8 @@ function showFinalResult() {
   document.getElementById('result-cta').textContent         = result.cta;
   document.getElementById('result-scores').innerHTML        = buildScoresSummary();
 
-  showScreen('screen-result');
+  window.scrollTo({ top: 0 });
+  setTimeout(() => showScreen('screen-result'), 50);
 }
 
 /* ── Build scores summary HTML ── */
