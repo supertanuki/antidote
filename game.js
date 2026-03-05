@@ -251,7 +251,8 @@ function confirmAction() {
   nextWrap.classList.remove('visible');
 
   setTimeout(() => {
-    document.getElementById('counter-text').textContent = action.counterAttack;
+    const counterText = document.getElementById('counter-text')
+    counterText.textContent = action.counterAttack;
     document.getElementById('delta-counter').innerHTML  = buildDeltaChips(action.counterEffects);
     banner.classList.add('visible');
 
@@ -266,15 +267,17 @@ function confirmAction() {
 
     const zeroKey = checkZero();
 
+    counterText.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
     setTimeout(() => {
       nextWrap.classList.add('visible');
       const btnNext = document.getElementById('btn-next');
       if (zeroKey !== null) {
         // Un score est à 0 : afficher "Voir le résultat" avant de passer à l'écran de fin
-        btnNext.textContent = '⚠️ Voir le résultat';
+        btnNext.textContent = 'Voir le résultat';
         btnNext.onclick = () => showEarlyEnd(zeroKey);
       } else if (playedPhases.length >= GAME_DATA.phases.length) {
-        btnNext.textContent = '🗳️ Voir le résultat final';
+        btnNext.textContent = 'Voir le résultat final';
         btnNext.onclick = nextPhase;
       } else {
         btnNext.textContent = 'Choisir la prochaine phase →';

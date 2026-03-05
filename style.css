@@ -327,7 +327,7 @@ main {
   border-radius: 8px;
   padding: 10px 12px;
   cursor: pointer;
-  width: 100px;
+  width: 102px;
   text-align: center;
   transition: border-color var(--transition), background var(--transition), opacity var(--transition);
 }
@@ -343,7 +343,7 @@ main {
 }
 
 .phase-pick-btn.played {
-  opacity: 0.45;
+  opacity: 0.8;
   cursor: not-allowed;
   background: var(--grey-light);
 }
@@ -372,13 +372,12 @@ main {
 
 /* Phase jouée : cercle gris foncé avec numéro d'ordre */
 .phase-pick-btn.played .ppb-num {
-  background: var(--grey);
+  background: var(--green-dark);
   border-color: var(--grey);
   color: var(--white);
 }
 
 .phase-pick-btn.played .ppb-title {
-  text-decoration: line-through;
   color: var(--text-muted);
 }
 
