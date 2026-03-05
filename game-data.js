@@ -67,7 +67,7 @@ const GAME_DATA = {
   phases: [
     {
       id: 1,
-      title: "Préparer la Campagne",
+      title: "Préparer la campagne",
       description: "Dans cette première phase, Zéro Waste France met en place sa stratégie pour lancer une campagne percutante contre les bouteilles en plastique. L'association doit choisir comment attirer l'attention du public et obtenir les ressources nécessaires pour se préparer à un combat acharné contre les lobbies industriels.",
       actions: [
         {
