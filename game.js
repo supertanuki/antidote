@@ -283,7 +283,7 @@ function confirmAction() {
         btnNext.textContent = 'Choisir la prochaine phase →';
         btnNext.onclick = nextPhase;
       }
-    }, 600);
+    }, 1000);
 
   }, 2000);
 }
