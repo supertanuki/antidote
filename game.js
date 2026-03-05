@@ -69,8 +69,11 @@ function updateScoreboard(animateIds) {
 function renderPhasePicker() {
   const picker = document.getElementById('phase-picker');
   picker.innerHTML = '';
-  // Afficher les phases dans l'ordre aléatoire défini en début de partie
-  phaseOrder.forEach(i => {
+  // Phases jouées en premier (ordre de sélection), puis les non-jouées (ordre aléatoire)
+  const unplayed = phaseOrder.filter(i => !playedPhases.includes(i));
+  const displayOrder = [...playedPhases, ...unplayed];
+
+  displayOrder.forEach(i => {
     const phase     = GAME_DATA.phases[i];
     const isPlayed  = playedPhases.includes(i);
     const isActive  = i === currentPhaseIndex;
