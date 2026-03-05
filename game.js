@@ -159,18 +159,22 @@ function renderPhase() {
   const list = document.getElementById('actions-list');
   list.innerHTML = '';
 
-  phase.actions.forEach((action, i) => {
+  // Mélange aléatoire des options de la phase
+  const actionOrder = shuffle(phase.actions.map((_, i) => i));
+
+  actionOrder.forEach((originalIdx, visualIdx) => {
+    const action = phase.actions[originalIdx];
     const wrapper = document.createElement('div');
     wrapper.className = 'action-wrapper';
 
     const btn = document.createElement('button');
     btn.className = 'action-btn';
-    btn.dataset.index = i;
+    btn.dataset.index = originalIdx;
     btn.innerHTML = `
-      <span class="action-num">${i + 1}</span>
+      <span class="action-num">${visualIdx + 1}</span>
       <span class="action-label-text">${action.label}</span>
     `;
-    btn.onclick = () => selectAction(i);
+    btn.onclick = () => selectAction(visualIdx, originalIdx);
 
     const desc = document.createElement('div');
     desc.className = 'action-description';
@@ -204,16 +208,17 @@ function renderPhase() {
 }
 
 /* ── Select an action (no execution yet) ── */
-function selectAction(actionIndex) {
+function selectAction(visualIdx, originalIdx) {
   if (actionChosen) return;
-  selectedActionIndex = actionIndex;
+  selectedActionIndex = originalIdx; // on stocke l'index original pour confirmAction
 
+  // Highlight basé sur la position visuelle
   document.querySelectorAll('.action-btn').forEach((btn, i) => {
-    btn.classList.toggle('selected', i === actionIndex);
+    btn.classList.toggle('selected', i === visualIdx);
   });
 
   document.querySelectorAll('.action-description').forEach((desc, i) => {
-    desc.classList.toggle('open', i === actionIndex);
+    desc.classList.toggle('open', i === visualIdx);
   });
 
   const validateBtn = document.getElementById('btn-validate');
