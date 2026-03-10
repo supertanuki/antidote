@@ -20,19 +20,20 @@
       Bataille contre le lobby des pesticides
     </p>
 
-    <div class="welcome-card">
-      <h3>Votre mission</h3>
-      <div class="mission-avatar">👩🏽‍💼</div>
-      <p>
-        Tu viens de rejoindre l'équipe de plaidoyer de l'association <strong>ANTIDOTE</strong>.
-        Une proposition de loi vient d'être déposée à l'Assemblée nationale - son objectif : réautoriser plusieurs pesticides dangereux aujourd'hui interdits.
-        Officiellement, il s'agit de « simplifier » les règles pour les agriculteurs.
-        Officieusement, le lobby des pesticides est déjà à l'œuvre.
-      </p>
-      <p style="margin-top:10px;">
-        Ton rôle : construire une stratégie pour <strong>empêcher l'adoption de cette loi</strong>.
-        Tu disposes de <strong>10 tours</strong> - chacun représente un champ d'action stratégique - avant le vote final.
-      </p>
+    <div class="welcome-card avatar-card">
+      <span class="wc-avatar">👩🏽‍💼</span>
+      <div class="wc-content">
+        <h3>Votre mission</h3>
+        <p>
+          Tu viens de rejoindre l'équipe de plaidoyer de l'association <strong>ANTIDOTE</strong>.
+          Une proposition de loi vient d'être déposée à l'Assemblée nationale - son objectif : réautoriser plusieurs pesticides dangereux aujourd'hui interdits.
+          Officieusement, le lobby des pesticides est déjà à l'œuvre.
+        </p>
+        <p style="margin-top:10px;">
+          Ton rôle : construire une stratégie pour <strong>empêcher l'adoption de cette loi</strong>.
+          Tu disposes de <strong>10 tours</strong> avant le vote final.
+        </p>
+      </div>
     </div>
 
     <div class="welcome-card">
@@ -56,19 +57,16 @@
       </div>
     </div>
 
-    <div class="welcome-card">
-      <h3>Règles</h3>
-      <p>
-        À chaque tour, choisissez un champ d'action parmi dix, puis sélectionnez votre stratégie.
-      </p>
-      <div class="rules-lobby-row">
-        <span class="rules-lobby-avatar">👨🏻‍💼</span>
-        <span>Le lobby des pesticides ripostera systématiquement.</span>
+    <div class="welcome-card avatar-card">
+      <span class="wc-avatar">👨🏻‍💼</span>
+      <div class="wc-content">
+        <h3>Règles</h3>
+        <p>
+          À chaque tour, choisissez un champ d'action parmi dix, puis sélectionnez votre stratégie.
+          Le <b>lobby des pesticides</b> ripostera systématiquement.
+          Si l'un de vos trois indicateurs atteint <strong>zéro</strong>, la partie s'arrête immédiatement.
+        </p>
       </div>
-      <p style="margin-top:10px;">
-        Si l'un de vos trois indicateurs atteint <strong>zéro</strong>, la partie s'arrête immédiatement.
-        La <strong>Bataille juridique</strong> est verrouillée jusqu'au tour 5.
-      </p>
     </div>
 
     <button class="btn btn-primary" onclick="startGame()" style="font-size:1.1rem; padding:16px 40px; margin-top:8px;">
@@ -130,6 +128,48 @@
       <div class="actions-list" id="actions-list"></div>
     </div>
 
+    <!-- Event card (tous les 2 tours) -->
+    <div class="card event-card-section" id="event-card-section">
+      <div class="event-header">
+        <span class="event-type-badge">⚡ Évènement</span>
+      </div>
+      <div class="event-body">
+        <span class="event-icon-big" id="event-icon-big">📰</span>
+        <div class="event-main">
+          <h2 class="event-title" id="event-title"></h2>
+          <p class="event-description" id="event-description"></p>
+          <p class="event-outcome" id="event-outcome"></p>
+          <div class="delta-row" id="event-effects-row"></div>
+        </div>
+      </div>
+      <div class="next-wrap visible" style="margin-top:20px;">
+        <button class="btn btn-primary" onclick="continueAfterEvent()">
+          Choisir le prochain champ d'action →
+        </button>
+      </div>
+    </div>
+
+    <!-- Unlock card (Bataille juridique disponible au tour 5) -->
+    <div class="card unlock-card-section" id="unlock-card-section">
+      <div class="unlock-header">
+        <span class="unlock-type-badge">🔓 Nouvelle action débloquée</span>
+      </div>
+      <div class="unlock-body">
+        <span class="unlock-icon-big">⚖️</span>
+        <div class="unlock-main">
+          <h2 class="unlock-title">La Bataille juridique est maintenant disponible</h2>
+          <p class="unlock-description">
+            Vous avez atteint le tour 6. Le débat parlementaire commence — la voie judiciaire s'ouvre. Vous pouvez désormais déposer des recours, porter plainte et mobiliser des avocats pour faire pression par un autre canal.
+          </p>
+        </div>
+      </div>
+      <div class="next-wrap visible" style="margin-top:20px;">
+        <button class="btn btn-primary" onclick="continueAfterUnlock()">
+          Choisir le prochain champ d'action →
+        </button>
+      </div>
+    </div>
+
     <!-- Result card -->
     <div class="card result-card" id="result-card">
       <!-- Action scenario -->
@@ -163,7 +203,7 @@
     </div>
   </main>
 
-  <footer>ANTIDOTE - Serious Game</footer>
+  <footer>ANTIDOTE - Bataille contre le lobby des pesticides</footer>
 </div>
 
 <!-- ═══════════════════════════════════════════════
@@ -182,6 +222,11 @@
     <div class="end-card">
       <h3>📊 Résumé de la Partie</h3>
       <div class="scores-summary" id="end-scores"></div>
+    </div>
+
+    <div class="end-card">
+      <h3>👩🏽‍💼 Vos actions</h3>
+      <div id="end-actions"></div>
     </div>
 
     <div class="end-card">
@@ -212,6 +257,11 @@
     <div class="end-card">
       <h3>📊 Résumé de la Partie</h3>
       <div class="scores-summary" id="result-scores"></div>
+    </div>
+
+    <div class="end-card">
+      <h3>👩🏽‍💼 Vos actions</h3>
+      <div id="result-actions"></div>
     </div>
 
     <div class="end-card">

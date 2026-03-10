@@ -68,6 +68,41 @@ const GAME_DATA = {
     }
   ],
 
+  events: [
+    {
+      id: "health_data",
+      icon: "🔬",
+      title: "Publication de nouvelles données sanitaires",
+      description: "Une agence publique publie de nouvelles données sur l'exposition aux pesticides dans les zones agricoles. Le débat prend une dimension sanitaire inattendue.",
+      outcome: "Les données appuient les arguments d'ANTIDOTE. Les médias s'emparent du sujet, plusieurs parlementaires demandent un moratoire.",
+      effects: { public: 2, political: 1, resources: 0 }
+    },
+    {
+      id: "journalism",
+      icon: "📰",
+      title: "Enquête journalistique",
+      description: "Un grand média publie une enquête révélant les liens étroits entre plusieurs responsables de l'industrie des pesticides et des décideurs politiques.",
+      outcome: "L'enquête fragilise publiquement la position du lobby. Les parlementaires les plus proches des industriels sont sur la défensive.",
+      effects: { public: 2, political: 1, resources: 0 }
+    },
+    {
+      id: "farm_mobilization",
+      icon: "🚜",
+      title: "Mobilisation agricole nationale",
+      description: "Un grand syndicat agricole appelle à soutenir la réautorisation des pesticides et organise une journée nationale de mobilisation.",
+      outcome: "La mobilisation met les parlementaires ruraux sous forte pression. Le rapport de force se durcit en faveur du lobby.",
+      effects: { public: -1, political: -2, resources: 0 }
+    },
+    {
+      id: "gov_arbitration",
+      icon: "🏛️",
+      title: "Arbitrage du gouvernement",
+      description: "La ministre de l'Agriculture prend position publiquement dans le débat sur la réautorisation des pesticides, invoquant l'intérêt économique du monde agricole.",
+      outcome: "La prise de position ministérielle fragilise la coalition parlementaire opposée à la loi. ANTIDOTE doit redoubler d'efforts pour maintenir ses alliés.",
+      effects: { public: 0, political: -1, resources: 1 }
+    }
+  ],
+
   phases: [
     {
       id: 1,
@@ -280,7 +315,7 @@ const GAME_DATA = {
           label: "Happening médiatique",
           description: "Un happening créatif et surprenant peut créer un buzz médiatique important. Mais son impact dépend beaucoup de l'exécution et du contexte - et la réaction du public peut être imprévisible.",
           scenario: "ANTIDOTE organise un happening médiatique percutant qui dénonce l'influence du lobby des pesticides. L'action est largement commentée sur les réseaux sociaux et dans la presse.",
-          effects: { public: 2, political: 0, resources: 0 },
+          effects: { public: 2, political: 0, resources: -3 },
           counterAttack: "Le lobby et certains médias ironisent sur l'action, la présentant comme du théâtre militant sans contenu sérieux.",
           counterEffects: { public: -1, political: 0, resources: 0 }
         }
@@ -321,8 +356,8 @@ const GAME_DATA = {
       id: 9,
       title: "Bataille juridique",
       locked: true,
-      lockedUntil: 4,
-      lockedMessage: "Cette action sera disponible à partir du tour 5.",
+      lockedUntil: 5,
+      lockedMessage: "Cette action n'est pas encore disponible",
       description: "À mi-parcours du processus législatif, la voie juridique s'ouvre. Les recours, plaintes et stratégies judiciaires permettent de peser sur le débat par un autre canal - parfois le seul restant quand les autres leviers sont bloqués.",
       actions: [
         {

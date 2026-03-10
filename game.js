@@ -3,8 +3,12 @@ let scores = {};
 let currentPhaseIndex = -1;
 let actionChosen = false;
 let selectedActionIndex = null;
-let playedPhases = []; // tableau ordonné des index de phases jouées
-let phaseOrder   = []; // ordre d'affichage aléatoire des phases dans le picker
+let playedPhases   = []; // tableau ordonné des index de phases jouées
+let playedActions  = []; // tableau ordonné des actions jouées { phase, action }
+let phaseOrder     = []; // ordre d'affichage aléatoire des phases dans le picker
+let eventOrder     = []; // ordre aléatoire des événements
+let eventCount     = 0;  // nombre d'événements déjà affichés
+let juridiqueLocked = true; // débloqué manuellement via la notification au tour 5
 const MAX_SCORE = 10;
 
 /* ── Fisher-Yates shuffle ── */
@@ -21,8 +25,8 @@ function shuffle(arr) {
 function isLocked(phaseIndex) {
   const phase = GAME_DATA.phases[phaseIndex];
   if (!phase.locked) return false;
-  // La phase est verrouillée tant que le nombre de phases jouées < lockedUntil
-  return playedPhases.length < phase.lockedUntil;
+  // Pour les phases avec locked:true, on utilise le flag explicite
+  return juridiqueLocked;
 }
 
 /* ── Init ── */
@@ -31,8 +35,15 @@ function startGame() {
   currentPhaseIndex = -1;
   actionChosen = false;
   selectedActionIndex = null;
-  playedPhases = [];
-  phaseOrder = shuffle(GAME_DATA.phases.map((_, i) => i));
+  playedPhases  = [];
+  playedActions = [];
+  phaseOrder    = shuffle(GAME_DATA.phases.map((_, i) => i));
+  eventOrder   = shuffle(GAME_DATA.events.map((_, i) => i));
+  eventCount   = 0;
+  juridiqueLocked = true;
+  hideEventCard();
+  document.getElementById('unlock-card-section').style.display = 'none';
+  restoreGameContent(); // s'assure que tous les éléments sont visibles (reset après game over sur événement)
   showScreen('screen-game');
   renderPhasePicker();
   renderProgress();
@@ -259,6 +270,9 @@ function confirmAction() {
   const phase  = GAME_DATA.phases[currentPhaseIndex];
   const action = phase.actions[selectedActionIndex];
 
+  // Enregistrer l'action jouée
+  playedActions.push({ phase: phase.title, action: action.label });
+
   applyEffects(action.effects);
   const effectKeys = changedKeys(action.effects);
   updateScoreboard(effectKeys);
@@ -299,12 +313,17 @@ function confirmAction() {
     setTimeout(() => {
       nextWrap.classList.add('visible');
       const btnNext = document.getElementById('btn-next');
+      // Un événement se déclenche tous les 2 tours (tours 2, 4, 6, 8)
+      const shouldEvent = playedPhases.length % 2 === 0 && playedPhases.length < GAME_DATA.phases.length;
       if (zeroKey !== null) {
         btnNext.textContent = 'Voir le résultat';
         btnNext.onclick = () => showEarlyEnd(zeroKey);
       } else if (playedPhases.length >= GAME_DATA.phases.length) {
         btnNext.textContent = 'Voir le résultat final →';
         btnNext.onclick = nextPhase;
+      } else if (shouldEvent) {
+        btnNext.textContent = 'Suivant →';
+        btnNext.onclick = triggerEvent;
       } else {
         btnNext.textContent = 'Choisir le prochain champ d\'action →';
         btnNext.onclick = nextPhase;
@@ -354,6 +373,12 @@ function nextPhase() {
     showFinalResult();
     return;
   }
+  // Après 5 tours joués (= début du tour 6) → afficher le déblocage de la Bataille juridique
+  if (playedPhases.length === 5 && juridiqueLocked) {
+    hideGameContent();
+    showUnlockCard();
+    return;
+  }
   window.scrollTo({ top: 0, behavior: 'smooth' });
   const rc = document.getElementById('result-card');
   rc.classList.remove('visible');
@@ -383,6 +408,7 @@ function showEarlyEnd(zeroKey) {
   document.getElementById('end-conclusion').textContent  = data.conclusion;
   document.getElementById('end-cta').textContent         = data.cta;
   document.getElementById('end-scores').innerHTML        = buildScoresSummary();
+  document.getElementById('end-actions').innerHTML       = buildActionsList();
 
   window.scrollTo({ top: 0 });
   setTimeout(() => showScreen('screen-end'), 50);
@@ -411,9 +437,20 @@ function showFinalResult() {
   document.getElementById('result-conclusion').textContent  = result.conclusion;
   document.getElementById('result-cta').textContent         = result.cta;
   document.getElementById('result-scores').innerHTML        = buildScoresSummary();
+  document.getElementById('result-actions').innerHTML       = buildActionsList();
 
   window.scrollTo({ top: 0 });
   setTimeout(() => showScreen('screen-result'), 50);
+}
+
+/* ── Build played actions list HTML ── */
+function buildActionsList() {
+  if (!playedActions.length) return '<p style="opacity:.7;font-size:.85rem;">Aucune action jouée.</p>';
+  return '<ol class="actions-recap-list">' +
+    playedActions.map((a, i) =>
+      `<li><span class="ar-phase">${a.phase}</span> — ${a.action}</li>`
+    ).join('') +
+    '</ol>';
 }
 
 /* ── Build scores summary HTML ── */
@@ -435,6 +472,88 @@ function buildScoresSummary() {
       <div class="si-val">${scores.resources}</div>
     </div>
   `;
+}
+
+/* ── Masquer / restaurer le contenu de jeu autour de l'événement ── */
+function hideGameContent() {
+  document.getElementById('phase-picker').style.display  = 'none';
+  document.getElementById('progress-steps').style.display = 'none';
+  document.getElementById('progress-label').style.display = 'none';
+  document.getElementById('phase-card').style.display    = 'none';
+  const rc = document.getElementById('result-card');
+  rc.classList.remove('visible');
+  rc.style.display = 'none';
+}
+
+function restoreGameContent() {
+  document.getElementById('phase-picker').style.display  = '';
+  document.getElementById('progress-steps').style.display = '';
+  document.getElementById('progress-label').style.display = '';
+  document.getElementById('phase-card').style.display    = '';
+}
+
+function hideEventCard() {
+  const ec = document.getElementById('event-card-section');
+  if (ec) ec.style.display = 'none';
+}
+
+/* ── Déclencher un événement ── */
+function triggerEvent() {
+  // Masquer tout le contenu de jeu
+  hideGameContent();
+
+  // Sélectionner l'événement suivant dans l'ordre aléatoire
+  const idx   = eventOrder[eventCount % eventOrder.length];
+  const event = GAME_DATA.events[idx];
+  eventCount++;
+
+  // Appliquer les effets
+  applyEffects(event.effects);
+  updateScoreboard(changedKeys(event.effects));
+
+  // Remplir la carte événement
+  document.getElementById('event-icon-big').textContent    = event.icon;
+  document.getElementById('event-title').textContent       = event.title;
+  document.getElementById('event-description').textContent = event.description;
+  document.getElementById('event-outcome').textContent     = event.outcome;
+  document.getElementById('event-effects-row').innerHTML   = buildDeltaChips(event.effects);
+
+  // Afficher la carte événement
+  const ec = document.getElementById('event-card-section');
+  ec.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Vérifier si un score est tombé à 0 après l'événement
+  const zeroKey = checkZero();
+  const btn = ec.querySelector('button');
+  if (zeroKey !== null && btn) {
+    btn.textContent = 'Voir le résultat';
+    btn.onclick = () => showEarlyEnd(zeroKey);
+  } else if (btn) {
+    btn.textContent = 'Choisir le prochain champ d\'action →';
+    btn.onclick = continueAfterEvent;
+  }
+}
+
+/* ── Continuer après un événement ── */
+function continueAfterEvent() {
+  hideEventCard();
+  restoreGameContent();
+  nextPhase();
+}
+
+/* ── Afficher la carte de déblocage ── */
+function showUnlockCard() {
+  document.getElementById('unlock-card-section').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Continuer après le déblocage ── */
+function continueAfterUnlock() {
+  document.getElementById('unlock-card-section').style.display = 'none';
+  juridiqueLocked = false; // débloquer la Bataille juridique dans le picker
+  restoreGameContent();
+  nextPhase();
 }
 
 /* ── Toast notification ── */
