@@ -17,14 +17,22 @@ function shuffle(arr) {
   return a;
 }
 
+/* ── Retourne vrai si une phase est verrouillée ── */
+function isLocked(phaseIndex) {
+  const phase = GAME_DATA.phases[phaseIndex];
+  if (!phase.locked) return false;
+  // La phase est verrouillée tant que le nombre de phases jouées < lockedUntil
+  return playedPhases.length < phase.lockedUntil;
+}
+
 /* ── Init ── */
 function startGame() {
   scores = { ...GAME_DATA.initialScores };
-  currentPhaseIndex = -1; // aucune phase sélectionnée au départ
+  currentPhaseIndex = -1;
   actionChosen = false;
   selectedActionIndex = null;
   playedPhases = [];
-  phaseOrder = shuffle(GAME_DATA.phases.map((_, i) => i)); // ordre aléatoire
+  phaseOrder = shuffle(GAME_DATA.phases.map((_, i) => i));
   showScreen('screen-game');
   renderPhasePicker();
   renderProgress();
@@ -69,31 +77,38 @@ function updateScoreboard(animateIds) {
 function renderPhasePicker() {
   const picker = document.getElementById('phase-picker');
   picker.innerHTML = '';
-  // Phases jouées en premier (ordre de sélection), puis les non-jouées (ordre aléatoire)
-  const unplayed = phaseOrder.filter(i => !playedPhases.includes(i));
-  const displayOrder = [...playedPhases, ...unplayed];
+
+  // Unplayed phases dans l'ordre aléatoire, mais "Bataille juridique" (index 8) toujours en dernier
+  const JURIDIQUE_INDEX = 8;
+  const unplayed = phaseOrder.filter(i => !playedPhases.includes(i) && i !== JURIDIQUE_INDEX);
+  const juridiqueUnplayed = !playedPhases.includes(JURIDIQUE_INDEX) ? [JURIDIQUE_INDEX] : [];
+  const displayOrder = [...playedPhases, ...unplayed, ...juridiqueUnplayed];
 
   displayOrder.forEach(i => {
     const phase     = GAME_DATA.phases[i];
     const isPlayed  = playedPhases.includes(i);
     const isActive  = i === currentPhaseIndex;
+    const locked    = !isPlayed && isLocked(i);
     const playOrder = isPlayed ? playedPhases.indexOf(i) + 1 : null;
 
     const btn = document.createElement('button');
     btn.className = 'phase-pick-btn' +
-      (isActive ? ' active' : '') +
-      (isPlayed ? ' played' : '');
-    btn.disabled = isPlayed;
-    btn.title = phase.title;
+      (isActive  ? ' active'  : '') +
+      (isPlayed  ? ' played'  : '') +
+      (locked    ? ' locked'  : '');
+    btn.disabled = isPlayed || locked;
 
-    // Cercle : vide si pas encore jouée, numéro d'ordre si jouée
-    const numContent = isPlayed ? playOrder : '';
+    const numContent = isPlayed ? playOrder : (locked ? '🔒' : '');
+    const lockLabel  = locked ? `<span class="ppb-lock-msg">${phase.lockedMessage || 'Verrouillé'}</span>` : '';
 
     btn.innerHTML = `
       <span class="ppb-num">${numContent}</span>
       <span class="ppb-title">${phase.title}</span>
+      ${lockLabel}
     `;
-    if (!isPlayed) {
+    btn.title = locked ? (phase.lockedMessage || 'Verrouillé') : phase.title;
+
+    if (!isPlayed && !locked) {
       btn.onclick = () => goToPhase(i);
     }
     picker.appendChild(btn);
@@ -101,17 +116,17 @@ function renderPhasePicker() {
 }
 
 function goToPhase(i) {
-  if (playedPhases.includes(i)) return;
+  if (playedPhases.includes(i) || isLocked(i)) return;
   currentPhaseIndex = i;
   renderPhase();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ── Phase placeholder (aucune phase sélectionnée) ── */
+/* ── Phase placeholder ── */
 function showPhasePlaceholder() {
   document.getElementById('phase-badge').textContent = '';
-  document.getElementById('phase-title').textContent = 'Choisissez votre première phase';
-  document.getElementById('phase-desc').textContent  = 'Sélectionnez une phase ci-dessus pour commencer la campagne.';
+  document.getElementById('phase-title').textContent = 'Choisissez votre premier champ d\'action';
+  document.getElementById('phase-desc').textContent  = 'Sélectionnez un champ d\'action ci-dessus pour lancer la campagne d\'ANTIDOTE.';
   document.getElementById('actions-list').innerHTML  = '';
   const rc = document.getElementById('result-card');
   rc.classList.remove('visible');
@@ -119,7 +134,7 @@ function showPhasePlaceholder() {
   updateScoreboard();
 }
 
-/* ── Progress bar (séquentiel : N joués + 1 en cours + reste vide) ── */
+/* ── Progress bar ── */
 function renderProgress() {
   const steps = document.getElementById('progress-steps');
   const label = document.getElementById('progress-label');
@@ -139,7 +154,17 @@ function renderProgress() {
     }
     steps.appendChild(dot);
   }
-  label.textContent = `${played} / ${total} phases jouées`;
+
+  const phaseLabels = [
+    'Dépôt de la loi', 'Dépôt de la loi',
+    'Débat public', 'Débat public',
+    'Commission parlementaire', 'Commission parlementaire',
+    'Débat parlementaire', 'Débat parlementaire',
+    'Vote final', 'Vote final'
+  ];
+  const currentStep = Math.min(played, total - 1);
+  const stepName = phaseLabels[currentStep] || '';
+  label.textContent = `Tour ${played} / ${total} - ${stepName}`;
 }
 
 /* ── Render current phase ── */
@@ -151,15 +176,14 @@ function renderPhase() {
   renderProgress();
   renderPhasePicker();
 
-  const currentRank = playedPhases.length + 1; // rang dans l'ordre de jeu
-  document.getElementById('phase-badge').textContent = `Phase ${currentRank} / ${GAME_DATA.phases.length}`;
+  const currentRank = playedPhases.length + 1;
+  document.getElementById('phase-badge').textContent = `Tour ${currentRank} / ${GAME_DATA.phases.length}`;
   document.getElementById('phase-title').textContent = phase.title;
   document.getElementById('phase-desc').textContent  = phase.description;
 
   const list = document.getElementById('actions-list');
   list.innerHTML = '';
 
-  // Mélange aléatoire des options de la phase
   const actionOrder = shuffle(phase.actions.map((_, i) => i));
 
   actionOrder.forEach((originalIdx, visualIdx) => {
@@ -199,7 +223,6 @@ function renderPhase() {
   validateWrap.appendChild(validateBtn);
   list.appendChild(validateWrap);
 
-  // Hide result card
   const rc = document.getElementById('result-card');
   rc.classList.remove('visible');
   rc.style.display = 'none';
@@ -207,12 +230,11 @@ function renderPhase() {
   updateScoreboard();
 }
 
-/* ── Select an action (no execution yet) ── */
+/* ── Select an action ── */
 function selectAction(visualIdx, originalIdx) {
   if (actionChosen) return;
-  selectedActionIndex = originalIdx; // on stocke l'index original pour confirmAction
+  selectedActionIndex = originalIdx;
 
-  // Highlight basé sur la position visuelle
   document.querySelectorAll('.action-btn').forEach((btn, i) => {
     btn.classList.toggle('selected', i === visualIdx);
   });
@@ -256,36 +278,35 @@ function confirmAction() {
   nextWrap.classList.remove('visible');
 
   setTimeout(() => {
-    const counterText = document.getElementById('counter-text')
+    const counterText = document.getElementById('counter-text');
     counterText.textContent = action.counterAttack;
-    document.getElementById('delta-counter').innerHTML  = buildDeltaChips(action.counterEffects);
+    document.getElementById('delta-counter').innerHTML = buildDeltaChips(action.counterEffects);
     banner.classList.add('visible');
 
     applyEffects(action.counterEffects);
     const counterKeys = changedKeys(action.counterEffects);
     updateScoreboard(counterKeys);
 
-    // Mark phase as played (order matters)
+    // Mark phase as played
     playedPhases.push(currentPhaseIndex);
     renderPhasePicker();
     renderProgress();
 
     const zeroKey = checkZero();
 
-    counterText.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    counterText.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     setTimeout(() => {
       nextWrap.classList.add('visible');
       const btnNext = document.getElementById('btn-next');
       if (zeroKey !== null) {
-        // Un score est à 0 : afficher "Voir le résultat" avant de passer à l'écran de fin
         btnNext.textContent = 'Voir le résultat';
         btnNext.onclick = () => showEarlyEnd(zeroKey);
       } else if (playedPhases.length >= GAME_DATA.phases.length) {
-        btnNext.textContent = 'Voir le résultat final';
+        btnNext.textContent = 'Voir le résultat final →';
         btnNext.onclick = nextPhase;
       } else {
-        btnNext.textContent = 'Choisir la prochaine phase →';
+        btnNext.textContent = 'Choisir le prochain champ d\'action →';
         btnNext.onclick = nextPhase;
       }
     }, 1000);
@@ -295,9 +316,9 @@ function confirmAction() {
 
 /* ── Apply effects to scores ── */
 function applyEffects(effects) {
-  scores.public    = Math.max(0, scores.public    + (effects.public    || 0));
-  scores.political = Math.max(0, scores.political + (effects.political || 0));
-  scores.resources = Math.max(0, scores.resources + (effects.resources || 0));
+  scores.public    = Math.max(0, Math.min(MAX_SCORE, scores.public    + (effects.public    || 0)));
+  scores.political = Math.max(0, Math.min(MAX_SCORE, scores.political + (effects.political || 0)));
+  scores.resources = Math.max(0, Math.min(MAX_SCORE, scores.resources + (effects.resources || 0)));
 }
 
 /* ── Get keys that changed ── */
@@ -307,7 +328,11 @@ function changedKeys(effects) {
 
 /* ── Build delta chips HTML ── */
 function buildDeltaChips(effects) {
-  const labels = { public: '🌍 Soutien', political: '🏛️ Influence', resources: '💰 Ressources' };
+  const labels = {
+    public:    '🌍 Soutien public',
+    political: '🏛️ Influence politique',
+    resources: '💰 Ressources'
+  };
   return Object.entries(effects).filter(([, v]) => v !== 0).map(([k, v]) => {
     const cls  = v > 0 ? 'pos' : 'neg';
     const sign = v > 0 ? '+' : '';
@@ -329,17 +354,14 @@ function nextPhase() {
     showFinalResult();
     return;
   }
-  // Scroll to top so the user can pick the next phase from the picker
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  // Hide result card
   const rc = document.getElementById('result-card');
   rc.classList.remove('visible');
   rc.style.display = 'none';
-  // Show placeholder in phase card
   currentPhaseIndex = -1;
   document.getElementById('phase-badge').textContent = '';
-  document.getElementById('phase-title').textContent = 'Choisissez votre prochaine phase';
-  document.getElementById('phase-desc').textContent  = 'Sélectionnez une phase ci-dessus pour continuer la campagne.';
+  document.getElementById('phase-title').textContent = 'Choisissez votre prochain champ d\'action';
+  document.getElementById('phase-desc').textContent  = 'Sélectionnez un champ d\'action ci-dessus pour continuer la campagne.';
   document.getElementById('actions-list').innerHTML  = '';
   renderPhasePicker();
   renderProgress();
@@ -368,29 +390,22 @@ function showEarlyEnd(zeroKey) {
 
 /* ── Final result screen ── */
 function showFinalResult() {
+  const total = scores.public + scores.political + scores.resources;
   let result;
 
-  if (scores.public >= 3 && scores.political >= 3 && scores.resources >= 3) {
-    result = GAME_DATA.finalResults.find(r => r.id === 'partial');
-  } else if (scores.public >= 2 && scores.political >= 2 && scores.resources >= 2) {
-    result = GAME_DATA.finalResults.find(r => r.id === 'national');
-  } else if (scores.public >= 1 && scores.political >= 1 && scores.resources >= 1) {
-    result = GAME_DATA.finalResults.find(r => r.id === 'symbolic');
+  if (total >= 21) {
+    result = GAME_DATA.finalResults.find(r => r.id === 'complete_win');
+  } else if (total >= 15) {
+    result = GAME_DATA.finalResults.find(r => r.id === 'partial_win');
+  } else if (total >= 9) {
+    result = GAME_DATA.finalResults.find(r => r.id === 'statu_quo');
   } else {
-    result = GAME_DATA.finalResults.find(r => r.id === 'failure');
+    result = GAME_DATA.finalResults.find(r => r.id === 'lobby_win');
   }
 
-  const icons = { failure: '❌', symbolic: '🥈', national: '🏅', partial: '🏆' };
-  const badgeClasses = {
-    failure:  'badge-failure',
-    symbolic: 'badge-symbolic',
-    national: 'badge-national',
-    partial:  'badge-partial'
-  };
-
-  document.getElementById('result-icon').textContent        = icons[result.id];
+  document.getElementById('result-icon').textContent        = result.icon;
   document.getElementById('result-badge-span').textContent  = result.title;
-  document.getElementById('result-badge-span').className    = badgeClasses[result.id];
+  document.getElementById('result-badge-span').className    = result.badgeClass;
   document.getElementById('result-title').textContent       = result.title;
   document.getElementById('result-description').textContent = result.description;
   document.getElementById('result-conclusion').textContent  = result.conclusion;
