@@ -2,9 +2,9 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --green-dark:    #1a4a2e;
-  --green:         #2d7a4f;
-  --green-light:   #4caf80;
+  --green-dark:    #1a2f4a;
+  --green:         #2d5b7a;
+  --green-light:   #4cacaf;
   --green-pale:    #e8f5ee;
   --green-bubble:  #dcf8c6;
   --yellow:        #f5c842;
@@ -239,6 +239,7 @@ body {
   font-weight: 700;
   line-height: 1;
   transition: color .5s;
+  text-align: center;
 }
 
 .sp-bar-bg {
@@ -635,7 +636,7 @@ body {
 
 .ao-card {
   background: rgba(255,255,255,.07);
-  border: 2px solid rgba(255,255,255,.12);
+  border: 2px solid transparent;
   border-radius: 14px;
   padding: 14px 12px;
   cursor: pointer;
@@ -886,7 +887,7 @@ body.notif-open .chat-header {
     border-radius: 10px;
   }
   .sp-icon  { font-size: 1.4rem; }
-  .sp-label { font-size: .7rem; white-space: nowrap; }
+  .sp-label { font-size: .7rem; white-space: nowrap; text-align: center; }
   .sp-val   { font-size: 1.7rem; line-height: 1; }
   .sp-bar-bg { height: 4px; margin-top: 4px; }
 }

@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════
-   ANTIDOTE — game.js   (interface messagerie avec Naomi)
+   ANTIDOTE interface messagerie avec Naomi
 ══════════════════════════════════════════════════════════ */
 
 /* ── State ── */
@@ -77,16 +77,27 @@ function startGame() {
   updateScoreboard();
   updateProgress();
   showScreen('screen-game');
+  showTyping();
 
   setTimeout(() => {
+    hideTyping();
     addNaomiMessage(
-      `Salut\u00a0! Je suis <strong>Naomi</strong>, ta collègue du lobbying environnemental chez ANTIDOTE. 🌿<br>
-       Une proposition de loi vient d'être déposée pour <strong>réautoriser plusieurs pesticides dangereux</strong>.
-       Nous avons la possibilité de lancer <strong>10&nbsp;actions</strong> avant le vote final.<br>
-       Le lobby des pesticides est déjà à l'œuvre. On doit agir vite.`
+      `Salut collègue\u00a0! Bienvenu chez ANTIDOTE\u00a0! ✊<br>Je suis <strong>Naomi</strong>, lobbyiste environnemental.`
     );
-    setTimeout(() => naomiAskAction(), 1200);
-  }, 400);
+    setTimeout(() => {
+      addPlayerMessage('Salut Naomi, merci !');
+      showTyping();
+      setTimeout(() => {
+        addNaomiMessage(
+          `Une proposition de loi vient d'être déposée pour <strong>réautoriser plusieurs pesticides dangereux</strong>.<br>
+          Nous avons la possibilité de lancer <strong>10&nbsp;actions</strong> avant le vote final à l'Assemblée Nationale qui aura lieu dans quelques semaines.<br>
+          Le lobby des pesticides est déjà à l'œuvre. On doit agir vite.`
+        );
+        hideTyping();
+      }, 1200);
+      setTimeout(() => naomiAskAction(), 2000);
+    }, 1000);
+  }, 500);
 }
 
 function restartGame() { startGame(); }
@@ -227,7 +238,7 @@ function addPlayerMessage(text) {
   row.innerHTML =
     '<div class="msg-bubble">' +
       '<div class="msg-body">' + text + '</div>' +
-      '<span class="msg-time">' + getTime() + ' ✓✓</span>' +
+      '<span class="msg-time">' + getTime() + ' ✓</span>' +
     '</div>';
   chat.appendChild(row);
   scrollToBottom();
@@ -274,7 +285,7 @@ function typewriterInput(text, cb) {
   inputEl.innerHTML = '';
 
   let i = 0;
-  const SPEED = 28;
+  const SPEED = 14;
 
   (function type() {
     if (i < text.length) {
@@ -369,7 +380,7 @@ function selectPhaseFromOverlay(phaseIndex) {
   closeActionsOverlay();
   pendingAction = { phaseIndex: phaseIndex };
   currentStep   = 'option';
-  typewriterInput(PHASE_ICONS[phaseIndex] + ' ' + GAME_DATA.phases[phaseIndex].title, null);
+  typewriterInput('Quelles sont les options pour : ' + GAME_DATA.phases[phaseIndex].title + ' ?', null);
 }
 
 /* ════════════════════════════════════════════
@@ -483,7 +494,7 @@ function sendActionChoice() {
   }, 400);
 }
 
-/* ── Résultat — contre-attaque auto après 4s ── */
+/* ── Résultat - contre-attaque auto après 4s ── */
 function showNaomiResult(action) {
   // Appliquer les effets au moment où le message de Naomi apparaît
   applyEffects(action.effects);
@@ -491,7 +502,7 @@ function showNaomiResult(action) {
   showScoreDelta(action.effects);
 
   addNaomiMessage(
-    '<div class="result-scenario-text">' + action.scenario + '</div>' +
+    '<div class="result-scenario-text">Coucou ! Voici les résultats de l\'action lancée ! 👍🏾<br>' + action.scenario + '</div>' +
     '<div class="delta-row">' + buildDeltaChips(action.effects) + '</div>'
   );
   scrollToBottom();
@@ -523,8 +534,7 @@ function triggerCounterAttack() {
     const zeroKey = checkZero();
 
     addNaomiMessage(
-      '<span class="counter-badge">⚔️ Contre-offensive du lobby</span><br>' +
-      '<div class="result-scenario-text">' + counterAttack + '</div>' +
+      '<div class="result-scenario-text">😡 ' + counterAttack + '</div>' +
       '<div class="delta-row">' + buildDeltaChips(counterEffects) + '</div>'
     );
 
@@ -584,11 +594,11 @@ function naomiAskAction() {
   ];
 
   showTyping();
-  setTimeout(function() {
+  setTimeout(() => {
     hideTyping();
 
     const text = (playedPhases.length === 0)
-      ? 'Pour commencer, choisis ta <strong>premi\u00e8re action</strong>. Explore les options disponibles et d\u00e9cide par o\u00f9 on attaque.'
+      ? 'Pour commencer, choisis ta <strong>première action</strong>.<br>Je te proposerai les options disponibles et tu décideras par où on attaque.'
       : msgs[Math.floor(Math.random() * msgs.length)];
 
     addNaomiMessage(text);
@@ -645,7 +655,7 @@ function triggerEvent() {
       showTyping();
       setTimeout(function() {
         hideTyping();
-        addNaomiMessage('Tu as vu la nouvelle\u00a0? ' + event.outcome);
+        addNaomiMessage('🔥 Tu as vu la nouvelle\u00a0?<br>' + event.outcome);
         scrollToBottom();
         setTimeout(afterOutcome, 2500);
       }, 1000);
@@ -736,7 +746,7 @@ function buildActionsList() {
   if (!playedActions.length) return '<p style="opacity:.7;font-size:.85rem;">Aucune action jouée.</p>';
   return '<ol class="actions-recap-list">' +
     playedActions.map(function(a) {
-      return '<li><span class="ar-phase">' + a.phase + '</span> — ' + a.action + '</li>';
+      return '<li><span class="ar-phase">' + a.phase + '</span> - ' + a.action + '</li>';
     }).join('') +
     '</ol>';
 }
