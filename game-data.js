@@ -315,7 +315,7 @@ const GAME_DATA = {
           label: "Happening médiatique",
           description: "Un happening créatif et surprenant peut créer un buzz médiatique important. Mais son impact dépend beaucoup de l'exécution et du contexte - et la réaction du public peut être imprévisible.",
           scenario: "ANTIDOTE organise un happening médiatique percutant qui dénonce l'influence du lobby des pesticides. L'action est largement commentée sur les réseaux sociaux et dans la presse.",
-          effects: { public: 2, political: 0, resources: -3 },
+          effects: { public: 2, political: 0, resources: -2 },
           counterAttack: "Le lobby des pesticides et certains médias ironisent sur l'action, la présentant comme du théâtre militant sans contenu sérieux.",
           counterEffects: { public: -1, political: 0, resources: 0 }
         }

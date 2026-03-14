@@ -19,7 +19,7 @@ let typingRowEl        = null;
 let pushTimer          = null;
 let counterTimer       = null;
 
-const MAX_SCORE   = 10;
+const MAX_SCORE   = 100;
 const PHASE_ICONS = ['🤝','🏛️','🔬','📺','📣','📱','✊','🌾','⚖️','🇪🇺'];
 
 function shuffle(arr) {
@@ -72,30 +72,30 @@ function startGame() {
   if (pushTimer)    { clearTimeout(pushTimer); pushTimer = null; }
 
   document.getElementById('chat-messages').innerHTML = '';
-  hideInputArea();
   closeActionsOverlay();
   updateScoreboard();
   updateProgress();
   showScreen('screen-game');
+  showDormantInput();
   showTyping();
 
   setTimeout(() => {
     hideTyping();
-    addNaomiMessage(
+    addColleagueMessage(
       `Salut collègue\u00a0! Bienvenu chez ANTIDOTE\u00a0! ✊<br>Je suis <strong>Naomi</strong>, lobbyiste environnemental.`
     );
     setTimeout(() => {
       addPlayerMessage('Salut Naomi, merci !');
       showTyping();
       setTimeout(() => {
-        addNaomiMessage(
+        addColleagueMessage(
           `Une proposition de loi vient d'être déposée pour <strong>réautoriser plusieurs pesticides dangereux</strong>.<br>
           Nous avons la possibilité de lancer <strong>10&nbsp;actions</strong> avant le vote final à l'Assemblée Nationale qui aura lieu dans quelques semaines.<br>
           Le lobby des pesticides est déjà à l'œuvre. On doit agir vite.`
         );
         hideTyping();
       }, 1200);
-      setTimeout(() => naomiAskAction(), 2000);
+      setTimeout(() => askAction(), 2000);
     }, 1000);
   }, 500);
 }
@@ -108,6 +108,7 @@ function restartGame() { startGame(); }
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  setTimeout(() => scrollToTop(), 60);
 }
 
 /* ════════════════════════════════════════════
@@ -183,7 +184,7 @@ function showScoreDelta(effects) {
 }
 
 function buildDeltaChips(effects) {
-  const labels = { public: '🌍 Public', political: '🏛️ Politique', resources: '💰 Ressources' };
+  const labels = { public: '👥 Public', political: '🏛️ Politique', resources: '💶 Ressources' };
   const chips = Object.entries(effects)
     .filter(([, v]) => v !== 0)
     .map(([k, v]) => '<span class="delta-chip ' + (v > 0 ? 'pos' : 'neg') + '">' + labels[k] + ' ' + (v > 0 ? '+' : '') + v + '</span>');
@@ -203,19 +204,20 @@ function checkZero() {
 function getChatEl() { return document.getElementById('chat-messages'); }
 
 function scrollToBottom() {
-  const el = getChatEl();
-  // Double RAF pour attendre le rendu complet
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      el.scrollTop = el.scrollHeight;
-      // Forcer sur le dernier enfant si disponible
-      const last = el.lastElementChild;
-      if (last) last.scrollIntoView({ block: 'end' });
-    });
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: 'smooth'
   });
 }
 
-function addNaomiMessage(htmlContent) {
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+function addColleagueMessage(htmlContent) {
   const chat = getChatEl();
   const row  = document.createElement('div');
   row.className = 'msg-row naomi';
@@ -274,6 +276,10 @@ function freezeOptionCards() {
     var clone = c.cloneNode(true);
     c.parentNode.replaceChild(clone, c);
   });
+  // Figer aussi le bouton "Changer d'action"
+  getChatEl().querySelectorAll('.change-action-btn:not(.done)').forEach(function(btn) {
+    btn.classList.add('done');
+  });
 }
 
 /* ── Typewriter dans la zone de saisie ── */
@@ -304,9 +310,26 @@ function typewriterInput(text, cb) {
   scrollToBottom();
 }
 
+/* ── Mode dormant : barre toujours visible mais inactive ── */
+function showDormantInput() {
+  const area = document.getElementById('chat-input-area');
+  area.style.display = 'flex';
+  area.classList.add('dormant');
+  document.getElementById('chat-pick-btn').style.display   = 'none';
+  const inputEl = document.getElementById('chat-input-text');
+  inputEl.style.display = 'block';
+  inputEl.innerHTML     = '';
+  const sendBtn = document.getElementById('chat-send-btn');
+  sendBtn.style.display = 'flex';
+  sendBtn.disabled      = true;
+  scrollToBottom();
+}
+
 /* ── Mode picker : bouton "Voir les actions" dans la barre ── */
 function showPickerBtn() {
-  document.getElementById('chat-input-area').style.display = 'flex';
+  const area = document.getElementById('chat-input-area');
+  area.style.display = 'flex';
+  area.classList.remove('dormant');
   document.getElementById('chat-pick-btn').style.display   = 'flex';
   document.getElementById('chat-input-text').style.display = 'none';
   document.getElementById('chat-send-btn').style.display   = 'none';
@@ -315,7 +338,9 @@ function showPickerBtn() {
 
 /* ── Mode saisie : bulle texte + bouton Envoyer ── */
 function showInputArea() {
-  document.getElementById('chat-input-area').style.display = 'flex';
+  const area = document.getElementById('chat-input-area');
+  area.style.display = 'flex';
+  area.classList.remove('dormant');
   document.getElementById('chat-pick-btn').style.display   = 'none';
   document.getElementById('chat-input-text').style.display = 'block';
   document.getElementById('chat-send-btn').style.display   = 'flex';
@@ -324,6 +349,7 @@ function showInputArea() {
 
 function hideInputArea() {
   document.getElementById('chat-input-area').style.display = 'none';
+  document.getElementById('chat-input-area').classList.remove('dormant');
   document.getElementById('chat-input-text').innerHTML     = '';
   document.getElementById('chat-send-btn').disabled        = true;
   document.getElementById('chat-pick-btn').style.display   = 'none';
@@ -396,16 +422,16 @@ function sendMessage() {
 
 function sendPhaseChoice() {
   const phaseIndex = pendingAction.phaseIndex;
-  hideInputArea();
+  showDormantInput();
   addPlayerMessage('Quelles sont les options pour\u00a0' + PHASE_ICONS[phaseIndex] + ' ' + GAME_DATA.phases[phaseIndex].title + '\u00a0?');
 
   setTimeout(function() {
     showTyping();
-    setTimeout(function() { hideTyping(); showNaomiOptions(phaseIndex); }, 1400);
+    setTimeout(function() { hideTyping(); showOptions(phaseIndex); }, 1400);
   }, 300);
 }
 
-function showNaomiOptions(phaseIndex) {
+function showOptions(phaseIndex) {
   const phase       = GAME_DATA.phases[phaseIndex];
   const actionOrder = shuffle(phase.actions.map(function(_, i) { return i; }));
   pendingAction._actionOrder = actionOrder;
@@ -423,10 +449,11 @@ function showNaomiOptions(phaseIndex) {
       '</div>';
   });
 
-  const row = addNaomiMessage(
+  const row = addColleagueMessage(
     'Voici les stratégies disponibles pour <strong>' + phase.title + '</strong>.' +
     ' Dis moi quel est ton choix.' +
-    '<div class="options-list">' + optionsHTML + '</div>'
+    '<div class="options-list">' + optionsHTML + '</div>' +
+    '<button class="change-action-btn" id="change-action-btn">🔄 Changer d\'action</button>'
   );
 
   row.querySelectorAll('.option-card').forEach(function(card) {
@@ -436,6 +463,26 @@ function showNaomiOptions(phaseIndex) {
       }
     });
   });
+
+  var changeBtn = row.querySelector('#change-action-btn');
+  if (changeBtn) {
+    changeBtn.addEventListener('click', function() {
+      if (changeBtn.classList.contains('done')) return;
+      changeBtn.classList.add('done');
+      // Figer les option-cards de ce message
+      row.querySelectorAll('.option-card').forEach(function(c) {
+        c.classList.add('done');
+        var clone = c.cloneNode(true);
+        c.parentNode.replaceChild(clone, c);
+      });
+      hideInputArea();
+      pendingAction = null;
+      pendingOption = null;
+      pendingInputText = null;
+      currentStep = 'pick';
+      openActionsOverlay();
+    });
+  }
 
   currentStep   = 'action';
   pendingOption = null;
@@ -474,7 +521,7 @@ function sendActionChoice() {
   pendingInputText = null;
 
   freezeOptionCards();
-  hideInputArea();
+  showDormantInput();
   addPlayerMessage(inputText);
 
   playedActions.push({ phase: phase.title, action: action.label });
@@ -490,19 +537,19 @@ function sendActionChoice() {
 
   setTimeout(function() {
     showTyping();
-    setTimeout(function() { hideTyping(); showNaomiResult(action); }, 1600);
+    setTimeout(function() { hideTyping(); showResult(action); }, 1600);
   }, 400);
 }
 
 /* ── Résultat - contre-attaque auto après 4s ── */
-function showNaomiResult(action) {
+function showResult(action) {
   // Appliquer les effets au moment où le message de Naomi apparaît
   applyEffects(action.effects);
   updateScoreboard(changedKeys(action.effects));
   showScoreDelta(action.effects);
 
-  addNaomiMessage(
-    '<div class="result-scenario-text">Coucou ! Voici les résultats de l\'action lancée ! 👍🏾<br>' + action.scenario + '</div>' +
+  addColleagueMessage(
+    '<div class="result-scenario-text">Coucou ! Voici les résultats de l\'action lancée !<br>' + action.scenario + ' 👍🏾</div>' +
     '<div class="delta-row">' + buildDeltaChips(action.effects) + '</div>'
   );
   scrollToBottom();
@@ -533,7 +580,7 @@ function triggerCounterAttack() {
 
     const zeroKey = checkZero();
 
-    addNaomiMessage(
+    addColleagueMessage(
       '<div class="result-scenario-text">😡 ' + counterAttack + '</div>' +
       '<div class="delta-row">' + buildDeltaChips(counterEffects) + '</div>'
     );
@@ -542,7 +589,7 @@ function triggerCounterAttack() {
 
     // Quelques secondes plus tard, suite automatique
     if (zeroKey !== null) {
-      setTimeout(function() { showEarlyEnd(zeroKey); }, 3500);
+      setTimeout(function() { showEarlyEnd(zeroKey); }, 5000);
     } else {
       setTimeout(function() { afterCounterAttack(); }, 4000);
     }
@@ -564,7 +611,7 @@ function afterCounterAttack() {
   currentStep = 'pick';
 
   if (playedPhases.length >= GAME_DATA.phases.length) {
-    setTimeout(function() { showFinalResult(); }, 500);
+    setTimeout(function() { showFinalResult(); }, 3000);
     return;
   }
 
@@ -578,13 +625,13 @@ function afterCounterAttack() {
     return;
   }
 
-  setTimeout(function() { naomiAskAction(); }, 600);
+  setTimeout(function() { askAction(); }, 600);
 }
 
 /* ════════════════════════════════════════════
    NAOMI DEMANDE LA PROCHAINE ACTION
 ════════════════════════════════════════════ */
-function naomiAskAction() {
+function askAction() {
   const remaining = GAME_DATA.phases.length - playedPhases.length;
   const s         = remaining > 1 ? 's' : '';
   const msgs      = [
@@ -601,7 +648,7 @@ function naomiAskAction() {
       ? 'Pour commencer, choisis ta <strong>première action</strong>.<br>Je te proposerai les options disponibles et tu décideras par où on attaque.'
       : msgs[Math.floor(Math.random() * msgs.length)];
 
-    addNaomiMessage(text);
+    addColleagueMessage(text);
     showPickerBtn();
     scrollToBottom();
   }, 900);
@@ -647,7 +694,7 @@ function triggerEvent() {
       } else if (playedPhases.length === 5 && juridiqueLocked) {
         setTimeout(function() { showUnlockMessage(); }, 400);
       } else {
-        setTimeout(function() { naomiAskAction(); }, 400);
+        setTimeout(function() { askAction(); }, 400);
       }
     }
 
@@ -655,7 +702,7 @@ function triggerEvent() {
       showTyping();
       setTimeout(function() {
         hideTyping();
-        addNaomiMessage('🔥 Tu as vu la nouvelle\u00a0?<br>' + event.outcome);
+        addColleagueMessage('🔥 Tu as vu la nouvelle\u00a0?<br>' + event.outcome);
         scrollToBottom();
         setTimeout(afterOutcome, 2500);
       }, 1000);
@@ -674,7 +721,7 @@ function showUnlockMessage() {
   setTimeout(function() {
     hideTyping();
 
-    addNaomiMessage(
+    addColleagueMessage(
       '<strong>⚖️ La Bataille juridique est maintenant disponible\u00a0!</strong><br>' +
       'Le d\u00e9bat parlementaire commence, la voie judiciaire s\'ouvre 😉<br>' +
       'Tu peux d\u00e9sormais d\u00e9poser des recours, porter plainte et mobiliser des avocats pour faire pression par un autre canal.'
@@ -685,7 +732,7 @@ function showUnlockMessage() {
     // Poursuite automatique après 5 secondes
     setTimeout(function() {
       juridiqueLocked = false;
-      naomiAskAction();
+      askAction();
     }, 5000);
   }, 900);
 }
@@ -710,8 +757,7 @@ function showEarlyEnd(zeroKey) {
   document.getElementById('end-scores').innerHTML        = buildScoresSummary();
   document.getElementById('end-actions').innerHTML       = buildActionsList();
 
-  window.scrollTo({ top: 0 });
-  setTimeout(function() { showScreen('screen-end'); }, 60);
+  setTimeout(() => showScreen('screen-end'), 60);
 }
 
 /* ════════════════════════════════════════════
@@ -735,8 +781,7 @@ function showFinalResult() {
   document.getElementById('result-scores').innerHTML        = buildScoresSummary();
   document.getElementById('result-actions').innerHTML       = buildActionsList();
 
-  window.scrollTo({ top: 0 });
-  setTimeout(function() { showScreen('screen-result'); }, 60);
+  setTimeout(() => showScreen('screen-result'), 60);
 }
 
 /* ════════════════════════════════════════════
@@ -752,7 +797,7 @@ function buildActionsList() {
 }
 
 function buildScoresSummary() {
-  return '<div class="summary-item"><div class="si-icon">🌍</div><div class="si-label">Soutien du Public</div><div class="si-val">' + scores.public + '</div></div>' +
+  return '<div class="summary-item"><div class="si-icon">👥</div><div class="si-label">Soutien du Public</div><div class="si-val">' + scores.public + '</div></div>' +
     '<div class="summary-item"><div class="si-icon">🏛️</div><div class="si-label">Influence Politique</div><div class="si-val">' + scores.political + '</div></div>' +
-    '<div class="summary-item"><div class="si-icon">💰</div><div class="si-label">Ressources</div><div class="si-val">' + scores.resources + '</div></div>';
+    '<div class="summary-item"><div class="si-icon">💶</div><div class="si-label">Ressources</div><div class="si-val">' + scores.resources + '</div></div>';
 }

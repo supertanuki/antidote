@@ -424,6 +424,34 @@ body {
 
 .option-card.selected .option-desc { display: block; }
 
+/* ─── Bouton "Changer d'action" ─── */
+.change-action-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--grey-light);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: .87rem;
+  font-weight: 700;
+  color: var(--green-dark);
+  cursor: pointer;
+  margin-top: 8px;
+  transition: border-color .2s, background .2s, opacity .2s;
+}
+
+.change-action-btn:hover:not(.done) {
+  border-color: var(--orange);
+  background: #fef0e6;
+}
+
+.change-action-btn.done {
+  opacity: .55;
+  cursor: default;
+  pointer-events: none;
+}
+
 /* ─── Naomi action button ─── */
 .naomi-action-btn {
   display: inline-flex;
@@ -556,6 +584,20 @@ body {
 
 .chat-send-btn:hover:not(:disabled) { background: var(--green); transform: translateY(-1px); }
 .chat-send-btn:disabled             { background: var(--grey); cursor: not-allowed; transform: none; }
+
+/* ── Mode dormant de la barre (attente / entre les tours) ── */
+.chat-input-area.dormant .chat-input-bubble {
+  color: var(--text-muted);
+  opacity: .55;
+  pointer-events: none;
+  user-select: none;
+}
+.chat-input-area.dormant .chat-send-btn {
+  background: var(--grey);
+  cursor: not-allowed;
+  opacity: .55;
+  pointer-events: none;
+}
 
 .send-icon { font-size: .8rem; }
 
