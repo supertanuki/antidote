@@ -616,6 +616,19 @@ body.notif-open .notif-overlay { display: block; }
 
 .option-card.selected .option-desc { display: block; }
 
+.option-res-chip {
+  display: none;
+  margin-top: 8px;
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  width: fit-content;
+}
+.option-card.selected .option-res-chip { display: inline-block; }
+.option-res-chip.neg { background: #fdecea; color: var(--red); }
+.option-res-chip.pos { background: #d4f0dc; color: var(--green-dark); }
+
 /* ─── Bouton "Changer d'action" ─── */
 .change-action-btn {
   display: block;

@@ -63,6 +63,7 @@ function startGame() {
   eventOrder         = shuffle(GAME_DATA.events.map((_, i) => i));
   eventCount         = 0;
   _unlockedShown     = [];
+  _pendingSend       = null;
   pendingAction      = null;
   pendingOption      = null;
   pendingCounterData = null;
@@ -173,7 +174,8 @@ const CAL_DAY_NAMES   = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 let _calMonth = 4;
 let _calYear  = 2025;
 let _calSelectedPhaseIdx = 0;
-let _calOnClose = null;
+let _calOnClose   = null;
+let _pendingSend  = null; // callback déclenché au clic Envoyer (mode merci)
 
 function openCalendar() {
   const label = document.getElementById('chp-label');
@@ -566,10 +568,24 @@ function selectPhaseFromOverlay(phaseIndex) {
    BOUTON "ENVOYER À NAOMI"
 ════════════════════════════════════════════ */
 function sendMessage() {
-  if (currentStep === 'option') {
+  if (currentStep === 'merci') {
+    sendMerci();
+  } else if (currentStep === 'option') {
     sendPhaseChoice();
   } else if (currentStep === 'action') {
     sendActionChoice();
+  }
+}
+
+function sendMerci() {
+  currentStep = 'waiting';
+  showDormantInput();
+  addPlayerMessage('Merci Naomi\u00a0!');
+  scrollToBottom();
+  if (_pendingSend) {
+    const cb = _pendingSend;
+    _pendingSend = null;
+    cb();
   }
 }
 
@@ -592,6 +608,12 @@ function showOptions(phaseIndex) {
   let optionsHTML = '';
   actionOrder.forEach(function(origIdx, visIdx) {
     const a = phase.actions[origIdx];
+    const resCost = a.effects && a.effects.resources ? a.effects.resources : 0;
+    const resChip = resCost !== 0
+      ? '<div class="option-res-chip' + (resCost < 0 ? ' neg' : ' pos') + '">' +
+          '💶\u00a0Ressources\u00a0' + (resCost > 0 ? '+' : '') + resCost +
+        '</div>'
+      : '';
     optionsHTML +=
       '<div class="option-card" data-orig="' + origIdx + '">' +
         '<div class="option-label">' +
@@ -599,6 +621,7 @@ function showOptions(phaseIndex) {
           a.label +
         '</div>' +
         '<div class="option-desc">' + a.description + '</div>' +
+        resChip +
       '</div>';
   });
 
@@ -808,26 +831,50 @@ function askAction() {
     return;
   }
 
-  // Tours suivants : incrémenter le tour, ouvrir le calendrier,
-  // puis afficher le message de Naomi à la fermeture
-  updateProgress();
+  // Tours suivants : d'abord "Merci Naomi" → calendrier → message Naomi
   const text = msgs[Math.floor(Math.random() * msgs.length)];
   const prevPhase = GAME_DATA.phases[playedPhases.length - 1];
   const prevDateLabel = (prevPhase && prevPhase.tourDate)
     ? prevPhase.tourDate.day + '\u00a0' + MONTH_NAMES[prevPhase.tourDate.month - 1] + '\u00a0' + prevPhase.tourDate.year
     : null;
-  _calOnClose = function() {
-    if (_lastDateSep && prevDateLabel) _lastDateSep.textContent = prevDateLabel;
-    addDateSeparator("Aujourd'hui");
-    showTyping();
-    setTimeout(() => {
-      hideTyping();
-      addColleagueMessage(text);
-      showPickerBtn();
-      scrollToBottom();
-    }, 900);
-  };
-  openCalendar();
+
+  // Étape 1 : afficher "Merci Naomi" pré-rempli, attendre l'envoi
+  showMerciInput(function() {
+    // Étape 2 : 1 s après l'envoi → incrémenter tour + ouvrir calendrier
+    setTimeout(function() {
+      updateProgress();
+      _calOnClose = function() {
+        if (_lastDateSep && prevDateLabel) _lastDateSep.textContent = prevDateLabel;
+        addDateSeparator("Aujourd'hui");
+        showTyping();
+        setTimeout(function() {
+          hideTyping();
+          addColleagueMessage(text);
+          showPickerBtn();
+          scrollToBottom();
+        }, 900);
+      };
+      openCalendar();
+    }, 1000);
+  });
+}
+
+/* ── Affiche "Merci Naomi" pré-rempli + Send actif ── */
+function showMerciInput(cb) {
+  const inputEl = document.getElementById('chat-input-text');
+  const sendBtn = document.getElementById('chat-send-btn');
+  const area    = document.getElementById('chat-input-area');
+  area.style.display    = 'flex';
+  area.classList.remove('dormant');
+  document.getElementById('chat-actions-btn').style.display = 'none';
+  inputEl.style.display = 'block';
+  inputEl.textContent   = 'Merci Naomi\u00a0!';
+  inputEl.contentEditable = 'false';
+  sendBtn.style.display = 'flex';
+  sendBtn.disabled      = false;
+  _pendingSend = cb;
+  currentStep  = 'merci';
+  scrollToBottom();
 }
 
 /* ════════════════════════════════════════════
