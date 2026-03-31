@@ -132,32 +132,33 @@
   <!-- Messages zone -->
   <div class="chat-messages" id="chat-messages"></div>
 
-  <!-- Input area - deux modes : picker ou saisie -->
-  <div class="chat-input-area" id="chat-input-area" style="display:none;">
-    <!-- Mode picker : bouton "Voir les actions" -->
-    <button class="chat-pick-btn" id="chat-pick-btn" onclick="openActionsOverlay()" style="display:none;">
-      Voir les actions disponibles
-    </button>
-    <!-- Mode saisie : texte + envoyer -->
-    <div class="chat-input-bubble" id="chat-input-text" style="display:none;"></div>
-    <button class="chat-send-btn" id="chat-send-btn" onclick="sendMessage()" style="display:none;">
-      <span>Envoyer</span>
-      <span class="send-icon">➤</span>
-    </button>
+  <!-- Zone basse sticky : panel + barre de saisie -->
+  <div class="chat-bottom">
+
+    <!-- Panel actions (glisse vers le haut au-dessus de la barre) -->
+    <div class="actions-panel" id="actions-panel">
+      <div class="ap-grid" id="ao-grid"></div>
+    </div>
+
+    <!-- Barre de saisie -->
+    <div class="chat-input-area" id="chat-input-area" style="display:none;">
+      <!-- Bouton Actions -->
+      <button class="chat-actions-btn" id="chat-actions-btn" onclick="toggleActionsPanel()" style="display:none;" aria-label="Voir les actions">
+        <span class="cab-icon">+</span>
+        <span class="cab-label">Actions</span>
+      </button>
+      <!-- Texte + envoyer -->
+      <div class="chat-input-bubble" id="chat-input-text" style="display:none;"></div>
+      <button class="chat-send-btn" id="chat-send-btn" onclick="sendMessage()" style="display:none;">
+        <span>Envoyer</span>
+        <span class="send-icon">➤</span>
+      </button>
+    </div>
+
   </div>
 
 </div><!-- /screen-game -->
 
-<!-- ═══════════════════════════════════════════════
-     OVERLAY : Grille d'actions (plein écran)
-═══════════════════════════════════════════════ -->
-<div class="actions-overlay" id="actions-overlay">
-  <div class="ao-header">
-    <h2 class="ao-title" id="ao-title">Quelle action lances-tu ?</h2>
-    <button class="ao-close" onclick="closeActionsOverlay()">✕</button>
-  </div>
-  <div class="ao-grid" id="ao-grid"></div>
-</div>
 
 <!-- Overlay grisé pour la notification -->
 <div class="notif-overlay" id="notif-overlay"></div>

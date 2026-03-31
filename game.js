@@ -75,7 +75,7 @@ function startGame() {
   document.getElementById('chat-messages').innerHTML = '';
   _lastDateSep = null;
   addDateSeparator("Aujourd'hui");
-  closeActionsOverlay();
+  closeActionsPanel();
   updateScoreboard();
   updateProgress();
   showScreen('screen-game');
@@ -450,7 +450,7 @@ function showDormantInput() {
   const area = document.getElementById('chat-input-area');
   area.style.display = 'flex';
   area.classList.add('dormant');
-  document.getElementById('chat-pick-btn').style.display   = 'none';
+  document.getElementById('chat-actions-btn').style.display = 'none';
   const inputEl = document.getElementById('chat-input-text');
   inputEl.style.display = 'block';
   inputEl.innerHTML     = '';
@@ -460,14 +460,18 @@ function showDormantInput() {
   scrollToBottom();
 }
 
-/* ── Mode picker : bouton "Voir les actions" dans la barre ── */
+/* ── Mode picker : bouton Actions + champ + envoyer (désactivés) ── */
 function showPickerBtn() {
-  const area = document.getElementById('chat-input-area');
-  area.style.display = 'flex';
+  const area    = document.getElementById('chat-input-area');
+  const inputEl = document.getElementById('chat-input-text');
+  const sendBtn = document.getElementById('chat-send-btn');
+  area.style.display    = 'flex';
   area.classList.remove('dormant');
-  document.getElementById('chat-pick-btn').style.display   = 'flex';
-  document.getElementById('chat-input-text').style.display = 'none';
-  document.getElementById('chat-send-btn').style.display   = 'none';
+  document.getElementById('chat-actions-btn').style.display = 'flex';
+  inputEl.style.display = 'block';
+  inputEl.innerHTML     = '<span style="color:var(--text-muted);opacity:.5;">Message…</span>';
+  sendBtn.style.display = 'flex';
+  sendBtn.disabled      = true;
   scrollToBottom();
 }
 
@@ -476,27 +480,27 @@ function showInputArea() {
   const area = document.getElementById('chat-input-area');
   area.style.display = 'flex';
   area.classList.remove('dormant');
-  document.getElementById('chat-pick-btn').style.display   = 'none';
-  document.getElementById('chat-input-text').style.display = 'block';
-  document.getElementById('chat-send-btn').style.display   = 'flex';
+  closeActionsPanel();
+  document.getElementById('chat-actions-btn').style.display = 'none';
+  document.getElementById('chat-input-text').style.display  = 'block';
+  document.getElementById('chat-send-btn').style.display    = 'flex';
   scrollToBottom();
 }
 
 function hideInputArea() {
+  closeActionsPanel();
   document.getElementById('chat-input-area').style.display = 'none';
   document.getElementById('chat-input-area').classList.remove('dormant');
   document.getElementById('chat-input-text').innerHTML     = '';
   document.getElementById('chat-send-btn').disabled        = true;
-  document.getElementById('chat-pick-btn').style.display   = 'none';
+  document.getElementById('chat-actions-btn').style.display = 'none';
 }
 
 /* ════════════════════════════════════════════
-   OVERLAY GRILLE D'ACTIONS
+   PANEL GRILLE D'ACTIONS
 ════════════════════════════════════════════ */
-function openActionsOverlay() {
-  const overlay = document.getElementById('actions-overlay');
-  const grid    = document.getElementById('ao-grid');
-  document.getElementById('ao-title').textContent = 'Quelle action lances-tu ?';
+function openActionsPanel() {
+  const grid = document.getElementById('ao-grid');
   grid.innerHTML = '';
 
   const unplayed  = phaseOrder.filter(function(i) { return !playedPhases.includes(i) && !isLocked(i); });
@@ -517,7 +521,7 @@ function openActionsOverlay() {
     card.disabled  = isPlayed || locked;
 
     let badge = '';
-    if (isPlayed)    badge = '<span class="ao-card-played-badge">✓ Action ' + (playedPhases.indexOf(i) + 1) + '</span>';
+    if (isPlayed)    badge = '<span class="ao-card-played-badge">✓ Tour ' + (playedPhases.indexOf(i) + 1) + '</span>';
     else if (locked) badge = '<span class="ao-card-locked-badge">🔒</span>';
 
     card.innerHTML = badge +
@@ -532,15 +536,27 @@ function openActionsOverlay() {
     grid.appendChild(card);
   });
 
-  overlay.classList.add('open');
+  document.getElementById('actions-panel').classList.add('open');
+  document.getElementById('chat-actions-btn').classList.add('active');
 }
 
-function closeActionsOverlay() {
-  document.getElementById('actions-overlay').classList.remove('open');
+function closeActionsPanel() {
+  document.getElementById('actions-panel').classList.remove('open');
+  const btn = document.getElementById('chat-actions-btn');
+  if (btn) btn.classList.remove('active');
+}
+
+function toggleActionsPanel() {
+  const panel = document.getElementById('actions-panel');
+  if (panel.classList.contains('open')) {
+    closeActionsPanel();
+  } else {
+    openActionsPanel();
+  }
 }
 
 function selectPhaseFromOverlay(phaseIndex) {
-  closeActionsOverlay();
+  closeActionsPanel();
   pendingAction = { phaseIndex: phaseIndex };
   currentStep   = 'option';
   typewriterInput('Quelles sont les options pour : ' + GAME_DATA.phases[phaseIndex].title + ' ?', null);
@@ -617,7 +633,7 @@ function showOptions(phaseIndex) {
       pendingOption = null;
       pendingInputText = null;
       currentStep = 'pick';
-      openActionsOverlay();
+      openActionsPanel();
     });
   }
 
