@@ -72,6 +72,8 @@ function startGame() {
   if (pushTimer)    { clearTimeout(pushTimer); pushTimer = null; }
 
   document.getElementById('chat-messages').innerHTML = '';
+  _lastDateSep = null;
+  addDateSeparator("Aujourd'hui");
   closeActionsOverlay();
   updateScoreboard();
   updateProgress();
@@ -321,6 +323,19 @@ function checkZero() {
    CHAT HELPERS
 ════════════════════════════════════════════ */
 function getChatEl() { return document.getElementById('chat-messages'); }
+
+const MONTH_NAMES = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+
+let _lastDateSep = null;
+
+function addDateSeparator(label) {
+  const chat = getChatEl();
+  const sep  = document.createElement('div');
+  sep.className   = 'chat-date-sep';
+  sep.textContent = label;
+  chat.appendChild(sep);
+  _lastDateSep = sep;
+}
 
 function scrollToBottom() {
   window.scrollTo({
@@ -774,7 +789,13 @@ function askAction() {
   // puis afficher le message de Naomi à la fermeture
   updateProgress();
   const text = msgs[Math.floor(Math.random() * msgs.length)];
+  const prevPhase = GAME_DATA.phases[playedPhases.length - 1];
+  const prevDateLabel = (prevPhase && prevPhase.tourDate)
+    ? prevPhase.tourDate.day + '\u00a0' + MONTH_NAMES[prevPhase.tourDate.month - 1] + '\u00a0' + prevPhase.tourDate.year
+    : null;
   _calOnClose = function() {
+    if (_lastDateSep && prevDateLabel) _lastDateSep.textContent = prevDateLabel;
+    addDateSeparator("Aujourd'hui");
     showTyping();
     setTimeout(() => {
       hideTyping();
