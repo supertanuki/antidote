@@ -828,8 +828,14 @@ body.notif-open .notif-overlay { display: block; }
 }
 .cab-icon  { font-size: 1.1rem; line-height: 1; font-weight: 400; }
 .cab-label { font-size: .82rem; font-weight: 700; }
-.chat-actions-btn:hover  { background: var(--green); }
-.chat-actions-btn.active { background: var(--green-light); color: var(--green-dark); }
+.chat-actions-btn:hover  { background: var(--green); animation: none; }
+.chat-actions-btn.active { background: var(--green-light); color: var(--green-dark); animation: none; }
+
+@keyframes btnPulse {
+  0%, 100% { opacity: 1;    transform: scale(1); }
+  50%       { opacity: .65; transform: scale(.94); }
+}
+.chat-actions-btn.pulse { animation: btnPulse .7s ease-in-out infinite; }
 
 /* ════════════════════════════════════════════
    ACTIONS PANEL (slide-up, ancré en bas)

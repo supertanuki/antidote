@@ -467,9 +467,17 @@ function showPickerBtn() {
   const area    = document.getElementById('chat-input-area');
   const inputEl = document.getElementById('chat-input-text');
   const sendBtn = document.getElementById('chat-send-btn');
+  const actBtn  = document.getElementById('chat-actions-btn');
   area.style.display    = 'flex';
   area.classList.remove('dormant');
-  document.getElementById('chat-actions-btn').style.display = 'flex';
+  actBtn.style.display  = 'flex';
+  actBtn.classList.remove('pulse');
+  void actBtn.offsetWidth; // force reflow pour relancer l'animation
+  actBtn.classList.add('pulse');
+  actBtn.addEventListener('mouseenter', function stopPulse() {
+    actBtn.classList.remove('pulse');
+    actBtn.removeEventListener('mouseenter', stopPulse);
+  }, { once: true });
   inputEl.style.display = 'block';
   inputEl.innerHTML     = '<span style="color:var(--text-muted);opacity:.5;">Message…</span>';
   sendBtn.style.display = 'flex';
