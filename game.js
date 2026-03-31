@@ -9,7 +9,7 @@ let playedActions  = [];
 let phaseOrder     = [];
 let eventOrder     = [];
 let eventCount     = 0;
-let juridiqueLocked    = true;
+let _unlockedShown     = [];
 let pendingAction      = null;
 let pendingOption      = null;
 let pendingCounterData = null;
@@ -20,7 +20,7 @@ let pushTimer          = null;
 let counterTimer       = null;
 
 const MAX_SCORE   = 100;
-const PHASE_ICONS = ['🤝','🏛️','🔬','📺','📣','📱','✊','🌾','⚖️','🇪🇺'];
+const PHASE_ICONS = ['🤝','🏛️','🔬','📺','🌾','📣','📱','✊','📋','⚖️'];
 
 function shuffle(arr) {
   const a = [...arr];
@@ -32,7 +32,8 @@ function shuffle(arr) {
 }
 
 function isLocked(i) {
-  return !!(GAME_DATA.phases[i].locked && juridiqueLocked);
+  const lu = GAME_DATA.phases[i].lockedUntil;
+  return !!(lu && playedPhases.length < lu);
 }
 
 function getTime() {
@@ -61,7 +62,7 @@ function startGame() {
   phaseOrder         = shuffle(GAME_DATA.phases.map((_, i) => i));
   eventOrder         = shuffle(GAME_DATA.events.map((_, i) => i));
   eventCount         = 0;
-  juridiqueLocked    = true;
+  _unlockedShown     = [];
   pendingAction      = null;
   pendingOption      = null;
   pendingCounterData = null;
@@ -498,10 +499,12 @@ function openActionsOverlay() {
   document.getElementById('ao-title').textContent = 'Quelle action lances-tu ?';
   grid.innerHTML = '';
 
-  const JURIDIQUE_INDEX = 8;
-  const unplayed     = phaseOrder.filter(function(i) { return !playedPhases.includes(i) && i !== JURIDIQUE_INDEX; });
-  const juridiqueArr = !playedPhases.includes(JURIDIQUE_INDEX) ? [JURIDIQUE_INDEX] : [];
-  const displayOrder = playedPhases.concat(unplayed).concat(juridiqueArr);
+  const unplayed  = phaseOrder.filter(function(i) { return !playedPhases.includes(i) && !isLocked(i); });
+  const lockedArr = GAME_DATA.phases
+    .map(function(_, i) { return i; })
+    .filter(function(i) { return !playedPhases.includes(i) && isLocked(i); })
+    .sort(function(a, b) { return (GAME_DATA.phases[a].lockedUntil || 99) - (GAME_DATA.phases[b].lockedUntil || 99); });
+  const displayOrder = playedPhases.concat(unplayed).concat(lockedArr);
 
   displayOrder.forEach(function(i) {
     const phase    = GAME_DATA.phases[i];
@@ -748,8 +751,12 @@ function afterCounterAttack() {
     return;
   }
 
-  if (playedPhases.length === 5 && juridiqueLocked) {
-    setTimeout(function() { showUnlockMessage(); }, 600);
+  const newlyUnlocked = GAME_DATA.phases.filter(function(p, i) {
+    return p.lockedUntil === playedPhases.length && !_unlockedShown.includes(i);
+  });
+  if (newlyUnlocked.length > 0) {
+    newlyUnlocked.forEach(function(p) { _unlockedShown.push(GAME_DATA.phases.indexOf(p)); });
+    setTimeout(function() { showUnlockMessage(newlyUnlocked); }, 600);
     return;
   }
 
@@ -844,8 +851,6 @@ function triggerEvent() {
     function afterOutcome() {
       if (zeroKey !== null) {
         setTimeout(function() { showEarlyEnd(zeroKey); }, 400);
-      } else if (playedPhases.length === 5 && juridiqueLocked) {
-        setTimeout(function() { showUnlockMessage(); }, 400);
       } else {
         setTimeout(function() { askAction(); }, 400);
       }
@@ -867,26 +872,29 @@ function triggerEvent() {
 }
 
 /* ════════════════════════════════════════════
-   DÉBLOCAGE BATAILLE JURIDIQUE
+   DÉBLOCAGE DE NOUVELLES ACTIONS
 ════════════════════════════════════════════ */
-function showUnlockMessage() {
+const UNLOCK_ICONS = { 'Lobbying Direct': '📋', 'Bataille juridique': '⚖️' };
+const UNLOCK_MSGS  = {
+  'Lobbying Direct':
+    '<strong>📋 Le Lobbying Direct est maintenant disponible\u00a0!</strong><br>' +
+    'Les débats en séance publique sont ouverts. Il est temps de rencontrer directement les parlementaires, de transmettre des amendements et de nourrir les cabinets avec vos analyses.',
+  'Bataille juridique':
+    '<strong>⚖️ La Bataille juridique est maintenant disponible\u00a0!</strong><br>' +
+    'Le vote approche. La voie judiciaire s\'ouvre comme dernier levier\u00a0: recours, plaintes, collectif d\'avocats. Une arme de plus pour peser sur la décision finale.'
+};
+
+function showUnlockMessage(phases) {
   showTyping();
   setTimeout(function() {
     hideTyping();
-
-    addColleagueMessage(
-      '<strong>⚖️ La Bataille juridique est maintenant disponible\u00a0!</strong><br>' +
-      'Le d\u00e9bat parlementaire commence, la voie judiciaire s\'ouvre 😉<br>' +
-      'Tu peux d\u00e9sormais d\u00e9poser des recours, porter plainte et mobiliser des avocats pour faire pression par un autre canal.'
-    );
-
+    phases.forEach(function(p) {
+      const msg = UNLOCK_MSGS[p.title] ||
+        '<strong>🔓 ' + p.title + ' est maintenant disponible\u00a0!</strong>';
+      addColleagueMessage(msg);
+    });
     scrollToBottom();
-
-    // Poursuite automatique après 5 secondes
-    setTimeout(function() {
-      juridiqueLocked = false;
-      askAction();
-    }, 5000);
+    setTimeout(function() { askAction(); }, 5000);
   }, 900);
 }
 

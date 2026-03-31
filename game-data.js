@@ -109,7 +109,7 @@ const GAME_DATA = {
       tourLabel: "Inscription et désignation du rapporteur",
       tourDescription: "Le texte est inscrit à l'ordre du jour et un rapporteur est désigné pour piloter son examen.",
       tourDate: { day: 2, month: 4, year: 2026 },
-      title: "Coalition d'organisations",
+      title: "Construire une coalition d'organisations",
       description: "Construire une coalition d'associations est souvent la première étape d'une stratégie de plaidoyer. En unissant leurs forces, les organisations multiplient leur visibilité et leur crédibilité. Mais chaque alliance a ses fragilités - et le lobby s'empressera de les exploiter.",
       actions: [
         {
@@ -177,7 +177,7 @@ const GAME_DATA = {
       tourLabel: "Rédaction du rapport",
       tourDescription: "Le rapporteur rédige son rapport, qui commence à structurer le débat politique.",
       tourDate: { day: 30, month: 4, year: 2026 },
-      title: "Expertise scientifique",
+      title: "Mobiliser l'expertise scientifique",
       description: "Dans les batailles réglementaires, l'expertise scientifique est un outil clé. Elle permet de contester les arguments des industriels et de donner une légitimité au plaidoyer. Mais l'industrie dispose de moyens considérables pour financer des contre-expertises et semer le doute.",
       actions: [
         {
@@ -245,7 +245,42 @@ const GAME_DATA = {
       tourLabel: "Examen en commission",
       tourDescription: "La commission examine le texte et vote sur les amendements.",
       tourDate: { day: 6, month: 5, year: 2026 },
-      title: "Agenda public",
+      title: "Dialoguer avec les agriculteurs",
+      description: "Le lobby des pesticides s'appuie massivement sur la figure de l'agriculteur pour légitimer ses positions. Aller à la rencontre des agriculteurs, notamment ceux qui travaillent sans pesticides dangereux, permet de casser ce monopole de représentation.",
+      actions: [
+        {
+          label: "Témoignages d'agriculteurs bio",
+          description: "Mettre en avant des agriculteurs qui travaillent sans pesticides dangereux est un contre-récit puissant face à l'argument que \"les agriculteurs ont besoin de ces produits\". Des voix agricoles dans le débat changent la donne.",
+          scenario: "Des agriculteurs expliquent publiquement qu'il est possible et rentable de produire sans pesticides dangereux. Le débat devient plus nuancé et sort du clivage ONG vs. agriculture.",
+          effects: { public: 1, political: 0, resources: 0 },
+          counterAttack: "Le syndicat agricole majoritaire organise une mobilisation pour défendre les pesticides et présenter les agriculteurs bio comme des exceptions non représentatives.",
+          counterEffects: { public: 0, political: -2, resources: 0 }
+        },
+        {
+          label: "Tribune commune d'agriculteurs",
+          description: "Une tribune signée par plusieurs dizaines d'agriculteurs opposés à la réautorisation montre que le monde agricole n'est pas monolithique et que le lobby des pesticides ne parle pas en son nom.",
+          scenario: "Des agriculteurs cosignent une tribune publique s'opposant à la réautorisation. Cette prise de parole déstabilise le discours du lobby et oblige les médias à nuancer leur traitement.",
+          effects: { public: 0, political: 1, resources: 0 },
+          counterAttack: "Le syndicat agricole majoritaire contre-attaque en présentant ces agriculteurs comme des militants déguisés en paysans.",
+          counterEffects: { public: 0, political: -2, resources: 0 }
+        },
+        {
+          label: "Rencontres terrain avec les agriculteurs",
+          description: "Organiser des rencontres directes sur le terrain permet de construire des relations de confiance avec des agriculteurs qui ne sont pas convaincus par les pesticides. Ce travail de fond prend du temps mais construit des alliances solides.",
+          scenario: "ANTIDOTE organise des rencontres sur le terrain avec des agriculteurs en quête d'alternatives aux pesticides dangereux. Des liens se créent qui pourraient devenir de futurs relais.",
+          effects: { public: 2, political: 0, resources: 0 },
+          counterAttack: "Le syndicat agricole majoritaire mobilise ses réseaux locaux pour dissuader les agriculteurs de participer aux rencontres d'ANTIDOTE.",
+          counterEffects: { public: 0, political: -1, resources: 0 }
+        }
+      ]
+    },
+    {
+      id: 6,
+      tourLabel: "Dépôt des amendements en séance",
+      tourDescription: "De nouveaux amendements sont déposés en vue de la séance publique.",
+      tourDate: { day: 12, month: 5, year: 2026 },
+      title: "Mettre le sujet à l'agenda public",
+      lockedUntil: 4,
       description: "Mettre un sujet à l'agenda public, c'est le rendre incontournable pour les décideurs. Des citoyens qui signent une pétition, des personnalités qui s'engagent, des campagnes d'interpellation : autant de leviers pour créer une pression politique diffuse mais réelle.",
       actions: [
         {
@@ -275,11 +310,12 @@ const GAME_DATA = {
       ]
     },
     {
-      id: 6,
-      tourLabel: "Dépôt des amendements en séance",
-      tourDescription: "De nouveaux amendements sont déposés en vue de la séance publique.",
-      tourDate: { day: 12, month: 5, year: 2026 },
-      title: "Réseaux sociaux",
+      id: 7,
+      tourLabel: "Début de la séance publique",
+      tourDescription: "Le texte arrive dans l'hémicycle et les débats commencent.",
+      tourDate: { day: 25, month: 5, year: 2026 },
+      title: "Mobiliser les réseaux sociaux",
+      lockedUntil: 4,
       description: "Les réseaux sociaux permettent de toucher des millions de personnes à faible coût. Mais ils sont aussi le terrain favori des contre-offensives industrielles : campagnes sponsorisées, trolls organisés, désinformation ciblée. Une arme à double tranchant.",
       actions: [
         {
@@ -309,11 +345,12 @@ const GAME_DATA = {
       ]
     },
     {
-      id: 7,
-      tourLabel: "Début de la séance publique",
-      tourDescription: "Le texte arrive dans l'hémicycle et les débats commencent.",
-      tourDate: { day: 25, month: 5, year: 2026 },
+      id: 8,
+      tourLabel: "Suite des débats en séance",
+      tourDescription: "Les députés discutent et votent les articles et amendements.",
+      tourDate: { day: 1, month: 6, year: 2026 },
       title: "Actions militantes",
+      lockedUntil: 4,
       description: "Les actions militantes - manifestations, actions symboliques, happenings - créent de l'événement médiatique et montrent une mobilisation physique. Elles peuvent galvaniser les soutiens. Mais un incident peut aussi se retourner contre la campagne.",
       actions: [
         {
@@ -343,49 +380,48 @@ const GAME_DATA = {
       ]
     },
     {
-      id: 8,
-      tourLabel: "Suite des débats en séance",
-      tourDescription: "Les députés discutent et votent les articles et amendements.",
-      tourDate: { day: 1, month: 6, year: 2026 },
-      title: "Dialoguer avec les agriculteurs",
-      description: "Le lobby des pesticides s'appuie massivement sur la figure de l'agriculteur pour légitimer ses positions. Aller à la rencontre des agriculteurs, notamment ceux qui travaillent sans pesticides dangereux, permet de casser ce monopole de représentation.",
+      id: 9,
+      tourLabel: "Vote solennel",
+      tourDescription: "Les députés se prononcent sur l'ensemble du texte.",
+      tourDate: { day: 5, month: 6, year: 2026 },
+      title: "Lobbying Direct",
+      lockedUntil: 5,
+      description: "Avec l'ouverture des débats en séance publique, le lobbying direct prend toute son importance. Rencontrer les parlementaires en face à face, leur transmettre des analyses précises et déposer des amendements sont les leviers les plus efficaces pour modifier le texte - et les plus difficiles à contrer pour les industriels.",
       actions: [
         {
-          label: "Témoignages d'agriculteurs bio",
-          description: "Mettre en avant des agriculteurs qui travaillent sans pesticides dangereux est un contre-récit puissant face à l'argument que \"les agriculteurs ont besoin de ces produits\". Des voix agricoles dans le débat changent la donne.",
-          scenario: "Des agriculteurs expliquent publiquement qu'il est possible et rentable de produire sans pesticides dangereux. Le débat devient plus nuancé et sort du clivage ONG vs. agriculture.",
-          effects: { public: 1, political: 0, resources: 0 },
-          counterAttack: "Le syndicat agricole majoritaire organise une mobilisation pour défendre les pesticides et présenter les agriculteurs bio comme des exceptions non représentatives.",
+          label: "Rédiger et transmettre des amendements",
+          description: "Rédiger des amendements techniques en collaboration avec des parlementaires alliés et les transmettre officiellement avant la séance publique. Modifier le texte directement est l'objectif final de tout plaidoyer législatif.",
+          scenario: "ANTIDOTE rédige des amendements précis avec l'appui de parlementaires alliés. Plusieurs amendements sont officiellement déposés et défendus en séance. Le texte commence à être modifié dans le bon sens.",
+          effects: { public: 0, political: 3, resources: -1 },
+          counterAttack: "Le lobby des pesticides fait pression sur les groupes politiques pour rejeter les amendements. Plusieurs élus qui semblaient acquis reculent sous la pression des industriels.",
           counterEffects: { public: 0, political: -2, resources: 0 }
         },
         {
-          label: "Tribune commune d'agriculteurs",
-          description: "Une tribune signée par plusieurs dizaines d'agriculteurs opposés à la réautorisation montre que le monde agricole n'est pas monolithique et que Le lobby des pesticides ne parle pas en son nom.",
-          scenario: "Des agriculteurs cosignent une tribune publique s'opposant à la réautorisation. Cette prise de parole déstabilise le discours du lobby et oblige les médias à nuancer leur traitement.",
-          effects: { public: 0, political: 1, resources: 0 },
-          counterAttack: "Le syndicat agricole majoritaire contre-attaque en présentant ces agriculteurs comme des militants déguisés en paysans.",
-          counterEffects: { public: 0, political: -2, resources: 0 }
+          label: "Rencontrer directement des parlementaires clés",
+          description: "Rencontrer en face à face les parlementaires indécis ou influents dans les commissions pour les convaincre de voter contre la réautorisation. Un échange direct permet de lever les doutes et de bâtir une confiance que les courriers ne permettent pas.",
+          scenario: "Des réunions discrètes mais décisives permettent à ANTIDOTE de présenter ses arguments directement aux parlementaires clés. Plusieurs élus jusqu'alors hésitants s'engagent à voter contre la réautorisation.",
+          effects: { public: 0, political: 2, resources: -1 },
+          counterAttack: "Le lobby des pesticides apprend les contacts d'ANTIDOTE et organise une contre-offensive auprès des mêmes parlementaires, multipliant les rendez-vous et les arguments économiques.",
+          counterEffects: { public: 0, political: -1, resources: 0 }
         },
         {
-          label: "Rencontres terrain avec les agriculteurs",
-          description: "Organiser des rencontres directes sur le terrain permet de construire des relations de confiance avec des agriculteurs qui ne sont pas convaincus par les pesticides. Ce travail de fond prend du temps mais construit des alliances solides.",
-          scenario: "ANTIDOTE organise des rencontres sur le terrain avec des agriculteurs en quête d'alternatives aux pesticides dangereux. Des liens se créent qui pourraient devenir de futurs relais.",
-          effects: { public: 2, political: 0, resources: 0 },
-          counterAttack: "Le syndicat agricole majoritaire mobilise ses réseaux locaux pour dissuader les agriculteurs de participer aux rencontres d'ANTIDOTE.",
+          label: "Transmettre des notes d'analyse aux cabinets",
+          description: "Préparer et transmettre des notes de synthèse factuelles aux cabinets ministériels et à l'administration pour alimenter leur réflexion avec une expertise indépendante. Influencer l'administration, c'est influencer les arbitrages en amont du vote.",
+          scenario: "Des notes de synthèse circulent dans les cabinets ministériels et chez les hauts fonctionnaires. L'administration intègre progressivement les arguments d'ANTIDOTE dans ses propres analyses et recommandations.",
+          effects: { public: 0, political: 2, resources: -1 },
+          counterAttack: "Les représentants de l'industrie transmettent à leur tour leurs propres analyses et font valoir leurs relais dans l'administration pour minimiser l'impact des notes d'ANTIDOTE.",
           counterEffects: { public: 0, political: -1, resources: 0 }
         }
       ]
     },
     {
-      id: 9,
-      tourLabel: "Vote solennel",
-      tourDescription: "Les députés se prononcent sur l'ensemble du texte.",
-      tourDate: { day: 5, month: 6, year: 2026 },
+      id: 10,
+      tourLabel: "Après-vote",
+      tourDescription: "Le résultat déclenche des réactions politiques et peut ouvrir une nouvelle phase de bataille.",
+      tourDate: { day: 8, month: 6, year: 2026 },
       title: "Bataille juridique",
-      locked: true,
-      lockedUntil: 5,
-      lockedMessage: "Cette action n'est pas encore disponible",
-      description: "À mi-parcours du processus législatif, la voie juridique s'ouvre. Les recours, plaintes et stratégies judiciaires permettent de peser sur le débat par un autre canal - parfois le seul restant quand les autres leviers sont bloqués.",
+      lockedUntil: 8,
+      description: "En fin de processus législatif, la voie juridique s'ouvre comme dernier levier. Les recours, plaintes et stratégies judiciaires permettent de peser sur le débat par un autre canal - parfois le seul restant quand les autres leviers sont bloqués.",
       actions: [
         {
           label: "Déposer un recours juridique",
@@ -409,40 +445,6 @@ const GAME_DATA = {
           scenario: "ANTIDOTE réunit un collectif d'avocats spécialisés en droit de l'environnement pour préparer une stratégie judiciaire complète. Ce dispositif renforce la crédibilité de l'association dans le débat.",
           effects: { public: 0, political: 2, resources: 0 },
           counterAttack: "L'industrie fait pression sur les cabinets d'avocats pour décourager certains d'entre eux de travailler avec ANTIDOTE.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
-        }
-      ]
-    },
-    {
-      id: 10,
-      tourLabel: "Après-vote",
-      tourDescription: "Le résultat déclenche des réactions politiques et peut ouvrir une nouvelle phase de bataille.",
-      tourDate: { day: 8, month: 6, year: 2026 },
-      title: "Action européenne",
-      description: "L'Union européenne réglemente les pesticides et peut mettre la pression sur les États membres. Interpeller les institutions européennes permet d'ouvrir un second front dans la bataille politique et d'obtenir des soutiens au-delà des frontières.",
-      actions: [
-        {
-          label: "Saisir la Commission européenne",
-          description: "Alerter la Commission européenne sur la réautorisation de pesticides interdits dans d'autres pays européens crée un précédent diplomatique et oblige le gouvernement français à justifier sa position.",
-          scenario: "ANTIDOTE saisit la Commission européenne en lui soumettant un dossier documenté sur la réautorisation projetée. La démarche crée une pression diplomatique nouvelle sur le gouvernement.",
-          effects: { public: 0, political: 2, resources: 0 },
-          counterAttack: "Le lobby des pesticides exerce des pressions auprès de ses relais au Parlement européen pour minimiser la portée de la saisine.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
-        },
-        {
-          label: "Coalition d'ONG européennes",
-          description: "Construire une coalition d'ONG de plusieurs pays européens amplifie la visibilité de la campagne et montre que l'enjeu dépasse les frontières françaises. Solidarité et force collective.",
-          scenario: "Une coalition d'ONG européennes rejoint ANTIDOTE pour dénoncer la réautorisation de pesticides dangereux. L'affaire prend une dimension continentale et les médias européens s'en emparent.",
-          effects: { public: 2, political: 1, resources: 0 },
-          counterAttack: "L'industrie mobilise ses lobbies européens pour contrer la coalition et tenter d'isoler ANTIDOTE au niveau des instances bruxelloises.",
-          counterEffects: { public: -1, political: -1, resources: 0 }
-        },
-        {
-          label: "Interpeller des eurodéputés",
-          description: "Contacter directement des eurodéputés, notamment ceux des commissions environnement et santé, pour les inviter à interpeller le gouvernement français est un levier d'influence institutionnel.",
-          scenario: "Des eurodéputés interpellent le gouvernement français sur la réautorisation de pesticides dangereux. La question remonte jusqu'aux instances européennes et met le gouvernement en position délicate.",
-          effects: { public: 0, political: 2, resources: 0 },
-          counterAttack: "Le lobby des industriels exerce des pressions sur ses relais au Parlement européen pour contrecarrer les interpellations des eurodéputés alliés.",
           counterEffects: { public: 0, political: -1, resources: 0 }
         }
       ]
