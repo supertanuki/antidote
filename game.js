@@ -336,9 +336,9 @@ function showScoreDelta(effects) {
     el.className  = 'score-delta-float ' + (delta > 0 ? 'pos' : 'neg');
     el.textContent = (delta > 0 ? '+' : '') + delta;
     el.style.left = (rect.left + rect.width / 2) + 'px';
-    el.style.top  = rect.top + 'px';
+    el.style.top  = rect.bottom + 'px';
     document.body.appendChild(el);
-    setTimeout(function() { if (el.parentNode) el.remove(); }, 1400);
+    setTimeout(function() { if (el.parentNode) el.remove(); }, 2200);
   });
 }
 
@@ -362,7 +362,26 @@ function checkZero() {
 ════════════════════════════════════════════ */
 function getChatEl() { return document.getElementById('chat-messages'); }
 
+function setNaomiOffline(offline) {
+  const dot = document.querySelector('.chat-online-dot');
+  if (dot) dot.classList.toggle('offline', offline);
+  if (!offline) {
+    getChatEl().querySelectorAll('.chat-date-sep').forEach(function(sep) {
+      if (sep.textContent === 'Naomi est hors ligne') sep.remove();
+    });
+  }
+}
+
 const MONTH_NAMES = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+
+function formatTourDate(tourDate) {
+  return tourDate.day + '\u00a0' + MONTH_NAMES[tourDate.month - 1] + '\u00a0' + tourDate.year;
+}
+
+function addDaysToTourDate(tourDate, n) {
+  const d = new Date(tourDate.year, tourDate.month - 1, tourDate.day + n);
+  return { day: d.getDate(), month: d.getMonth() + 1, year: d.getFullYear() };
+}
 
 let _lastDateSep = null;
 
@@ -458,10 +477,9 @@ function freezeOptionCards() {
 /* ── Typewriter dans la zone de saisie ── */
 function typewriterInput(text, cb) {
   const inputEl = document.getElementById('chat-input-text');
-  const sendBtn = document.getElementById('chat-send-btn');
-  sendBtn.disabled = true;
   showInputArea();
   inputEl.innerHTML = '';
+  enableSendBtn();
 
   let i = 0;
   const SPEED = 14;
@@ -474,7 +492,6 @@ function typewriterInput(text, cb) {
       const cursor = document.createElement('span');
       cursor.className = 'cursor';
       inputEl.appendChild(cursor);
-      enableSendBtn();
       scrollToBottom();
       if (cb) cb();
     }
@@ -548,6 +565,7 @@ function enableSendBtn() {
 function hideInputArea() {
   closeStrategyPanel();
   closeActionsPanel();
+  document.getElementById('quick-replies').style.display   = 'none';
   document.getElementById('chat-input-area').style.display = 'none';
   document.getElementById('chat-input-area').classList.remove('dormant');
   document.getElementById('chat-input-text').innerHTML     = '';
@@ -619,8 +637,8 @@ function selectPhaseFromOverlay(phaseIndex) {
   pendingAction = { phaseIndex: phaseIndex };
   pendingOption = null;
 
-  // Mode panel (tous sauf tours 1, 4, 7) : ouvrir le panel stratégies
-  if (playedPhases.length % 3 !== 0) {
+  // Mode panel (tous sauf tours 1, 4, 7 ; le tour 10 va toujours au panel)
+  if (playedPhases.length % 3 !== 0 || playedPhases.length === 9) {
     openStrategyPanel(phaseIndex);
     return;
   }
@@ -726,10 +744,13 @@ function sendMessage() {
 }
 
 function sendMerci() {
+  const inputEl = document.getElementById('chat-input-text');
+  const text = (inputEl.textContent || '').trim() || 'Merci Naomi\u00a0!';
+  document.getElementById('quick-replies').style.display = 'none';
   currentStep = 'waiting';
   showDormantInput();
   playSound('760370__froey__message-sent.mp3');
-  addPlayerMessage('Merci Naomi\u00a0!');
+  addPlayerMessage(text);
   scrollToBottom();
   if (_pendingSend) {
     const cb = _pendingSend;
@@ -832,9 +853,6 @@ function selectOption(cardEl) {
   pendingInputText = prefix + label;
 
   typewriterInput(pendingInputText, null);
-
-  // Permettre l'envoi immédiatement sans attendre la fin de la frappe
-  enableSendBtn();
 }
 
 function sendActionChoice() {
@@ -870,9 +888,40 @@ function sendActionChoice() {
 
   currentStep = 'result';
 
+  const goMsgs = [
+    'C\'est parti\u00a0! A+',
+    'Bien joué\u00a0! Je reviens vers toi pour les résultats. A+',
+    'J\'espère que cette stratégie sera payante. Je te tiens au courant. A+'
+  ];
+
   setTimeout(function() {
     showTyping();
-    setTimeout(function() { hideTyping(); showResult(action, effects); }, 1600);
+    setTimeout(function() {
+      hideTyping();
+      addColleagueMessage(goMsgs[Math.floor(Math.random() * goMsgs.length)]);
+
+      // Naomi passe hors ligne
+      setTimeout(function() {
+        setNaomiOffline(true);
+        addDateSeparator('Naomi est hors ligne');
+
+        setTimeout(function() {
+          // Mettre à jour le séparateur "tour start" avec la date du tour
+          const ph = GAME_DATA.phases[playedPhases[playedPhases.length - 1]];
+          if (ph && ph.tourDate) {
+            // le séparateur "Naomi est hors ligne" reste tel quel ;
+            // le séparateur précédent (début de tour) prend la date du tour
+            const seps = getChatEl().querySelectorAll('.chat-date-sep');
+            if (seps.length >= 2) seps[seps.length - 2].textContent = formatTourDate(ph.tourDate);
+          }
+
+          setNaomiOffline(false);
+          addDateSeparator("Aujourd'hui");
+          showTyping();
+          setTimeout(function() { hideTyping(); showResult(action, effects); }, 1200);
+        }, 3000);
+      }, 2000);
+    }, 1000);
   }, 400);
 }
 
@@ -992,9 +1041,9 @@ function askAction() {
   }
 
   // Tours suivants : d'abord "Merci Naomi" → calendrier → message Naomi
-  const prevPhase = GAME_DATA.phases[playedPhases.length - 1];
-  const prevDateLabel = (prevPhase && prevPhase.tourDate)
-    ? prevPhase.tourDate.day + '\u00a0' + MONTH_NAMES[prevPhase.tourDate.month - 1] + '\u00a0' + prevPhase.tourDate.year
+  const prevPhase = GAME_DATA.phases[playedPhases[playedPhases.length - 1]];
+  const prevResultDateLabel = (prevPhase && prevPhase.tourDate)
+    ? formatTourDate(addDaysToTourDate(prevPhase.tourDate, 2))
     : null;
 
   // Étape 1 : afficher "Merci Naomi" pré-rempli, attendre l'envoi
@@ -1004,7 +1053,7 @@ function askAction() {
       updateProgress();
       playSound('545495__ienba__notification.mp3');
       _calOnClose = function() {
-        if (_lastDateSep && prevDateLabel) _lastDateSep.textContent = prevDateLabel;
+        if (_lastDateSep && prevResultDateLabel) _lastDateSep.textContent = prevResultDateLabel;
         addDateSeparator("Aujourd'hui");
 
         // Construire le message Naomi, avec les déblocages éventuels intégrés
@@ -1033,6 +1082,13 @@ function askAction() {
 }
 
 /* ── Affiche "Merci Naomi" pré-rempli + Send actif ── */
+const MERCI_SUGGESTIONS = [
+  { label: 'Merci', text: 'Merci Naomi\u00a0! A+' },
+  { label: 'Vu, on continue', text: 'Naomi, merci, vu, on continue... A+' },
+  { label: 'On se laisse pas démonter', text: 'Allez on se laisse pas démonter, merci pour les infos\u00a0!' },
+  { label: 'On va gagner', text: 'Tu m\'étonnes ! On va gagner, on peut y arriver ! A+' },
+];
+
 function showMerciInput(cb) {
   const inputEl = document.getElementById('chat-input-text');
   const area    = document.getElementById('chat-input-area');
@@ -1042,11 +1098,31 @@ function showMerciInput(cb) {
   const sendBtn = document.getElementById('chat-send-btn');
   sendBtn.style.display = 'flex';
   inputEl.style.display = 'block';
-  inputEl.textContent   = 'Merci Naomi\u00a0!';
+  const picked = shuffle(MERCI_SUGGESTIONS).slice(0, 2);
+  inputEl.textContent   = picked[0].text;
   inputEl.contentEditable = 'false';
   enableSendBtn();
   _pendingSend = cb;
   currentStep  = 'merci';
+
+  // Boutons de suggestion : 2 au hasard
+  const qr = document.getElementById('quick-replies');
+  qr.innerHTML = '';
+  picked.forEach(function(s) {
+    const btn = document.createElement('button');
+    btn.className   = 'qr-btn';
+    btn.textContent = s.label;
+    btn.addEventListener('click', function() {
+      inputEl.textContent = s.text;
+      qr.querySelectorAll('.qr-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    });
+    qr.appendChild(btn);
+  });
+  // Marquer le premier comme actif par défaut
+  qr.querySelector('.qr-btn').classList.add('active');
+  qr.style.display = 'flex';
+
   scrollToBottom();
 }
 

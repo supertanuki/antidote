@@ -1,5 +1,5 @@
 const GAME_DATA = {
-  initialScores: { public: 40, political: 60, resources: 100, score: 0 },
+  initialScores: { public: 40, political: 60, resources: 130, score: 0 },
 
   endConditions: {
     publicZero: {
