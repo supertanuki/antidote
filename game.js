@@ -19,7 +19,8 @@ let typingRowEl        = null;
 let pushTimer          = null;
 let counterTimer       = null;
 
-const MAX_SCORES  = { public: 40, political: 60, resources: 100 };
+// Référence d'affichage des barres : valeur initiale × 2 = 50 % au départ
+const BAR_REF = { public: 80, political: 120, resources: 200 };
 const PHASE_ICONS = ['🤝','🏛️','🔬','📺','🌾','📣','📱','✊','📋','⚖️'];
 
 /* ── Sons ── */
@@ -143,20 +144,20 @@ function showScreen(id) {
 ════════════════════════════════════════════ */
 function updateScoreboard(animateKeys) {
   ['public','political','resources'].forEach(key => {
-    const val  = scores[key];
-    const max  = MAX_SCORES[key];
+    const val = scores[key];
+    const ref = BAR_REF[key];
     const elV  = document.getElementById('score-' + key);
     const elB  = document.getElementById('bar-'   + key);
     const pill = document.getElementById('pill-'  + key);
 
     elV.textContent = val;
-    const pct = Math.max(0, Math.min(100, (val / max) * 100));
+    const pct = Math.max(0, Math.min(100, (val / ref) * 100));
     elB.style.width = pct + '%';
 
     elB.classList.remove('danger','warning');
     pill.classList.remove('danger','warning');
-    if (val <= max * 0.10)      { elB.classList.add('danger');  pill.classList.add('danger'); }
-    else if (val <= max * 0.20) { elB.classList.add('warning'); pill.classList.add('warning'); }
+    if (val <= ref * 0.10)      { elB.classList.add('danger');  pill.classList.add('danger'); }
+    else if (val <= ref * 0.20) { elB.classList.add('warning'); pill.classList.add('warning'); }
 
     if (animateKeys && animateKeys.includes(key)) {
       elV.style.color = '#f5c842';
@@ -310,9 +311,9 @@ function getTourBand() {
 }
 
 function applyEffects(effects) {
-  scores.public    = Math.max(0, Math.min(MAX_SCORES.public,    scores.public    + (effects.public    || 0)));
-  scores.political = Math.max(0, Math.min(MAX_SCORES.political, scores.political + (effects.political || 0)));
-  scores.resources = Math.max(0, Math.min(MAX_SCORES.resources, scores.resources + (effects.resources || 0)));
+  scores.public    = Math.max(0, scores.public    + (effects.public    || 0));
+  scores.political = Math.max(0, scores.political + (effects.political || 0));
+  scores.resources = Math.max(0, scores.resources + (effects.resources || 0));
   scores.score     = (scores.score || 0) + (effects.score || 0);
 }
 
