@@ -22,6 +22,18 @@ let counterTimer       = null;
 const MAX_SCORES  = { public: 40, political: 60, resources: 100 };
 const PHASE_ICONS = ['🤝','🏛️','🔬','📺','🌾','📣','📱','✊','📋','⚖️'];
 
+/* ── Sons ── */
+let _soundEnabled = true;
+
+function playSound(filename) {
+  if (!_soundEnabled) return;
+  try {
+    const audio = new Audio('sfx/' + filename);
+    audio.volume = 0.5;
+    audio.play().catch(function() {});
+  } catch (e) {}
+}
+
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -56,6 +68,16 @@ function bindBtn(row, selector, handler) {
    INIT
 ════════════════════════════════════════════ */
 function startGame() {
+  _soundEnabled = document.getElementById('opt-sound')
+    ? document.getElementById('opt-sound').checked
+    : true;
+
+  const wantFullscreen = document.getElementById('opt-fullscreen')
+    && document.getElementById('opt-fullscreen').checked;
+  if (wantFullscreen && document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen().catch(function() {});
+  }
+
   scores             = { ...GAME_DATA.initialScores };
   playedPhases       = [];
   playedActions      = [];
@@ -365,6 +387,7 @@ function scrollToTop() {
 }
 
 function addColleagueMessage(htmlContent) {
+  playSound('400697__daphne_in_wonderland__messenger-notification-sound-imitation.mp3');
   const chat = getChatEl();
   const row  = document.createElement('div');
   row.className = 'msg-row naomi';
@@ -702,6 +725,7 @@ function sendMessage() {
 function sendMerci() {
   currentStep = 'waiting';
   showDormantInput();
+  playSound('760370__froey__message-sent.mp3');
   addPlayerMessage('Merci Naomi\u00a0!');
   scrollToBottom();
   if (_pendingSend) {
@@ -714,6 +738,7 @@ function sendMerci() {
 function sendPhaseChoice() {
   const phaseIndex = pendingAction.phaseIndex;
   showDormantInput();
+  playSound('760370__froey__message-sent.mp3');
   addPlayerMessage('Quelles sont les options pour\u00a0' + PHASE_ICONS[phaseIndex] + ' ' + GAME_DATA.phases[phaseIndex].title + '\u00a0?');
 
   setTimeout(function() {
@@ -829,6 +854,7 @@ function sendActionChoice() {
   closeActionsPanel();
   freezeOptionCards();
   showDormantInput();
+  playSound('760370__froey__message-sent.mp3');
   addPlayerMessage(inputText);
 
   playedActions.push({ phase: phase.title, action: action.label });
@@ -975,6 +1001,7 @@ function askAction() {
     // Étape 2 : 1 s après l'envoi → incrémenter tour + ouvrir calendrier
     setTimeout(function() {
       updateProgress();
+      playSound('545495__ienba__notification.mp3');
       _calOnClose = function() {
         if (_lastDateSep && prevDateLabel) _lastDateSep.textContent = prevDateLabel;
         addDateSeparator("Aujourd'hui");
@@ -1034,6 +1061,7 @@ function triggerEvent() {
 
   const zeroKey = checkZero();
 
+  playSound('545495__ienba__notification.mp3');
   notif.classList.add('show');
 
   if (pushTimer) clearTimeout(pushTimer);

@@ -118,6 +118,60 @@ body {
 .btn:active { transform: translateY(0); }
 .btn-primary { background: var(--green-light); color: var(--green-dark); }
 
+/* ── Options d'accueil ── */
+.welcome-options {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+.welcome-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.welcome-toggle input { display: none; }
+
+.wt-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid rgba(255,255,255,.5);
+  background: rgba(255,255,255,.08);
+  flex-shrink: 0;
+  transition: background .2s, border-color .2s;
+  position: relative;
+}
+
+.welcome-toggle input:checked + .wt-box {
+  background: var(--green-light);
+  border-color: var(--green-light);
+}
+
+.welcome-toggle input:checked + .wt-box::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 0px;
+  width: 6px;
+  height: 11px;
+  border: 2px solid var(--green-dark);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+.wt-label {
+  font-size: .9rem;
+  opacity: .9;
+  color: rgba(255,255,255,.9);
+}
+
 /* ════════════════════════════════════════════
    CHAT HEADER  (deux lignes sur mobile)
 ════════════════════════════════════════════ */
