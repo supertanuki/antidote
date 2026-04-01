@@ -87,6 +87,7 @@ function startGame() {
   eventCount         = 0;
   _unlockedShown     = [];
   _pendingSend       = null;
+  _pendingUnlocks    = [];
   pendingAction      = null;
   pendingOption      = null;
   pendingCounterData = null;
@@ -200,7 +201,8 @@ let _calMonth = 4;
 let _calYear  = 2025;
 let _calSelectedPhaseIdx = 0;
 let _calOnClose   = null;
-let _pendingSend  = null; // callback déclenché au clic Envoyer (mode merci)
+let _pendingSend    = null; // callback déclenché au clic Envoyer (mode merci)
+let _pendingUnlocks = [];  // phases débloquées à annoncer au début du prochain tour
 
 function openCalendar() {
   const label = document.getElementById('chp-label');
@@ -617,16 +619,16 @@ function selectPhaseFromOverlay(phaseIndex) {
   pendingAction = { phaseIndex: phaseIndex };
   pendingOption = null;
 
-  // Mode panel (tours pairs) : garder le panel actions ouvert, ouvrir le panel stratégies
-  if (playedPhases.length % 2 === 1) {
+  // Mode panel (tous sauf tours 1, 4, 7) : ouvrir le panel stratégies
+  if (playedPhases.length % 3 !== 0) {
     openStrategyPanel(phaseIndex);
     return;
   }
 
-  // Mode chat (tours impairs) : comportement habituel
+  // Mode chat (tours 1, 4, 7) : demander à Naomi
   closeActionsPanel();
   currentStep = 'option';
-  typewriterInput('Quelles sont les options pour\u00a0: ' + GAME_DATA.phases[phaseIndex].title + '\u00a0?', null);
+  typewriterInput('Que me recommandes-tu comme stratégies pour\u00a0: ' + GAME_DATA.phases[phaseIndex].title + '\u00a0?', null);
 }
 
 /* ════════════════════════════════════════════
@@ -740,7 +742,7 @@ function sendPhaseChoice() {
   const phaseIndex = pendingAction.phaseIndex;
   showDormantInput();
   playSound('760370__froey__message-sent.mp3');
-  addPlayerMessage('Quelles sont les options pour\u00a0' + PHASE_ICONS[phaseIndex] + ' ' + GAME_DATA.phases[phaseIndex].title + '\u00a0?');
+  addPlayerMessage('Que me recommandes-tu comme stratégies pour\u00a0' + PHASE_ICONS[phaseIndex] + ' ' + GAME_DATA.phases[phaseIndex].title + '\u00a0?');
 
   setTimeout(function() {
     showTyping();
@@ -954,8 +956,7 @@ function afterCounterAttack() {
   });
   if (newlyUnlocked.length > 0) {
     newlyUnlocked.forEach(function(p) { _unlockedShown.push(GAME_DATA.phases.indexOf(p)); });
-    setTimeout(function() { showUnlockMessage(newlyUnlocked); }, 600);
-    return;
+    _pendingUnlocks = newlyUnlocked; // annoncé au début du prochain tour
   }
 
   if (playedPhases.length % 2 === 0) {
@@ -973,9 +974,9 @@ function askAction() {
   const remaining = GAME_DATA.phases.length - playedPhases.length;
   const s         = remaining > 1 ? 's' : '';
   const msgs      = [
-    'Quelle est ta <strong>prochaine action</strong>\u00a0? Il reste <strong>' + remaining + ' action' + s + '</strong> possible' + s + ' avant le vote final.',
-    'Il nous reste <strong>' + remaining + ' action' + s + '</strong>. Quelle action lances-tu\u00a0?',
-    'Ok, au suivant. <strong>' + remaining + ' action' + s + '</strong> restante' + s + '. Quelle est ta strat\u00e9gie\u00a0?',
+    'Coucou ! Quelle est ta <strong>prochaine action</strong>\u00a0? Il reste <strong>' + remaining + ' action' + s + '</strong> possible' + s + ' avant le vote final.',
+    'Salut ! Il nous reste <strong>' + remaining + ' action' + s + '</strong>. Quelle action lances-tu\u00a0?',
+    'Bonjour ! <strong>' + remaining + ' action' + s + '</strong> restante' + s + '. Quelle est ta strat\u00e9gie\u00a0?',
   ];
 
   if (playedPhases.length === 0) {
@@ -991,7 +992,6 @@ function askAction() {
   }
 
   // Tours suivants : d'abord "Merci Naomi" → calendrier → message Naomi
-  const text = msgs[Math.floor(Math.random() * msgs.length)];
   const prevPhase = GAME_DATA.phases[playedPhases.length - 1];
   const prevDateLabel = (prevPhase && prevPhase.tourDate)
     ? prevPhase.tourDate.day + '\u00a0' + MONTH_NAMES[prevPhase.tourDate.month - 1] + '\u00a0' + prevPhase.tourDate.year
@@ -1006,6 +1006,19 @@ function askAction() {
       _calOnClose = function() {
         if (_lastDateSep && prevDateLabel) _lastDateSep.textContent = prevDateLabel;
         addDateSeparator("Aujourd'hui");
+
+        // Construire le message Naomi, avec les déblocages éventuels intégrés
+        const base = msgs[Math.floor(Math.random() * msgs.length)];
+        const unlocks = _pendingUnlocks;
+        _pendingUnlocks = [];
+        let text = base;
+        if (unlocks.length === 1) {
+          text += '<br><br>Une nouvelle action peut être lancée si tu penses que c\'est pertinent\u00a0: <strong>' + unlocks[0].title + '</strong>.';
+        } else if (unlocks.length > 1) {
+          text += '<br><br>On peut lancer de nouvelles actions maintenant\u00a0:<br>'
+            + unlocks.map(function(p) { return '- <strong>' + p.title + '</strong>'; }).join('<br>');
+        }
+
         showTyping();
         setTimeout(function() {
           hideTyping();
@@ -1055,13 +1068,6 @@ function triggerEvent() {
 
   const notif = document.getElementById('push-notification');
 
-  // Appliquer les effets au moment où la notification apparaît
-  applyEffects(event.effects);
-  updateScoreboard(changedKeys(event.effects));
-  showScoreDelta(event.effects);
-
-  const zeroKey = checkZero();
-
   playSound('545495__ienba__notification.mp3');
   notif.classList.add('show');
 
@@ -1070,6 +1076,13 @@ function triggerEvent() {
 
   notif._onClose = function() {
     document.body.classList.remove('notif-open');
+
+    // Appliquer les effets et animer les indicateurs à la fermeture
+    applyEffects(event.effects);
+    updateScoreboard(changedKeys(event.effects));
+    showScoreDelta(event.effects);
+
+    const zeroKey = checkZero();
 
     // Naomi commente l'outcome puis passe à la suite
     function afterOutcome() {
@@ -1098,29 +1111,6 @@ function triggerEvent() {
 /* ════════════════════════════════════════════
    DÉBLOCAGE DE NOUVELLES ACTIONS
 ════════════════════════════════════════════ */
-const UNLOCK_ICONS = { 'Lobbying Direct': '📋', 'Bataille juridique': '⚖️' };
-const UNLOCK_MSGS  = {
-  'Lobbying Direct':
-    '<strong>📋 Le Lobbying Direct est maintenant disponible\u00a0!</strong><br>' +
-    'Les débats en séance publique sont ouverts. Il est temps de rencontrer directement les parlementaires, de transmettre des amendements et de nourrir les cabinets avec vos analyses.',
-  'Bataille juridique':
-    '<strong>⚖️ La Bataille juridique est maintenant disponible\u00a0!</strong><br>' +
-    'Le vote approche. La voie judiciaire s\'ouvre comme dernier levier\u00a0: recours, plaintes, collectif d\'avocats. Une arme de plus pour peser sur la décision finale.'
-};
-
-function showUnlockMessage(phases) {
-  showTyping();
-  setTimeout(function() {
-    hideTyping();
-    phases.forEach(function(p) {
-      const msg = UNLOCK_MSGS[p.title] ||
-        '<strong>🔓 ' + p.title + ' est maintenant disponible\u00a0!</strong>';
-      addColleagueMessage(msg);
-    });
-    scrollToBottom();
-    setTimeout(function() { askAction(); }, 5000);
-  }, 900);
-}
 
 /* ════════════════════════════════════════════
    FIN PRÉMATURÉE
