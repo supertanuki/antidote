@@ -266,7 +266,18 @@ body.notif-open .notif-overlay { display: block; }
 .cal-modal .pn-header { padding: 14px 16px 12px; margin-bottom: 0; }
 
 .cal-inner {
-  padding: 14px 16px 20px;
+  padding: 14px 16px 10px;
+}
+
+.cal-footer {
+  padding: 10px 16px 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cal-ok-btn {
+  padding: 8px 28px;
+  font-size: .9rem;
 }
 
 .cal-month-header {
@@ -790,8 +801,9 @@ body.notif-open .notif-overlay { display: block; }
   white-space: nowrap;
 }
 
-.chat-send-btn:hover:not(:disabled) { background: var(--green); transform: translateY(-1px); }
+.chat-send-btn:hover:not(:disabled) { background: var(--green); transform: translateY(-1px); animation: none; }
 .chat-send-btn:disabled             { background: var(--grey); cursor: not-allowed; transform: none; }
+.chat-send-btn.pulse { animation: btnPulse .7s ease-in-out infinite; }
 
 /* ── Mode dormant de la barre (attente / entre les tours) ── */
 .chat-input-area.dormant .chat-input-bubble {
@@ -863,6 +875,70 @@ body.notif-open .notif-overlay { display: block; }
   .ap-grid { grid-template-columns: repeat(5, 1fr); }
   .actions-panel.open { max-height: 200px; }
 }
+
+/* ════════════════════════════════════════════
+   STRATEGY PANEL
+════════════════════════════════════════════ */
+.strategy-panel {
+  background: rgba(6,30,18,.98);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .3s cubic-bezier(.32,1,.56,1);
+}
+.strategy-panel.open {
+  max-height: 280px;
+  overflow-y: auto;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.sp-header {
+  padding: 8px 12px 4px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.sp-title {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--green-light);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.sp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+}
+
+/* Surcharges pour option-card dans le panel sombre */
+.sp-list .option-card {
+  background: rgba(255,255,255,.06);
+  border-color: transparent;
+  color: var(--white);
+}
+.sp-list .option-card:hover:not(.done) {
+  background: rgba(255,255,255,.12);
+  border-color: var(--green-light);
+}
+.sp-list .option-card.selected {
+  background: rgba(76,172,175,.18);
+  border-color: var(--green-light);
+}
+.sp-list .option-card .option-label {
+  color: var(--white);
+}
+.sp-list .option-card .option-num {
+  background: rgba(255,255,255,.15);
+  color: var(--white);
+}
+.sp-list .option-card .option-desc {
+  color: rgba(255,255,255,.65);
+  border-top-color: rgba(255,255,255,.1);
+}
+.sp-list .option-card.selected .option-desc { display: block; }
+.sp-list .option-card.selected .option-res-chip { display: inline-block; }
+.sp-list .option-res-chip.neg { background: rgba(214,64,69,.3); color: #ffaaaa; }
+.sp-list .option-res-chip.pos { background: rgba(39,174,96,.3); color: #aaffcc; }
 
 .ao-card {
   background: rgba(255,255,255,.07);

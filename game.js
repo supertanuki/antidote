@@ -76,6 +76,7 @@ function startGame() {
   document.getElementById('chat-messages').innerHTML = '';
   _lastDateSep = null;
   addDateSeparator("Aujourd'hui");
+  closeStrategyPanel();
   closeActionsPanel();
   updateScoreboard();
   updateProgress();
@@ -438,7 +439,7 @@ function typewriterInput(text, cb) {
       const cursor = document.createElement('span');
       cursor.className = 'cursor';
       inputEl.appendChild(cursor);
-      sendBtn.disabled = false;
+      enableSendBtn();
       scrollToBottom();
       if (cb) cb();
     }
@@ -497,7 +498,20 @@ function showInputArea() {
   scrollToBottom();
 }
 
+function enableSendBtn() {
+  const btn = document.getElementById('chat-send-btn');
+  btn.disabled = false;
+  btn.classList.remove('pulse');
+  void btn.offsetWidth;
+  btn.classList.add('pulse');
+  btn.addEventListener('mouseenter', function stop() {
+    btn.classList.remove('pulse');
+    btn.removeEventListener('mouseenter', stop);
+  }, { once: true });
+}
+
 function hideInputArea() {
+  closeStrategyPanel();
   closeActionsPanel();
   document.getElementById('chat-input-area').style.display = 'none';
   document.getElementById('chat-input-area').classList.remove('dormant');
@@ -559,6 +573,7 @@ function closeActionsPanel() {
 function toggleActionsPanel() {
   const panel = document.getElementById('actions-panel');
   if (panel.classList.contains('open')) {
+    closeStrategyPanel();
     closeActionsPanel();
   } else {
     openActionsPanel();
@@ -566,10 +581,98 @@ function toggleActionsPanel() {
 }
 
 function selectPhaseFromOverlay(phaseIndex) {
-  closeActionsPanel();
   pendingAction = { phaseIndex: phaseIndex };
-  currentStep   = 'option';
-  typewriterInput('Quelles sont les options pour : ' + GAME_DATA.phases[phaseIndex].title + ' ?', null);
+  pendingOption = null;
+
+  // Mode panel (tours pairs) : garder le panel actions ouvert, ouvrir le panel stratégies
+  if (playedPhases.length % 2 === 1) {
+    openStrategyPanel(phaseIndex);
+    return;
+  }
+
+  // Mode chat (tours impairs) : comportement habituel
+  closeActionsPanel();
+  currentStep = 'option';
+  typewriterInput('Quelles sont les options pour\u00a0: ' + GAME_DATA.phases[phaseIndex].title + '\u00a0?', null);
+}
+
+/* ════════════════════════════════════════════
+   PANEL STRATÉGIES
+════════════════════════════════════════════ */
+function openStrategyPanel(phaseIndex) {
+  const phase   = GAME_DATA.phases[phaseIndex];
+  const panel   = document.getElementById('strategy-panel');
+  const list    = document.getElementById('sp-list');
+  const title   = document.getElementById('sp-title');
+
+  title.textContent = 'Stratégies disponibles pour\u00a0: ' + phase.title;
+  list.innerHTML    = '';
+
+  const actionOrder = shuffle(phase.actions.map(function(_, i) { return i; }));
+  pendingAction._actionOrder = actionOrder;
+
+  actionOrder.forEach(function(origIdx, visIdx) {
+    const a = phase.actions[origIdx];
+    const resCost = a.effects && a.effects.resources ? a.effects.resources : 0;
+    const resChip = resCost !== 0
+      ? '<div class="option-res-chip ' + (resCost < 0 ? 'neg' : 'pos') + '">' +
+          '💶\u00a0Ressources\u00a0' + (resCost > 0 ? '+' : '') + resCost +
+        '</div>'
+      : '';
+
+    const card = document.createElement('div');
+    card.className = 'option-card';
+    card.dataset.orig = origIdx;
+    card.innerHTML =
+      '<div class="option-label">' +
+        '<span class="option-num">' + (visIdx + 1) + '</span>' +
+        a.label +
+      '</div>' +
+      '<div class="option-desc">' + a.description + '</div>' +
+      resChip;
+
+    card.addEventListener('click', function() { selectOptionFromPanel(card, origIdx, phaseIndex); });
+    list.appendChild(card);
+  });
+
+  panel.classList.add('open');
+
+  // Préparer la barre : champ vide désactivé + Send désactivé
+  const area    = document.getElementById('chat-input-area');
+  const inputEl = document.getElementById('chat-input-text');
+  const sendBtn = document.getElementById('chat-send-btn');
+  area.style.display    = 'flex';
+  area.classList.remove('dormant');
+  document.getElementById('chat-actions-btn').style.display = 'flex';
+  inputEl.style.display = 'block';
+  inputEl.innerHTML     = '<span style="color:var(--text-muted);opacity:.5;">Choisir une stratégie…</span>';
+  sendBtn.style.display = 'flex';
+  sendBtn.disabled      = true;
+  currentStep = 'action';
+  scrollToBottom();
+}
+
+function closeStrategyPanel() {
+  document.getElementById('strategy-panel').classList.remove('open');
+  document.getElementById('sp-list').innerHTML = '';
+}
+
+function selectOptionFromPanel(cardEl, origIdx, phaseIndex) {
+  // Désélectionner les autres
+  document.querySelectorAll('#sp-list .option-card').forEach(function(c) { c.classList.remove('selected'); });
+  cardEl.classList.add('selected');
+
+  pendingOption = origIdx;
+  const label = GAME_DATA.phases[phaseIndex].actions[origIdx].label;
+  const prefixes = ['Je propose l\u2019option\u00a0: ', 'Je sugg\u00e8re l\u2019option\u00a0: '];
+  pendingInputText = prefixes[Math.floor(Math.random() * prefixes.length)] + label;
+
+  // Afficher dans le champ
+  const inputEl = document.getElementById('chat-input-text');
+  inputEl.textContent     = pendingInputText;
+  inputEl.contentEditable = 'false';
+  enableSendBtn();
+  scrollToBottom();
 }
 
 /* ════════════════════════════════════════════
@@ -690,7 +793,7 @@ function selectOption(cardEl) {
   typewriterInput(pendingInputText, null);
 
   // Permettre l'envoi immédiatement sans attendre la fin de la frappe
-  document.getElementById('chat-send-btn').disabled = false;
+  enableSendBtn();
 }
 
 function sendActionChoice() {
@@ -704,6 +807,8 @@ function sendActionChoice() {
   const inputText = (pendingInputText && pendingInputText.trim()) ? pendingInputText : action.label;
   pendingInputText = null;
 
+  closeStrategyPanel();
+  closeActionsPanel();
   freezeOptionCards();
   showDormantInput();
   addPlayerMessage(inputText);
@@ -870,16 +975,16 @@ function askAction() {
 /* ── Affiche "Merci Naomi" pré-rempli + Send actif ── */
 function showMerciInput(cb) {
   const inputEl = document.getElementById('chat-input-text');
-  const sendBtn = document.getElementById('chat-send-btn');
   const area    = document.getElementById('chat-input-area');
   area.style.display    = 'flex';
   area.classList.remove('dormant');
   document.getElementById('chat-actions-btn').style.display = 'none';
+  const sendBtn = document.getElementById('chat-send-btn');
+  sendBtn.style.display = 'flex';
   inputEl.style.display = 'block';
   inputEl.textContent   = 'Merci Naomi\u00a0!';
   inputEl.contentEditable = 'false';
-  sendBtn.style.display = 'flex';
-  sendBtn.disabled      = false;
+  enableSendBtn();
   _pendingSend = cb;
   currentStep  = 'merci';
   scrollToBottom();

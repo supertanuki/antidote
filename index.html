@@ -140,6 +140,14 @@
       <div class="ap-grid" id="ao-grid"></div>
     </div>
 
+    <!-- Panel stratégies (s'ouvre sous le panel actions) -->
+    <div class="strategy-panel" id="strategy-panel">
+      <div class="sp-header">
+        <span class="sp-title" id="sp-title">Stratégies disponibles</span>
+      </div>
+      <div class="sp-list" id="sp-list"></div>
+    </div>
+
     <!-- Barre de saisie -->
     <div class="chat-input-area" id="chat-input-area" style="display:none;">
       <!-- Bouton Actions -->
@@ -245,6 +253,9 @@
       <button class="pn-close" onclick="closeCalendar()" aria-label="Fermer">✕</button>
     </div>
     <div class="cal-inner" id="cal-inner"></div>
+    <div class="cal-footer">
+      <button class="btn btn-primary cal-ok-btn" onclick="closeCalendar()">Ok</button>
+    </div>
   </div>
 </div>
 
