@@ -1,9 +1,5 @@
 const GAME_DATA = {
-  initialScores: {
-    public: 4,
-    political: 3,
-    resources: 4
-  },
+  initialScores: { public: 40, political: 60, resources: 100, score: 0 },
 
   endConditions: {
     publicZero: {
@@ -37,7 +33,8 @@ const GAME_DATA = {
       title: "Victoire du lobby",
       description: "La loi est adoptée. Plusieurs pesticides dangereux sont réautorisés. Les industriels ont réussi à convaincre les décideurs politiques grâce à leur accès privilégié aux institutions et à leurs ressources considérables. ANTIDOTE n'a pas réussi à construire un rapport de force suffisant pour faire reculer les parlementaires.",
       conclusion: "Ce résultat illustre la difficulté réelle des batailles contre des lobbies puissants et bien financés. La mobilisation d'ANTIDOTE n'est pas terminée pour autant - la bataille continue dans d'autres arènes.",
-      cta: "Même après une défaite, les associations ne s'arrêtent pas. Les recours juridiques, les mobilisations européennes et la pression citoyenne continuent de peser sur les décisions."
+      cta: "Même après une défaite, les associations ne s'arrêtent pas. Les recours juridiques, les mobilisations européennes et la pression citoyenne continuent de peser sur les décisions.",
+      threshold: { max: 19 }
     },
     {
       id: "statu_quo",
@@ -46,7 +43,8 @@ const GAME_DATA = {
       title: "Statu quo",
       description: "La loi est adoptée, mais fortement limitée. La mobilisation d'ANTIDOTE a suffi à réduire la portée du texte, mais n'a pas permis de le bloquer totalement. Quelques pesticides sont réautorisés, mais les plus dangereux ont été écartés grâce à la pression combinée des scientifiques, des parlementaires alliés et de l'opinion publique.",
       conclusion: "Un statu quo peut ressembler à un échec, mais c'est souvent le résultat réel des batailles politiques. Les associations ont réussi à limiter les dégâts et posé les bases pour les prochains combats.",
-      cta: "Les batailles politiques se gagnent rarement d'un coup. Chaque avancée partielle construit la pression pour les réformes suivantes. Restez mobilisés."
+      cta: "Les batailles politiques se gagnent rarement d'un coup. Chaque avancée partielle construit la pression pour les réformes suivantes. Restez mobilisés.",
+      threshold: { min: 20, max: 49 }
     },
     {
       id: "partial_win",
@@ -55,7 +53,8 @@ const GAME_DATA = {
       title: "Victoire partielle d'ANTIDOTE",
       description: "La mobilisation a porté ses fruits. La majorité des pesticides dangereux reste interdite. La loi a été fortement amendée grâce à la coalition que vous avez construite : scientifiques, parlementaires, citoyens et médias ont exercé une pression suffisante pour faire reculer les industriels sur l'essentiel. Une victoire significative.",
       conclusion: "Cette victoire partielle montre qu'une association bien organisée peut peser face à des intérêts industriels puissants. La clé : construire des coalitions larges, mobiliser l'expertise, et maintenir la pression citoyenne.",
-      cta: "Ce résultat est possible dans la réalité. Des associations comme celle-ci remportent régulièrement des victoires partielles qui protègent notre santé et notre environnement."
+      cta: "Ce résultat est possible dans la réalité. Des associations comme celle-ci remportent régulièrement des victoires partielles qui protègent notre santé et notre environnement.",
+      threshold: { min: 50, max: 89 }
     },
     {
       id: "complete_win",
@@ -64,7 +63,8 @@ const GAME_DATA = {
       title: "Victoire complète d'ANTIDOTE",
       description: "La loi est rejetée. La mobilisation citoyenne et scientifique coordonnée par ANTIDOTE a réussi à faire reculer les décideurs politiques. La coalition construite au fil des tours a rendu politiquement coûteux le soutien à la réautorisation. Les parlementaires n'ont pas pu ignorer la pression populaire, scientifique et médiatique combinée.",
       conclusion: "Mais le lobby des pesticides reste puissant. La bataille continue. Cette victoire démontre qu'une stratégie de plaidoyer bien construite peut contrebalancer des moyens financiers considérables. C'est une leçon précieuse pour toutes les campagnes à venir.",
-      cta: "Cette victoire est possible. Elle se construit dans la réalité grâce à des milliers de bénévoles, de scientifiques engagés et de citoyens mobilisés. Rejoignez-les."
+      cta: "Cette victoire est possible. Elle se construit dans la réalité grâce à des milliers de bénévoles, de scientifiques engagés et de citoyens mobilisés. Rejoignez-les.",
+      threshold: { min: 90 }
     }
   ],
 
@@ -75,7 +75,7 @@ const GAME_DATA = {
       title: "Publication de nouvelles données sanitaires",
       description: "Une agence publique publie de nouvelles données sur l'exposition aux pesticides dans les zones agricoles. Le débat prend une dimension sanitaire inattendue.",
       outcome: "Les données appuient les arguments d'ANTIDOTE. Les médias s'emparent du sujet, plusieurs parlementaires demandent un moratoire.",
-      effects: { public: 2, political: 1, resources: 0 }
+      effects: { public: 10, political: 10, resources: 0, score: 10 }
     },
     {
       id: "journalism",
@@ -83,7 +83,7 @@ const GAME_DATA = {
       title: "Enquête journalistique",
       description: "Un grand média publie une enquête révélant les liens étroits entre plusieurs responsables de l'industrie des pesticides et des décideurs politiques.",
       outcome: "L'enquête fragilise publiquement la position du lobby. Les parlementaires les plus proches des industriels sont sur la défensive.",
-      effects: { public: 2, political: 1, resources: 0 }
+      effects: { public: 15, political: 10, resources: 0, score: 15 }
     },
     {
       id: "farm_mobilization",
@@ -91,7 +91,7 @@ const GAME_DATA = {
       title: "Mobilisation agricole nationale",
       description: "Un grand syndicat agricole appelle à soutenir la réautorisation des pesticides et organise une journée nationale de mobilisation.",
       outcome: "La mobilisation met les parlementaires ruraux sous forte pression. Le rapport de force se durcit en faveur du lobby.",
-      effects: { public: -1, political: -2, resources: 0 }
+      effects: { public: -15, political: -5, resources: 0, score: -10 }
     },
     {
       id: "gov_arbitration",
@@ -99,7 +99,7 @@ const GAME_DATA = {
       title: "Arbitrage du gouvernement",
       description: "La ministre de l'Agriculture prend position publiquement dans le débat sur la réautorisation des pesticides, invoquant l'intérêt économique du monde agricole.",
       outcome: "La prise de position ministérielle fragilise la coalition parlementaire opposée à la loi. ANTIDOTE doit redoubler d'efforts pour maintenir ses alliés.",
-      effects: { public: 0, political: -1, resources: 1 }
+      effects: { public: -5, political: -15, resources: 0, score: -15 }
     }
   ],
 
@@ -116,25 +116,49 @@ const GAME_DATA = {
           label: "Rassembler des associations environnementales",
           description: "Coordonner plusieurs ONG environnementales pour dénoncer publiquement la réautorisation. Un communiqué commun, une prise de parole unitaire - la coalition envoie un signal fort aux médias et aux élus.",
           scenario: "ANTIDOTE rassemble plusieurs associations environnementales pour dénoncer publiquement la réautorisation de pesticides dangereux. La coalition publie un communiqué commun et alerte les médias.",
-          effects: { public: 2, political: 0, resources: 0 },
+          effectsByTour: [
+            { resources: -10, political: 10, public: 10, score: 10 },
+            { resources: -10, political: 10, public: 5,  score: 10 },
+            { resources: -10, political: 5,  public: 10, score: 10 },
+          ],
           counterAttack: "Les industriels dénoncent une campagne idéologique menée par des ONG déconnectées de la réalité agricole. Ils multiplient les interventions dans les médias pour défendre les pesticides.",
-          counterEffects: { public: -1, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { political: -5, public: -5, score: -10 },
+            { political: -5, public: -5, score: -10 },
+            { political: -10, public: -10, score: -10 },
+          ]
         },
         {
           label: "Alliance avec des associations de santé",
           description: "Nouer une alliance avec des associations de médecins et de patients permet de faire sortir le débat du seul cadre environnemental. Les arguments sanitaires touchent un public plus large et sont plus difficiles à contester politiquement.",
           scenario: "ANTIDOTE travaille avec des associations de médecins et de patients pour mettre en lumière les risques sanitaires des pesticides. Le débat commence à dépasser le cadre strictement environnemental.",
-          effects: { public: 1, political: 1, resources: 0 },
+          effectsByTour: [
+            { resources: -10, political: 20, public: 10, score: 15 },
+            { resources: -10, political: 15, public: 10, score: 15 },
+            { resources: -10, political: 10, public: 10, score: 15 },
+          ],
           counterAttack: "L'industrie conteste les données scientifiques et affirme que les pesticides sont utilisés en toute sécurité. Elle finance ses propres experts pour contre-attaquer.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, public: -10, score: -10 },
+            { political: -10, public: -10, score: -10 },
+            { political: -15, public: -10, score: -15 },
+          ]
         },
         {
           label: "Mobiliser des scientifiques et chercheurs",
           description: "Mobiliser des chercheurs pour soutenir publiquement la position d'ANTIDOTE renforce la légitimité scientifique de la campagne. Une communauté scientifique unie est difficile à ignorer pour les décideurs.",
           scenario: "Des chercheurs et experts scientifiques apportent leur soutien public à ANTIDOTE. La prise de position de la communauté scientifique renforce le poids de l'association dans le débat.",
-          effects: { public: 0, political: 1, resources: -1 },
+          effectsByTour: [
+            { resources: -10, political: 20, score: 10 },
+            { resources: -10, political: 15, score: 10 },
+            { resources: -10, political: 10, public: 5, score: 10 },
+          ],
           counterAttack: "Le lobby des pesticides finance rapidement une contre-expertise pour semer le doute sur les conclusions scientifiques. Il s'appuie sur quelques chercheurs dissidents pour brouiller le message.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+            { political: -10, public: -5, score: -10 },
+          ]
         }
       ]
     },
@@ -150,25 +174,49 @@ const GAME_DATA = {
           label: "Convaincre des députés écologistes et de gauche",
           description: "Les groupes écologistes et de gauche sont souvent les alliés naturels des associations environnementales. Les convaincre d'entrer dans la bataille permet d'organiser une opposition structurée à la proposition de loi.",
           scenario: "Des députés écologistes et de gauche s'engagent publiquement contre la proposition de loi. Une opposition parlementaire organisée commence à se structurer autour d'ANTIDOTE.",
-          effects: { public: 0, political: 2, resources: 0 },
+          effectsByTour: [
+            { resources: -10, political: 10, score: 5 },
+            { resources: -10, political: 15, score: 10 },
+            { resources: -10, political: 10, score: 5 },
+          ],
           counterAttack: "Le lobby des pesticides riposte en finançant une campagne accusant ces parlementaires de s'attaquer au monde agricole et à l'emploi rural.",
-          counterEffects: { public: 0, political: -2, resources: 0 }
+          counterEffectsByTour: [
+            { political: -5, score: -10 },
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+          ]
         },
         {
           label: "Construire une coalition transpartisane",
           description: "Une coalition qui dépasse les clivages partisans a beaucoup plus de poids politique. Convaincre des parlementaires de droite, de centre et de gauche de s'unir contre la réautorisation envoie un signal fort - mais cela demande des compromis.",
           scenario: "ANTIDOTE parvient à convaincre des parlementaires de différents bords politiques. Une coalition transpartisane se forme pour bloquer la réautorisation des pesticides.",
-          effects: { public: 1, political: 3, resources: 0 },
+          effectsByTour: [
+            { resources: -20, political: 20, score: 15 },
+            { resources: -20, political: 25, score: 20 },
+            { resources: -20, political: 15, public: 5, score: 15 },
+          ],
           counterAttack: "Le lobby des pesticides exerce une pression intense sur les parlementaires du centre et de la droite pour les faire sortir de la coalition. Plusieurs hésitent.",
-          counterEffects: { public: 0, political: -2, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -15, score: -15 },
+            { political: -15, score: -15 },
+          ]
         },
         {
           label: "Obtenir une audition en commission parlementaire",
           description: "Être entendu officiellement en commission parlementaire, c'est être reconnu comme un acteur légitime du débat. ANTIDOTE peut présenter ses arguments directement aux décideurs qui examinent le texte.",
           scenario: "ANTIDOTE obtient une audition officielle lors de l'examen du texte en commission parlementaire. L'association présente ses arguments directement aux élus qui vont voter sur la loi.",
-          effects: { public: 0, political: 2, resources: 0 },
+          effectsByTour: [
+            { resources: -10, political: 15, score: 10 },
+            { resources: -10, political: 20, score: 15 },
+            { resources: -10, political: 10, score: 5 },
+          ],
           counterAttack: "L'industrie obtient elle aussi une audition et mobilise ses experts pour contrecarrer les arguments d'ANTIDOTE.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -15, score: -10 },
+            { political: -10, score: -10 },
+          ]
         }
       ]
     },
@@ -184,25 +232,49 @@ const GAME_DATA = {
           label: "Tribune de scientifiques dans la presse",
           description: "Organiser la publication d'une tribune signée par plusieurs chercheurs reconnus permet de donner une visibilité médiatique à l'alerte scientifique sur les risques des pesticides.",
           scenario: "Plusieurs chercheurs publient une tribune dans un grand quotidien national dénonçant les risques des pesticides concernés par la loi. Le sujet gagne en légitimité dans le débat public.",
-          effects: { public: 1, political: 1, resources: 0 },
+          effectsByTour: [
+            { resources: -10, political: 15, public: 5,  score: 10 },
+            { resources: -10, political: 10, public: 5,  score: 10 },
+            { resources: -10, political: 10, public: 10, score: 10 },
+          ],
           counterAttack: "Le lobby des industriels finance rapidement une contre-tribune signée par des experts qu'il rémunère pour semer le doute sur les conclusions scientifiques.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+            { political: -10, public: -5, score: -10 },
+          ]
         },
         {
           label: "Publier une méta-analyse scientifique",
           description: "Une méta-analyse rassemblant des centaines d'études existantes est un argument scientifique difficile à contester. C'est un travail coûteux mais très solide pour appuyer le plaidoyer.",
           scenario: "ANTIDOTE publie une méta-analyse scientifique compilant l'ensemble des études sur les effets des pesticides concernés. C'est un argument de poids pour les parlementaires et les médias.",
-          effects: { public: 1, political: 2, resources: -2 },
+          effectsByTour: [
+            { resources: -20, political: 25, score: 15 },
+            { resources: -20, political: 20, score: 15 },
+            { resources: -10, political: 15, public: 5, score: 15 },
+          ],
           counterAttack: "L'industrie finance immédiatement sa propre étude pour contester les conclusions. Elle soulève des questions méthodologiques pour brouiller le message.",
-          counterEffects: { public: 0, political: -2, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+          ]
         },
         {
           label: "Prise de position d'une société savante",
           description: "Obtenir la prise de position officielle d'une société savante reconnue - une académie, un collège de médecins - donne un poids institutionnel à la mobilisation scientifique.",
           scenario: "Une société savante de renom prend officiellement position contre la réautorisation des pesticides dangereux. Cette prise de position institutionnelle est difficile à ignorer.",
-          effects: { public: 0, political: 2, resources: 0 },
+          effectsByTour: [
+            { resources: -10, political: 20, score: 10 },
+            { resources: -10, political: 15, score: 10 },
+            { resources: -10, political: 15, public: 5, score: 10 },
+          ],
           counterAttack: "Le lobby des pesticides tente de discréditer la société savante en la présentant comme proche des milieux militants. Il finance des tribunes de dissidence.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+          ]
         }
       ]
     },
@@ -218,25 +290,49 @@ const GAME_DATA = {
           label: "Tribune dans un grand journal national",
           description: "Publier une tribune dans un quotidien national permet de toucher à la fois le grand public et les décideurs. Un texte bien argumenté peut avoir un impact durable sur le débat.",
           scenario: "Une tribune d'ANTIDOTE est publiée dans un grand quotidien national. Le sujet des pesticides revient au centre du débat public. Plusieurs parlementaires réagissent.",
-          effects: { public: 2, political: 0, resources: 0 },
+          effectsByTour: [
+            { resources: -10, public: 10, score: 10 },
+            { resources: -10, public: 15, score: 10 },
+            { resources: -10, public: 20, score: 15 },
+          ],
           counterAttack: "Des représentants de l'industrie publient une tribune concurrente pour défendre la loi et présenter la réautorisation comme une nécessité économique.",
-          counterEffects: { public: -2, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { public: -10, score: -10 },
+            { public: -10, score: -10 },
+            { public: -15, score: -15 },
+          ]
         },
         {
           label: "Organiser une conférence de presse",
           description: "Une conférence de presse bien préparée, avec des chiffres solides et des témoignages percutants, peut déclencher une vague d'articles et de reportages favorables à la cause.",
           scenario: "ANTIDOTE organise une conférence de presse réunissant scientifiques, lanceurs d'alerte et victimes de pesticides. Les médias couvrent largement l'événement.",
-          effects: { public: 1, political: 1, resources: 0 },
+          effectsByTour: [
+            { resources: -20, public: 15, score: 10 },
+            { resources: -20, public: 20, score: 15 },
+            { resources: -20, public: 25, score: 20 },
+          ],
           counterAttack: "L'industrie organise le lendemain sa propre conférence de presse avec ses experts pour tenter de noyer le message.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { public: -10, score: -10 },
+            { public: -15, score: -15 },
+            { public: -20, score: -20 },
+          ]
         },
         {
           label: "Révéler un scandale industriel",
           description: "ANTIDOTE dispose de documents montrant les liens entre certains industriels et des responsables politiques. Les révéler peut provoquer une onde de choc médiatique - mais cela coûte cher en ressources et l'industrie contre-attaquera violemment.",
           scenario: "ANTIDOTE révèle des documents montrant les liens étroits entre l'industrie des pesticides et des responsables politiques. L'affaire fait grand bruit dans les médias. Les parlementaires sont embarrassés.",
-          effects: { public: 4, political: 0, resources: -2 },
+          effectsByTour: [
+            { resources: -20, political: -10, public: 10 },
+            { resources: -20, political: 10,  public: 20, score: 20 },
+            { resources: -20, political: 5,   public: 25, score: 20 },
+          ],
           counterAttack: "Le lobby industriel accuse ANTIDOTE de manipulation et de faire de la politique. Il tente de décrédibiliser l'enquête et menace l'association de poursuites judiciaires.",
-          counterEffects: { public: -2, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -15, score: -15 },
+            { political: -20, score: -20 },
+          ]
         }
       ]
     },
@@ -252,25 +348,49 @@ const GAME_DATA = {
           label: "Témoignages d'agriculteurs bio",
           description: "Mettre en avant des agriculteurs qui travaillent sans pesticides dangereux est un contre-récit puissant face à l'argument que \"les agriculteurs ont besoin de ces produits\". Des voix agricoles dans le débat changent la donne.",
           scenario: "Des agriculteurs expliquent publiquement qu'il est possible et rentable de produire sans pesticides dangereux. Le débat devient plus nuancé et sort du clivage ONG vs. agriculture.",
-          effects: { public: 1, political: 0, resources: 0 },
+          effectsByTour: [
+            { resources: -10, political: 10, public: 10, score: 10 },
+            { resources: -10, political: 10, public: 10, score: 10 },
+            { resources: -10, political: 5,  public: 10, score: 10 },
+          ],
           counterAttack: "Le syndicat agricole majoritaire organise une mobilisation pour défendre les pesticides et présenter les agriculteurs bio comme des exceptions non représentatives.",
-          counterEffects: { public: 0, political: -2, resources: 0 }
+          counterEffectsByTour: [
+            { public: -5,  score: -10 },
+            { public: -10, score: -10 },
+            { public: -10, score: -10 },
+          ]
         },
         {
           label: "Tribune commune d'agriculteurs",
           description: "Une tribune signée par plusieurs dizaines d'agriculteurs opposés à la réautorisation montre que le monde agricole n'est pas monolithique et que le lobby des pesticides ne parle pas en son nom.",
           scenario: "Des agriculteurs cosignent une tribune publique s'opposant à la réautorisation. Cette prise de parole déstabilise le discours du lobby et oblige les médias à nuancer leur traitement.",
-          effects: { public: 0, political: 1, resources: 0 },
+          effectsByTour: [
+            { resources: -10, political: 10, public: 10, score: 10 },
+            { resources: -10, political: 10, public: 15, score: 10 },
+            { resources: -10, political: 5,  public: 15, score: 10 },
+          ],
           counterAttack: "Le syndicat agricole majoritaire contre-attaque en présentant ces agriculteurs comme des militants déguisés en paysans.",
-          counterEffects: { public: 0, political: -2, resources: 0 }
+          counterEffectsByTour: [
+            { public: -10, score: -10 },
+            { public: -10, score: -10 },
+            { public: -15, score: -10 },
+          ]
         },
         {
           label: "Rencontres terrain avec les agriculteurs",
           description: "Organiser des rencontres directes sur le terrain permet de construire des relations de confiance avec des agriculteurs qui ne sont pas convaincus par les pesticides. Ce travail de fond prend du temps mais construit des alliances solides.",
           scenario: "ANTIDOTE organise des rencontres sur le terrain avec des agriculteurs en quête d'alternatives aux pesticides dangereux. Des liens se créent qui pourraient devenir de futurs relais.",
-          effects: { public: 2, political: 0, resources: 0 },
+          effectsByTour: [
+            { resources: -20, political: 15, public: 10, score: 10 },
+            { resources: -20, political: 15, public: 10, score: 10 },
+            { resources: -20, political: 10, public: 10, score: 10 },
+          ],
           counterAttack: "Le syndicat agricole majoritaire mobilise ses réseaux locaux pour dissuader les agriculteurs de participer aux rencontres d'ANTIDOTE.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { political: -5,  public: -5,  score: -10 },
+            { political: -5,  public: -10, score: -10 },
+            { political: -10, public: -10, score: -10 },
+          ]
         }
       ]
     },
@@ -287,25 +407,49 @@ const GAME_DATA = {
           label: "Lancer une pétition nationale",
           description: "Une pétition massive est un signal fort envoyé aux parlementaires : des milliers de citoyens regardent comment ils voteront. C'est un outil classique mais toujours efficace pour créer de la pression.",
           scenario: "ANTIDOTE lance une pétition nationale contre la réautorisation des pesticides. Des milliers de citoyens la signent en quelques jours. Le sujet commence à inquiéter certains élus.",
-          effects: { public: 2, political: 0, resources: 0 },
+          effectsByTour: [
+            { resources: -10, public: 20, score: 10 },
+            { resources: -10, public: 20, score: 10 },
+            { resources: -10, public: 20, score: 10 },
+          ],
           counterAttack: "Les industriels financent un sondage affirmant que la majorité des agriculteurs ont besoin de ces produits. Les médias relaient les deux chiffres.",
-          counterEffects: { public: -1, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { public: -10, score: -10 },
+            { public: -10, score: -10 },
+            { public: -15, score: -15 },
+          ]
         },
         {
           label: "Campagne d'interpellation des élus",
           description: "Organiser une campagne où des milliers de citoyens écrivent directement à leurs élus est un outil de pression politique direct. Cela oblige les parlementaires à prendre position.",
           scenario: "Des milliers de citoyens contactent leurs députés pour leur demander de rejeter la loi. Les élus qui hésitaient ressentent la pression dans leurs circonscriptions.",
-          effects: { public: 0, political: 2, resources: 0 },
+          effectsByTour: [
+            { resources: -10, political: 10, public: 10, score: 10 },
+            { resources: -10, political: 10, public: 10, score: 10 },
+            { resources: -10, political: 10, public: 15, score: 15 },
+          ],
           counterAttack: "Le lobby des pesticides réplique en mobilisant ses réseaux agricoles pour une contre-campagne d'interpellation en sens inverse.",
-          counterEffects: { public: 0, political: -2, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+            { political: -10, public: -10, score: -15 },
+          ]
         },
         {
           label: "Lettre ouverte de personnalités publiques",
           description: "Une lettre ouverte signée par des acteurs connus, des sportifs, des artistes engagés peut toucher un public bien au-delà des cercles militants et donner une visibilité nouvelle à la cause.",
           scenario: "Des personnalités publiques signent une lettre ouverte contre la réautorisation des pesticides. La médiatisation de leur engagement touche un large public et crée un effet de légitimité.",
-          effects: { public: 1, political: 1, resources: 0 },
+          effectsByTour: [
+            { resources: -10, public: 15, score: 10 },
+            { resources: -10, public: 15, score: 10 },
+            { resources: -10, public: 20, score: 15 },
+          ],
           counterAttack: "L'industrie instrumentalise des agriculteurs pour dénoncer l'ingérence des « célébrités parisiennes » dans leurs affaires.",
-          counterEffects: { public: -1, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { public: -10, score: -10 },
+            { public: -10, score: -10 },
+            { public: -15, score: -15 },
+          ]
         }
       ]
     },
@@ -322,25 +466,49 @@ const GAME_DATA = {
           label: "Mobiliser des influenceurs",
           description: "Des créateurs de contenu engagés peuvent toucher des millions de personnes jeunes peu habituées aux canaux traditionnels du militantisme. Mais cette visibilité peut attirer la critique sur le sérieux de la campagne.",
           scenario: "Des influenceurs relaient la campagne d'ANTIDOTE sur les réseaux sociaux. La question des pesticides devient virale et touche un public nouveau, particulièrement les 18-35 ans.",
-          effects: { public: 3, political: 0, resources: 0 },
+          effectsByTour: [
+            { resources: -10, public: 20, score: 10 },
+            { resources: -10, public: 20, score: 10 },
+            { resources: -10, public: 25, score: 15 },
+          ],
           counterAttack: "L'industrie finance à son tour des campagnes sponsorisées massives pour contrecarrer le message et noyer la visibilité d'ANTIDOTE.",
-          counterEffects: { public: -2, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { public: -10, score: -10 },
+            { public: -10, score: -10 },
+            { public: -20, score: -15 },
+          ]
         },
         {
           label: "Lancer une vidéo virale",
           description: "Une vidéo percutante, pédagogique et émotionnellement engageante peut propager la sensibilisation bien au-delà des cercles convaincus. Format idéal pour les réseaux sociaux.",
           scenario: "ANTIDOTE publie une vidéo expliquant simplement les risques liés aux pesticides concernés. Elle est massivement partagée et génère de nombreuses réactions publiques.",
-          effects: { public: 2, political: 0, resources: 0 },
+          effectsByTour: [
+            { resources: -10, public: 20, score: 10 },
+            { resources: -10, public: 20, score: 10 },
+            { resources: -10, public: 25, score: 15 },
+          ],
           counterAttack: "Le lobby des pesticides produit sa propre vidéo mettant en scène des agriculteurs défendant leur travail et présentant les ONG comme des ennemis du monde rural.",
-          counterEffects: { public: -1, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { public: -10, score: -10 },
+            { public: -10, score: -10 },
+            { public: -20, score: -15 },
+          ]
         },
         {
           label: "Campagne pédagogique numérique",
           description: "Diffuser une campagne de fond, factuelle et pédagogique, sur les réseaux sociaux : infographies, fils de discussion, explications scientifiques accessibles. Moins spectaculaire mais plus durable.",
           scenario: "ANTIDOTE diffuse une série de contenus pédagogiques sur les réseaux sociaux. L'audience engagée grandit, la qualité des échanges s'améliore et la campagne gagne en profondeur.",
-          effects: { public: 1, political: 1, resources: 0 },
+          effectsByTour: [
+            { resources: -10, political: 5, public: 10, score: 10 },
+            { resources: -10, political: 5, public: 10, score: 10 },
+            { resources: -10, political: 5, public: 15, score: 10 },
+          ],
           counterAttack: "L'industrie intensifie sa présence numérique avec des publicités ciblées contredisant les informations d'ANTIDOTE.",
-          counterEffects: { public: -1, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { public: -5,  score: -10 },
+            { public: -5,  score: -10 },
+            { public: -10, score: -10 },
+          ]
         }
       ]
     },
@@ -357,25 +525,49 @@ const GAME_DATA = {
           label: "Organiser une manifestation nationale",
           description: "Une grande manifestation dans la rue montre la réalité de la mobilisation. Des milliers de personnes dans les rues envoient un signal fort aux décideurs politiques et aux médias.",
           scenario: "Plusieurs milliers de personnes manifestent contre la réautorisation des pesticides. Les images font le tour des médias. Des parlementaires prennent note de l'ampleur de la mobilisation.",
-          effects: { public: 3, political: 0, resources: 0 },
+          effectsByTour: [
+            { resources: -20, political: -10, public: 20, score: 10 },
+            { resources: -20, political: -10, public: 20, score: 10 },
+            { resources: -20, political: -5,  public: 20, score: 10 },
+          ],
           counterAttack: "Le lobby des industriels accuse les ONG de s'attaquer au monde agricole et mobilise des syndicats agricoles pour organiser une contre-manifestation.",
-          counterEffects: { public: -1, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+            { political: -10, public: -10, score: -15 },
+          ]
         },
         {
           label: "Action symbolique devant l'Assemblée nationale",
           description: "Une action symbolique, bien scénarisée, devant l'Assemblée nationale ou un ministère peut générer des images fortes qui circulent dans les médias. L'objectif : rendre visible l'enjeu politique.",
           scenario: "ANTIDOTE mène une action symbolique percutante devant l'Assemblée nationale. Les images circulent dans la presse et sur les réseaux sociaux, rappelant aux élus que la société civile les observe.",
-          effects: { public: 2, political: 0, resources: 0 },
+          effectsByTour: [
+            { resources: -10, public: 15, score: 10 },
+            { resources: -10, public: 15, score: 10 },
+            { resources: -10, public: 20, score: 10 },
+          ],
           counterAttack: "L'industrie et ses alliés agricoles dénoncent l'action comme provocatrice et hors-sol. Ils tentent de retourner l'opinion contre les militants.",
-          counterEffects: { public: -1, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { public: -5,  score: -10 },
+            { public: -5,  score: -10 },
+            { public: -10, score: -10 },
+          ]
         },
         {
           label: "Happening médiatique",
           description: "Un happening créatif et surprenant peut créer un buzz médiatique important. Mais son impact dépend beaucoup de l'exécution et du contexte - et la réaction du public peut être imprévisible.",
           scenario: "ANTIDOTE organise un happening médiatique percutant qui dénonce l'influence du lobby des pesticides. L'action est largement commentée sur les réseaux sociaux et dans la presse.",
-          effects: { public: 2, political: 0, resources: -2 },
+          effectsByTour: [
+            { resources: -20, political: -10, public: 20, score: 10 },
+            { resources: -20, political: -10, public: 20, score: 10 },
+            { resources: -20, political: -5,  public: 20, score: 10 },
+          ],
           counterAttack: "Le lobby des pesticides et certains médias ironisent sur l'action, la présentant comme du théâtre militant sans contenu sérieux.",
-          counterEffects: { public: -1, political: 0, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+            { political: -10, public: -10, score: -15 },
+          ]
         }
       ]
     },
@@ -392,25 +584,49 @@ const GAME_DATA = {
           label: "Rédiger et transmettre des amendements",
           description: "Rédiger des amendements techniques en collaboration avec des parlementaires alliés et les transmettre officiellement avant la séance publique. Modifier le texte directement est l'objectif final de tout plaidoyer législatif.",
           scenario: "ANTIDOTE rédige des amendements précis avec l'appui de parlementaires alliés. Plusieurs amendements sont officiellement déposés et défendus en séance. Le texte commence à être modifié dans le bon sens.",
-          effects: { public: 0, political: 3, resources: -1 },
+          effectsByTour: [
+            { resources: -10, political: 20, score: 15 },
+            { resources: -10, political: 20, score: 15 },
+            { resources: -10, political: 20, score: 20 },
+          ],
           counterAttack: "Le lobby des pesticides fait pression sur les groupes politiques pour rejeter les amendements. Plusieurs élus qui semblaient acquis reculent sous la pression des industriels.",
-          counterEffects: { public: 0, political: -2, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+            { political: -15, score: -15 },
+          ]
         },
         {
           label: "Rencontrer directement des parlementaires clés",
           description: "Rencontrer en face à face les parlementaires indécis ou influents dans les commissions pour les convaincre de voter contre la réautorisation. Un échange direct permet de lever les doutes et de bâtir une confiance que les courriers ne permettent pas.",
           scenario: "Des réunions discrètes mais décisives permettent à ANTIDOTE de présenter ses arguments directement aux parlementaires clés. Plusieurs élus jusqu'alors hésitants s'engagent à voter contre la réautorisation.",
-          effects: { public: 0, political: 2, resources: -1 },
+          effectsByTour: [
+            { resources: -10, political: 15, score: 15 },
+            { resources: -10, political: 15, score: 15 },
+            { resources: -10, political: 15, score: 20 },
+          ],
           counterAttack: "Le lobby des pesticides apprend les contacts d'ANTIDOTE et organise une contre-offensive auprès des mêmes parlementaires, multipliant les rendez-vous et les arguments économiques.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { political: -10, score: -10 },
+            { political: -10, score: -10 },
+            { political: -10, score: -15 },
+          ]
         },
         {
           label: "Transmettre des notes d'analyse aux cabinets",
           description: "Préparer et transmettre des notes de synthèse factuelles aux cabinets ministériels et à l'administration pour alimenter leur réflexion avec une expertise indépendante. Influencer l'administration, c'est influencer les arbitrages en amont du vote.",
           scenario: "Des notes de synthèse circulent dans les cabinets ministériels et chez les hauts fonctionnaires. L'administration intègre progressivement les arguments d'ANTIDOTE dans ses propres analyses et recommandations.",
-          effects: { public: 0, political: 2, resources: -1 },
+          effectsByTour: [
+            { resources: -10, political: 10, score: 10 },
+            { resources: -10, political: 10, score: 10 },
+            { resources: -10, political: 15, score: 15 },
+          ],
           counterAttack: "Les représentants de l'industrie transmettent à leur tour leurs propres analyses et font valoir leurs relais dans l'administration pour minimiser l'impact des notes d'ANTIDOTE.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { political: -5, score: -10 },
+            { political: -5, score: -10 },
+            { political: -10, score: -10 },
+          ]
         }
       ]
     },
@@ -427,25 +643,49 @@ const GAME_DATA = {
           label: "Déposer un recours juridique",
           description: "Contester juridiquement la réautorisation de certains pesticides devant les tribunaux administratifs peut bloquer ou retarder le processus. C'est coûteux mais potentiellement très efficace.",
           scenario: "ANTIDOTE dépose un recours juridique pour contester la réautorisation de pesticides dont les risques sanitaires sont documentés. Le débat s'installe aussi sur le terrain judiciaire.",
-          effects: { public: 0, political: 3, resources: -2 },
+          effectsByTour: [
+            { resources: -20, political: 20, score: 20 },
+            { resources: -20, political: 20, score: 20 },
+            { resources: -20, political: 20, score: 20 },
+          ],
           counterAttack: "Les industriels mobilisent leurs propres équipes juridiques pour contester le recours et faire traîner la procédure.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { resources: -10, political: -10, score: -10 },
+            { resources: -10, political: -10, score: -10 },
+            { resources: -10, political: -10, score: -10 },
+          ]
         },
         {
           label: "Déposer une plainte environnementale",
           description: "Une plainte pour atteinte à l'environnement ou mise en danger d'autrui met en lumière la responsabilité des acteurs de l'industrie et peut contraindre des enquêtes officielles.",
           scenario: "ANTIDOTE dépose une plainte environnementale dénonçant les impacts sanitaires des pesticides concernés. L'affaire est prise en charge par la justice et fait l'objet d'une couverture médiatique.",
-          effects: { public: 1, political: 1, resources: -1 },
+          effectsByTour: [
+            { resources: -20, political: 15, public: 5, score: 15 },
+            { resources: -20, political: 15, public: 5, score: 15 },
+            { resources: -20, political: 15, public: 5, score: 15 },
+          ],
           counterAttack: "L'industrie minimise la portée de la plainte et tente d'intimider l'association avec des menaces de contre-poursuites.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { resources: -10, political: -10, score: -10 },
+            { resources: -10, political: -10, score: -10 },
+            { resources: -10, political: -10, score: -10 },
+          ]
         },
         {
           label: "Mobiliser un collectif d'avocats",
           description: "Rassembler un collectif d'avocats spécialisés en droit de l'environnement permet de construire une stratégie judiciaire robuste sans dépenser immédiatement des ressources importantes.",
           scenario: "ANTIDOTE réunit un collectif d'avocats spécialisés en droit de l'environnement pour préparer une stratégie judiciaire complète. Ce dispositif renforce la crédibilité de l'association dans le débat.",
-          effects: { public: 0, political: 2, resources: 0 },
+          effectsByTour: [
+            { resources: -20, political: 20, score: 15 },
+            { resources: -20, political: 20, score: 15 },
+            { resources: -20, political: 20, score: 15 },
+          ],
           counterAttack: "L'industrie fait pression sur les cabinets d'avocats pour décourager certains d'entre eux de travailler avec ANTIDOTE.",
-          counterEffects: { public: 0, political: -1, resources: 0 }
+          counterEffectsByTour: [
+            { resources: -10, political: -10, score: -10 },
+            { resources: -10, political: -10, score: -10 },
+            { resources: -10, political: -10, score: -10 },
+          ]
         }
       ]
     }

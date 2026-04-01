@@ -19,7 +19,7 @@ let typingRowEl        = null;
 let pushTimer          = null;
 let counterTimer       = null;
 
-const MAX_SCORE   = 100;
+const MAX_SCORES  = { public: 40, political: 60, resources: 100 };
 const PHASE_ICONS = ['🤝','🏛️','🔬','📺','🌾','📣','📱','✊','📋','⚖️'];
 
 function shuffle(arr) {
@@ -122,18 +122,19 @@ function showScreen(id) {
 function updateScoreboard(animateKeys) {
   ['public','political','resources'].forEach(key => {
     const val  = scores[key];
+    const max  = MAX_SCORES[key];
     const elV  = document.getElementById('score-' + key);
     const elB  = document.getElementById('bar-'   + key);
     const pill = document.getElementById('pill-'  + key);
 
     elV.textContent = val;
-    const pct = Math.max(0, Math.min(100, (val / MAX_SCORE) * 100));
+    const pct = Math.max(0, Math.min(100, (val / max) * 100));
     elB.style.width = pct + '%';
 
     elB.classList.remove('danger','warning');
     pill.classList.remove('danger','warning');
-    if (val <= 1)      { elB.classList.add('danger');  pill.classList.add('danger'); }
-    else if (val <= 2) { elB.classList.add('warning'); pill.classList.add('warning'); }
+    if (val <= max * 0.10)      { elB.classList.add('danger');  pill.classList.add('danger'); }
+    else if (val <= max * 0.20) { elB.classList.add('warning'); pill.classList.add('warning'); }
 
     if (animateKeys && animateKeys.includes(key)) {
       elV.style.color = '#f5c842';
@@ -279,14 +280,22 @@ function renderCalendar() {
 /* ════════════════════════════════════════════
    EFFETS
 ════════════════════════════════════════════ */
+function getTourBand() {
+  const t = playedPhases.length;
+  if (t <= 3) return 0; // tours 1-4
+  if (t <= 6) return 1; // tours 5-7
+  return 2;             // tours 8-10
+}
+
 function applyEffects(effects) {
-  scores.public    = Math.max(0, Math.min(MAX_SCORE, scores.public    + (effects.public    || 0)));
-  scores.political = Math.max(0, Math.min(MAX_SCORE, scores.political + (effects.political || 0)));
-  scores.resources = Math.max(0, Math.min(MAX_SCORE, scores.resources + (effects.resources || 0)));
+  scores.public    = Math.max(0, Math.min(MAX_SCORES.public,    scores.public    + (effects.public    || 0)));
+  scores.political = Math.max(0, Math.min(MAX_SCORES.political, scores.political + (effects.political || 0)));
+  scores.resources = Math.max(0, Math.min(MAX_SCORES.resources, scores.resources + (effects.resources || 0)));
+  scores.score     = (scores.score || 0) + (effects.score || 0);
 }
 
 function changedKeys(effects) {
-  return Object.keys(effects).filter(k => effects[k] !== 0);
+  return Object.keys(effects).filter(k => effects[k] !== 0 && k !== 'score');
 }
 
 /* ── Animation flottante +/- sur les pills de score ── */
@@ -311,7 +320,7 @@ function showScoreDelta(effects) {
 function buildDeltaChips(effects) {
   const labels = { public: '👥 Public', political: '🏛️ Politique', resources: '💶 Ressources' };
   const chips = Object.entries(effects)
-    .filter(([, v]) => v !== 0)
+    .filter(([k, v]) => v !== 0 && labels[k])
     .map(([k, v]) => '<span class="delta-chip ' + (v > 0 ? 'pos' : 'neg') + '">' + labels[k] + ' ' + (v > 0 ? '+' : '') + v + '</span>');
   return chips.length ? chips.join('') : '<span class="delta-chip zero">Aucun effet</span>';
 }
@@ -610,10 +619,12 @@ function openStrategyPanel(phaseIndex) {
 
   const actionOrder = shuffle(phase.actions.map(function(_, i) { return i; }));
   pendingAction._actionOrder = actionOrder;
+  const band = getTourBand();
 
   actionOrder.forEach(function(origIdx, visIdx) {
     const a = phase.actions[origIdx];
-    const resCost = a.effects && a.effects.resources ? a.effects.resources : 0;
+    const fx = a.effectsByTour ? a.effectsByTour[band] : (a.effects || {});
+    const resCost = fx.resources || 0;
     const resChip = resCost !== 0
       ? '<div class="option-res-chip ' + (resCost < 0 ? 'neg' : 'pos') + '">' +
           '💶\u00a0Ressources\u00a0' + (resCost > 0 ? '+' : '') + resCost +
@@ -715,11 +726,13 @@ function showOptions(phaseIndex) {
   const phase       = GAME_DATA.phases[phaseIndex];
   const actionOrder = shuffle(phase.actions.map(function(_, i) { return i; }));
   pendingAction._actionOrder = actionOrder;
+  const band = getTourBand();
 
   let optionsHTML = '';
   actionOrder.forEach(function(origIdx, visIdx) {
     const a = phase.actions[origIdx];
-    const resCost = a.effects && a.effects.resources ? a.effects.resources : 0;
+    const fx = a.effectsByTour ? a.effectsByTour[band] : (a.effects || {});
+    const resCost = fx.resources || 0;
     const resChip = resCost !== 0
       ? '<div class="option-res-chip' + (resCost < 0 ? ' neg' : ' pos') + '">' +
           '💶\u00a0Ressources\u00a0' + (resCost > 0 ? '+' : '') + resCost +
@@ -807,6 +820,11 @@ function sendActionChoice() {
   const inputText = (pendingInputText && pendingInputText.trim()) ? pendingInputText : action.label;
   pendingInputText = null;
 
+  // Capturer le band AVANT la mise à jour de playedPhases
+  const band = getTourBand();
+  const effects        = action.effectsByTour        ? action.effectsByTour[band]        : (action.effects        || {});
+  const counterEffects = action.counterEffectsByTour ? action.counterEffectsByTour[band] : (action.counterEffects || {});
+
   closeStrategyPanel();
   closeActionsPanel();
   freezeOptionCards();
@@ -818,27 +836,28 @@ function sendActionChoice() {
 
   pendingCounterData = {
     counterAttack:  action.counterAttack,
-    counterEffects: action.counterEffects
+    counterEffects: counterEffects
   };
 
   currentStep = 'result';
 
   setTimeout(function() {
     showTyping();
-    setTimeout(function() { hideTyping(); showResult(action); }, 1600);
+    setTimeout(function() { hideTyping(); showResult(action, effects); }, 1600);
   }, 400);
 }
 
 /* ── Résultat - contre-attaque auto après 4s ── */
-function showResult(action) {
+function showResult(action, effects) {
+  effects = effects || action.effects || {};
   // Appliquer les effets au moment où le message de Naomi apparaît
-  applyEffects(action.effects);
-  updateScoreboard(changedKeys(action.effects));
-  showScoreDelta(action.effects);
+  applyEffects(effects);
+  updateScoreboard(changedKeys(effects));
+  showScoreDelta(effects);
 
   addColleagueMessage(
     '<div class="result-scenario-text">Coucou ! Voici les résultats de l\'action lancée !<br>' + action.scenario + ' 👍🏾</div>' +
-    '<div class="delta-row">' + buildDeltaChips(action.effects) + '</div>'
+    '<div class="delta-row">' + buildDeltaChips(effects) + '</div>'
   );
   scrollToBottom();
 
@@ -1101,12 +1120,12 @@ function showEarlyEnd(zeroKey) {
    RÉSULTAT FINAL
 ════════════════════════════════════════════ */
 function showFinalResult() {
-  const total = scores.public + scores.political + scores.resources;
+  const s = scores.score || 0;
   let result;
-  if      (total >= 21) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'complete_win'; });
-  else if (total >= 15) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'partial_win'; });
-  else if (total >= 9)  result = GAME_DATA.finalResults.find(function(r) { return r.id === 'statu_quo'; });
-  else                  result = GAME_DATA.finalResults.find(function(r) { return r.id === 'lobby_win'; });
+  if      (s >= 90) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'complete_win'; });
+  else if (s >= 50) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'partial_win'; });
+  else if (s >= 20) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'statu_quo'; });
+  else              result = GAME_DATA.finalResults.find(function(r) { return r.id === 'lobby_win'; });
 
   document.getElementById('result-icon').textContent        = result.icon;
   document.getElementById('result-badge-span').textContent  = result.title;
