@@ -38,8 +38,10 @@ function playSound(filename) {
   } catch (e) {}
 }
 
-/* ── Options de la page d'accueil ── */
+/* ── Options de la page d'accueil + modale paramètres ── */
 document.addEventListener('DOMContentLoaded', function() {
+
+  /* --- Page d'accueil --- */
   const optSound = document.getElementById('opt-sound');
   const optFullscreen = document.getElementById('opt-fullscreen');
 
@@ -60,6 +62,46 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  /* --- Modale paramètres --- */
+
+  // Plein écran
+  const setFs = document.getElementById('set-fullscreen');
+  if (setFs) {
+    setFs.addEventListener('change', function() {
+      if (setFs.checked) {
+        document.documentElement.requestFullscreen().catch(function() {});
+      } else if (document.fullscreenElement) {
+        document.exitFullscreen().catch(function() {});
+      }
+    });
+  }
+
+  // Effets sonores
+  const setSound = document.getElementById('set-sound');
+  if (setSound) {
+    setSound.addEventListener('change', function() {
+      _soundEnabled = setSound.checked;
+      if (optSound) optSound.checked = _soundEnabled;
+      if (_soundEnabled) playSound('545495__ienba__notification.mp3');
+    });
+  }
+
+  // Synchroniser les cases fullscreen (accueil + modale) avec l'état réel
+  document.addEventListener('fullscreenchange', function() {
+    const isFs = !!document.fullscreenElement;
+    if (optFullscreen) optFullscreen.checked = isFs;
+    // La modale est synchro à l'ouverture via openSettings()
+  });
+
+  // Taille des textes
+  document.querySelectorAll('input[name="zoom"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      if (r.checked) {
+        document.documentElement.style.zoom = (parseInt(r.value, 10) / 100).toString();
+      }
+    });
+  });
 });
 
 function shuffle(arr) {
@@ -263,6 +305,35 @@ function closeCalendar() {
 
 function onCalOverlayClick(e) {
   if (e.target === document.getElementById('cal-overlay')) closeCalendar();
+}
+
+/* ════════════════════════════════════════════
+   PARAMÈTRES
+════════════════════════════════════════════ */
+function openSettings() {
+  const setFs = document.getElementById('set-fullscreen');
+  if (setFs) setFs.checked = !!document.fullscreenElement;
+
+  const setSound = document.getElementById('set-sound');
+  if (setSound) setSound.checked = _soundEnabled;
+
+  const currentZoom = Math.round(parseFloat(document.documentElement.style.zoom || '1') * 100) || 100;
+  document.querySelectorAll('input[name="zoom"]').forEach(function(r) {
+    r.checked = parseInt(r.value, 10) === currentZoom;
+  });
+
+  document.getElementById('settings-overlay').classList.add('open');
+  document.getElementById('settings-btn').setAttribute('aria-expanded', 'true');
+}
+
+function closeSettings() {
+  document.getElementById('settings-overlay').classList.remove('open');
+  document.getElementById('settings-btn').setAttribute('aria-expanded', 'false');
+  document.getElementById('settings-btn').focus();
+}
+
+function onSettingsOverlayClick(e) {
+  if (e.target === document.getElementById('settings-overlay')) closeSettings();
 }
 
 function calNav(dir) {
