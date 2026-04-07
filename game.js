@@ -27,7 +27,7 @@ const BAR_REF = { public: 80, political: 120, resources: 200 };
 const PHASE_ICONS = ['🤝','🏛️','🔬','📺','🌾','📣','📱','✊','📋','⚖️'];
 
 /* ── Sons ── */
-let _soundEnabled = true;
+let _soundEnabled = false;
 
 function playSound(filename) {
   if (!_soundEnabled) return;
@@ -37,6 +37,30 @@ function playSound(filename) {
     audio.play().catch(function() {});
   } catch (e) {}
 }
+
+/* ── Options de la page d'accueil ── */
+document.addEventListener('DOMContentLoaded', function() {
+  const optSound = document.getElementById('opt-sound');
+  const optFullscreen = document.getElementById('opt-fullscreen');
+
+  if (optSound) {
+    _soundEnabled = optSound.checked;
+    optSound.addEventListener('change', function() {
+      _soundEnabled = optSound.checked;
+      if (_soundEnabled) playSound('545495__ienba__notification.mp3');
+    });
+  }
+
+  if (optFullscreen) {
+    optFullscreen.addEventListener('change', function() {
+      if (optFullscreen.checked) {
+        document.documentElement.requestFullscreen().catch(function() {});
+      } else if (document.fullscreenElement) {
+        document.exitFullscreen().catch(function() {});
+      }
+    });
+  }
+});
 
 function shuffle(arr) {
   const a = [...arr];
@@ -72,13 +96,12 @@ function bindBtn(row, selector, handler) {
    INIT
 ════════════════════════════════════════════ */
 function startGame() {
-  _soundEnabled = document.getElementById('opt-sound')
-    ? document.getElementById('opt-sound').checked
-    : true;
+  const optSound = document.getElementById('opt-sound');
+  _soundEnabled = optSound ? optSound.checked : false;
 
-  const wantFullscreen = document.getElementById('opt-fullscreen')
-    && document.getElementById('opt-fullscreen').checked;
-  if (wantFullscreen && document.documentElement.requestFullscreen) {
+  const optFullscreen = document.getElementById('opt-fullscreen');
+  if (optFullscreen && optFullscreen.checked && !document.fullscreenElement
+      && document.documentElement.requestFullscreen) {
     document.documentElement.requestFullscreen().catch(function() {});
   }
 
