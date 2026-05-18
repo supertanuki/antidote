@@ -446,7 +446,7 @@ function showScoreDelta(effects) {
     el.className  = 'score-delta-float ' + (delta > 0 ? 'pos' : 'neg');
     el.textContent = (delta > 0 ? '+' : '') + delta;
     el.style.left = (rect.left + rect.width / 2) + 'px';
-    el.style.top  = rect.bottom + 'px';
+    el.style.top  = (rect.top + rect.height / 2) + 'px';
     document.body.appendChild(el);
     setTimeout(function() { if (el.parentNode) el.remove(); }, 2200);
   });
