@@ -110,11 +110,11 @@ const GAME_DATA = {
       tourDescription: "Le texte est inscrit à l'ordre du jour et un rapporteur est désigné pour piloter son examen.",
       tourDate: { day: 2, month: 6, year: 2026 },
       title: "Construire une coalition",
-      description: "Construire une coalition d'associations est souvent la première étape d'une stratégie de plaidoyer. En unissant leurs forces, les organisations multiplient leur visibilité et leur crédibilité. Mais chaque alliance a ses fragilités — et le lobby s'empressera de les exploiter.",
+      description: "Construire une coalition d'associations est souvent la première étape d'une stratégie de plaidoyer. En unissant leurs forces, les organisations multiplient leur visibilité et leur crédibilité. Mais chaque alliance a ses fragilités et le lobby s'empressera de les exploiter.",
       actions: [
         {
           label: "Rassembler des associations environnementales",
-          description: "Coordonner plusieurs ONG environnementales pour dénoncer publiquement la réautorisation. Un communiqué commun, une prise de parole unitaire - la coalition envoie un signal fort aux médias et aux élus.",
+          description: "Coordonner plusieurs ONG environnementales pour dénoncer publiquement la réautorisation. Un communiqué commun, une prise de parole unitaire, la coalition envoie un signal fort aux médias et aux élus.",
           naomiMessages: [
             "OK. On active notre réseau.",
             "On a réussi à rassembler plusieurs ONG environnementales.<br>On sort une note de position commune.<br>Ça donne du poids à notre position… mais on reste entre convaincus."
@@ -125,7 +125,7 @@ const GAME_DATA = {
             { resources: -10, political: 5,  public: 10, score: 10 },
           ],
           naomiCounterMessages: [
-            "Tu as vu le communiqué de l'AIPP ? Il évoque une \"offensive idéologique des ONG\". L'info est reprise dans plusieurs médias.<br><img src=\"images/image17.png\" class=\"chat-img\">",
+            "Tu as vu le communiqué de l'AIPP ? Il évoque une \"offensive idéologique des ONG\".<br>L'info est reprise dans plusieurs médias.<br><img src=\"images/image17.png\" class=\"chat-img\">",
             "Ça fragilise un peu notre crédibilité auprès de certains décideurs."
           ],
           counterEffectsByTour: [
@@ -136,7 +136,7 @@ const GAME_DATA = {
         },
         {
           label: "Nouer une alliance avec des associations de santé",
-          description: "Nouer une alliance avec des associations de médecins et de patients permet de faire sortir le débat du seul cadre environnemental. Les arguments liés à la santé publique touchent un public plus large et sont plus difficiles à contester politiquement.",
+          description: "Nouer une alliance avec des associations de médecins et de patients permet de faire sortir le débat du seul cadre environnemental.<br>Les arguments liés à la santé publique touchent un public plus large et sont plus difficiles à contester politiquement.",
           naomiMessages: [
             "Bravo !<br>Je viens de recevoir la confirmation : on a réussi à embarquer des associations de médecins et de patients.<br>On change complètement le cadre du débat : on ne parle plus seulement d'environnement, mais de santé publique."
           ],
@@ -159,8 +159,8 @@ const GAME_DATA = {
           label: "Organiser un forum citoyen",
           description: "Organiser un événement public réunissant associations, citoyens et experts permet de donner une visibilité concrète à la mobilisation. Un forum citoyen crée de l'événement, fédère les énergies et envoie un signal fort aux médias et aux décideurs.",
           naomiMessages: [
-            "Bonne idée. On organise un forum citoyen ouvert au public. Associations, chercheurs, agriculteurs bio, représentants de patients… On met tout le monde dans la même pièce.",
-            "C'est une réussite ! La salle est pleine, les échanges sont riches. Et surtout, ça donne une image unitaire de notre mobilisation."
+            "Bonne idée. On organise un forum citoyen ouvert au public.<br>Associations, chercheurs, agriculteurs bio, représentants de patients…<br>On met tout le monde dans la même pièce.",
+            "C'est une réussite ! La salle est pleine, les échanges sont riches.<br>Et surtout, ça donne une image unitaire de notre mobilisation."
           ],
           effectsByTour: [
             { resources: -10, political: 10, public: 15, score: 10 },
@@ -169,7 +169,7 @@ const GAME_DATA = {
           ],
           naomiCounterMessages: [
             "L'AIPP vient de qualifier notre forum de \"grand-messe idéologique\" dans un communiqué.",
-            "Repris par plusieurs médias proches du lobby. Ils essaient de réduire ça à du militantisme. On va devoir tenir le cap."
+            "Repris par plusieurs médias proches du lobby.<br>Ils essaient de réduire ça à du militantisme.<br>On va devoir tenir le cap."
           ],
           counterEffectsByTour: [
             { public: -5,  score: -10 },
@@ -191,7 +191,7 @@ const GAME_DATA = {
           label: "Convaincre des députés écologistes et de gauche",
           description: "Les groupes écologistes et de gauche sont souvent les alliés naturels des associations environnementales. Les convaincre d'entrer dans la bataille permet d'organiser une opposition structurée à la proposition de loi.",
           naomiMessages: [
-            "OK, tu as raison. Il faut d'abord s'assurer que les députés écologistes et de gauche — les plus favorables naturellement à nos propositions — vont bien se mobiliser.",
+            "OK, tu as raison. Il faut d'abord s'assurer que les députés écologistes et de gauche, les plus favorables naturellement à nos propositions, vont bien se mobiliser.",
             "Notes transmises aux députés !"
           ],
           effectsByTour: [
@@ -267,7 +267,7 @@ const GAME_DATA = {
           label: "Tribune de scientifiques dans la presse",
           description: "Organiser la publication d'une tribune signée par plusieurs chercheurs reconnus permet de donner une visibilité médiatique à l'alerte scientifique sur les risques des pesticides.",
           naomiMessages: [
-            "Plusieurs chercheurs se mobilisent. Je te tiens au courant.",
+            "Plusieurs chercheurs se mobilisent.<br>Je te tiens au courant.",
             "Les chercheurs viennent de cosigner et publier une tribune qui alerte sur les risques des pesticides.<br>Ça crédibilise clairement notre position, surtout auprès des médias et des députés.<br>Bravo !<br><img src=\"images/image14.png\" class=\"chat-img\">"
           ],
           effectsByTour: [
@@ -276,7 +276,7 @@ const GAME_DATA = {
             { resources: -10, political: 10, public: 10, score: 10 },
           ],
           naomiCounterMessages: [
-            "On vient de m'envoyer ça ! Une tribune \"concurrente\" est sortie dans la foulée. Avec d'autres scientifiques… ou présentés comme tels.<br><img src=\"images/image8.png\" class=\"chat-img\">",
+            "On vient de m'envoyer ça ! Une tribune \"concurrente\" est sortie dans la foulée.<br>Avec d'autres scientifiques… ou présentés comme tels.<br><img src=\"images/image8.png\" class=\"chat-img\">",
             "Le débat devient technique.<br>Et surtout, il devient confus."
           ],
           counterEffectsByTour: [
@@ -311,7 +311,7 @@ const GAME_DATA = {
           label: "Prise de position d'une société savante",
           description: "Obtenir la prise de position officielle d'une société savante reconnue - une académie, un collège de médecins - donne un poids institutionnel à la mobilisation scientifique.",
           naomiMessages: [
-            "Très bon levier.<br>Une société savante prend rarement position publiquement.<br>Si on y arrive, on gagnera en crédibilité — ils seront plus difficilement contestables que nous.",
+            "Très bon levier.<br>Une société savante prend rarement position publiquement.<br>Si on y arrive, on gagnera en crédibilité - ils seront plus difficilement contestables que nous.",
             "Bravo !<br>J'ai eu un échange avec la présidente de la société savante sur le Cancer.<br>Ils devraient prendre position publiquement.",
             "Voilà leur communiqué officiel.<br><img src=\"images/image11.png\" class=\"chat-img\">"
           ],
@@ -376,7 +376,7 @@ const GAME_DATA = {
             { resources: -20, public: 25, score: 20 },
           ],
           naomiCounterMessages: [
-            "Regarde !<br>Y'a une grosse campagne de communication menée par l'AIPP.<br>Leurs représentants sont partout sur les plateaux des chaînes et radios privées…<br>Le directeur général de l'AIPP était ce matin sur CNAZE.<br><img src=\"images/image7.png\" class=\"chat-img\">"
+            "Regarde !<br>Il y a une grosse campagne de communication menée par l'AIPP.<br>Leurs représentants sont partout sur les plateaux des chaînes et radios privées…<br>Le directeur général de l'AIPP était ce matin sur CNAZE.<br><img src=\"images/image7.png\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -421,7 +421,7 @@ const GAME_DATA = {
           label: "Témoignages d'agriculteurs bio",
           description: "Mettre en avant des agriculteurs qui travaillent sans pesticides dangereux est un contre-récit puissant face à l'argument que \"les agriculteurs ont besoin de ces produits\". Des voix agricoles dans le débat changent la donne.",
           naomiMessages: [
-            "Tu as raison.<br>Il faut éviter que notre mobilisation soit perçue comme une mobilisation contre les agriculteurs.<br>On ne s'oppose pas à l'agriculture, mais à certaines pratiques.<br>On publie des témoignages d'agriculteurs qui travaillent au contact des pesticides dangereux — ce sont eux les premières victimes.",
+            "Tu as raison.<br>Il faut éviter que notre mobilisation soit perçue comme une mobilisation contre les agriculteurs.<br>On ne s'oppose pas à l'agriculture, mais à certaines pratiques.<br>On publie des témoignages d'agriculteurs qui travaillent au contact des pesticides dangereux. Ce sont eux les premières victimes.",
             "Et voilà !<br><img src=\"images/image23.png\" class=\"chat-img\">"
           ],
           effectsByTour: [
@@ -445,7 +445,7 @@ const GAME_DATA = {
           description: "Une tribune signée par plusieurs dizaines d'agriculteurs opposés à la réautorisation montre que le monde agricole n'est pas monolithique et que le lobby des pesticides ne parle pas en son nom.",
           naomiMessages: [
             "Bonne idée.<br>Je vais proposer la tribune à co-signature auprès de plusieurs paysans et agriculteurs en agriculture biologique.",
-            "Bonne nouvelle !<br>On a plus de 100 co-signatures !<br>La tribune sera publiée demain.<br>Ça montre qu'il n'y a pas qu'une seule agriculture mais \"des\" agricultures — et ça compte."
+            "Bonne nouvelle !<br>On a plus de 100 co-signatures !<br>La tribune sera publiée demain.<br>Ça montre qu'il n'y a pas qu'une seule agriculture mais \"des\" agricultures et ça compte."
           ],
           effectsByTour: [
             { resources: -10, political: 10, public: 10, score: 10 },
@@ -553,7 +553,7 @@ const GAME_DATA = {
             { resources: -10, political: 5, public: 15, score: 10 },
           ],
           naomiCounterMessages: [
-            "Des centaines de contenus en faveur de la loi circulent sur les réseaux. Ce sont des contenus générés avec l'IA. Nos messages sont complètement dilués.",
+            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.<br>Ce sont des contenus générés avec l'IA.<br>Nos messages sont complètement dilués.",
             "Regarde ce faux podcast…<br><img src=\"images/image1.png\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
@@ -571,7 +571,7 @@ const GAME_DATA = {
       tourDate: { day: 1, month: 7, year: 2026 },
       title: "Actions militantes",
       lockedUntil: 4,
-      description: "Les actions militantes — pétitions, manifestations, happenings — créent de l'événement médiatique et montrent une mobilisation concrète. Elles peuvent galvaniser les soutiens. Mais un incident peut aussi se retourner contre la campagne.",
+      description: "Les actions militantes, pétitions, manifestations, happenings... créent de l'événement médiatique et montrent une mobilisation concrète. Elles peuvent galvaniser les soutiens. Mais un incident peut aussi se retourner contre la campagne.",
       actions: [
         {
           label: "Lancer une pétition nationale",
@@ -621,7 +621,7 @@ const GAME_DATA = {
         },
         {
           label: "Organiser un happening médiatique",
-          description: "Un happening créatif et surprenant peut créer un buzz médiatique important. Son impact dépend beaucoup de l'exécution et du contexte — et la réaction du public peut être imprévisible.",
+          description: "Un happening créatif et surprenant peut créer un buzz médiatique important. Son impact dépend beaucoup de l'exécution et du contexte - et la réaction du public peut être imprévisible.",
           naomiMessages: [
             "C'est ambitieux, mais d'accord !<br>On tente quelque chose de plus marquant.<br>Je propose qu'on manifeste avec des faux cercueils devant le siège de l'AIPP.<br>Ça va attirer l'attention.",
             "Elle claque cette opération !<br><img src=\"images/image6.png\" class=\"chat-img\">"
@@ -650,13 +650,13 @@ const GAME_DATA = {
       tourDate: { day: 8, month: 7, year: 2026 },
       title: "Travail légistique",
       lockedUntil: 3,
-      description: "Avec le dépôt des amendements en commission, le travail légistique prend toute son importance. Rédiger des amendements précis, transmettre des analyses aux cabinets : ce sont les leviers les plus directs pour modifier le texte — et les plus difficiles à contrer pour les industriels.",
+      description: "Avec le dépôt des amendements en commission, le travail légistique prend toute son importance. Rédiger des amendements précis, transmettre des analyses aux cabinets : ce sont les leviers les plus directs pour modifier le texte - et les plus difficiles à contrer pour les industriels.",
       actions: [
         {
           label: "Rédiger et transmettre un amendement de suppression",
           description: "Rédiger un amendement de suppression totale du texte en collaboration avec des parlementaires alliés et le transmettre officiellement. Si cet amendement est adopté, la proposition de loi tombe.",
           naomiMessages: [
-            "Bonne idée.<br>Je te suggère de rédiger un amendement précis de suppression — s'il est adopté, la proposition de loi tombe assez rapidement.",
+            "Bonne idée.<br>Je te suggère de rédiger un amendement précis de suppression.<br>S'il est adopté, la proposition de loi tombe assez rapidement.",
             "Le voici, on le transmet ensemble directement à plusieurs députés.<br><img src=\"images/image5.png\" class=\"chat-img\">"
           ],
           effectsByTour: [
@@ -701,7 +701,7 @@ const GAME_DATA = {
           label: "Transmettre des notes d'analyse aux cabinets ministériels",
           description: "Préparer et transmettre des notes de synthèse factuelles aux cabinets ministériels et à l'administration pour alimenter leur réflexion avec une expertise indépendante. Influencer l'administration, c'est influencer les arbitrages en amont du vote.",
           naomiMessages: [
-            "Tu as raison, on peut aussi tenter de convaincre l'administration et les différents cabinets ministériels.<br>Il doit y avoir une note dans le drive commun.<br>Je te laisse la mettre à jour — ensuite, on l'envoie au ministère de la Transition écologique et au ministère de l'Agriculture.",
+            "Tu as raison, on peut aussi tenter de convaincre l'administration et les différents cabinets ministériels.<br>Il doit y avoir une note dans le drive commun.<br>Je te laisse la mettre à jour, ensuite, on l'envoie au ministère de la Transition écologique et au ministère de l'Agriculture.",
             "Notes transmises."
           ],
           effectsByTour: [
