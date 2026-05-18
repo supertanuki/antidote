@@ -958,7 +958,7 @@ body.notif-open .notif-overlay { display: block; }
 }
 
 @media (min-width: 480px) {
-  .ap-grid { grid-template-columns: repeat(5, 1fr); }
+  .ap-grid { grid-template-columns: repeat(4, 1fr); }
   .actions-panel.open { max-height: 200px; }
 }
 
