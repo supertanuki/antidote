@@ -311,7 +311,7 @@ const GAME_DATA = {
           label: "Prise de position d'une société savante",
           description: "Obtenir la prise de position officielle d'une société savante reconnue - une académie, un collège de médecins - donne un poids institutionnel à la mobilisation scientifique.",
           naomiMessages: [
-            "Très bon levier.<br>Une société savante prend rarement position publiquement.<br>Si on y arrive, on gagnera en crédibilité - ils seront plus difficilement contestables que nous.",
+            "Très bon levier.<br>Une société savante prend rarement position publiquement.<br>Si on y arrive, on gagnera en crédibilité.<br>Ils seront plus difficilement contestables que nous.",
             "Bravo !<br>J'ai eu un échange avec la présidente de la société savante sur le Cancer.<br>Ils devraient prendre position publiquement.",
             "Voilà leur communiqué officiel.<br><img src=\"images/image11.png\" class=\"chat-img\">"
           ],
