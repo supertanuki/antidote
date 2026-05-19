@@ -24,7 +24,7 @@ let counterTimer       = null;
 
 // Référence d'affichage des barres : valeur initiale × 2 = 50 % au départ
 const BAR_REF = { public: 80, political: 120, resources: 200 };
-const PHASE_ICONS = ['🤝','🏛️','🔬','📺','🌾','📣','📱','✊','📋','⚖️'];
+const PHASE_ICONS = ['🤝','🏛️','🔬','📺','🌾','📣','📱','⚖️'];
 
 /* ── Sons ── */
 let _soundEnabled = false;
@@ -1565,9 +1565,9 @@ function showFinalResult() {
 function _doShowFinalResult() {
   const s = scores.score || 0;
   let result;
-  if      (s >= 90) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'complete_win'; });
-  else if (s >= 50) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'partial_win'; });
-  else if (s >= 20) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'statu_quo'; });
+  if      (s >= 40) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'complete_win'; });
+  else if (s >= 25) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'partial_win'; });
+  else if (s >= 15) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'statu_quo'; });
   else              result = GAME_DATA.finalResults.find(function(r) { return r.id === 'lobby_win'; });
 
   document.getElementById('result-icon').textContent        = result.icon;
