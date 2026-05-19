@@ -1571,8 +1571,6 @@ function _doShowFinalResult() {
   else              result = GAME_DATA.finalResults.find(function(r) { return r.id === 'lobby_win'; });
 
   document.getElementById('result-icon').textContent        = result.icon;
-  document.getElementById('result-badge-span').textContent  = result.title;
-  document.getElementById('result-badge-span').className    = result.badgeClass;
   document.getElementById('result-title').textContent       = result.title;
   document.getElementById('result-description').textContent = result.description;
   document.getElementById('result-conclusion').textContent  = result.conclusion;

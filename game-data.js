@@ -146,8 +146,7 @@ const GAME_DATA = {
             { resources: -10, political: 10, public: 10, score: 15 },
           ],
           naomiCounterMessages: [
-            "L'AIPP vient de contester les données et met en avant ses propres experts.",
-            "C'est classique : ils créent du doute pour ralentir le débat.<br>Espérons que ces chiffres biaisés ne circulent pas trop."
+            "L'AIPP vient de contester les données et met en avant ses propres experts.<br>C'est classique : ils créent du doute pour ralentir le débat.<br>Espérons que ces chiffres biaisés ne circulent pas trop."
           ],
           counterEffectsByTour: [
             { political: -10, public: -10, score: -10 },
@@ -168,8 +167,7 @@ const GAME_DATA = {
             { resources: -10, political: 5,  public: 10, score: 10 },
           ],
           naomiCounterMessages: [
-            "L'AIPP vient de qualifier notre forum de \"grand-messe idéologique\" dans un communiqué.",
-            "Repris par plusieurs médias proches du lobby.<br>Ils essaient de réduire ça à du militantisme.<br>On va devoir tenir le cap."
+            "L'AIPP vient de qualifier notre forum de \"grand-messe idéologique\" dans un communiqué.<br>Repris par plusieurs médias proches du lobby.<br>Ils essaient de réduire ça à du militantisme.<br>On va devoir tenir le cap."
           ],
           counterEffectsByTour: [
             { public: -5,  score: -10 },
@@ -200,8 +198,7 @@ const GAME_DATA = {
             { resources: -10, political: 10, score: 5 },
           ],
           naomiCounterMessages: [
-            "Mauvaise nouvelle : l'AIPP a transmis une note aux députés du centre, de la droite et de l'extrême droite.",
-            "Elle présente notre sujet comme un clivage classique : écologie contre agriculture.<br>On va avoir du mal à convaincre de façon transpartisane.<br><img src=\"images/image2.png\" class=\"chat-img\">"
+            "Mauvaise nouvelle : l'AIPP a transmis une note aux députés du centre, de la droite et de l'extrême droite.<br>Elle présente notre sujet comme un clivage classique : écologie contre agriculture.<br>On va avoir du mal à convaincre de façon transpartisane.<br><img src=\"images/image2.png\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { political: -5,  score: -10 },
@@ -244,8 +241,7 @@ const GAME_DATA = {
             { resources: -10, political: 10, score: 5 },
           ],
           naomiCounterMessages: [
-            "Évidemment, on ne sera pas les seuls.",
-            "L'AIPP est auditionné aussi.<br>Juste après nous !"
+            "Évidemment, on ne sera pas les seuls.<br>L'AIPP est auditionné aussi.<br>Juste après nous !"
           ],
           counterEffectsByTour: [
             { political: -10, score: -10 },
@@ -298,8 +294,7 @@ const GAME_DATA = {
             { resources: -10, political: 15, public: 5, score: 15 },
           ],
           naomiCounterMessages: [
-            "L'AIPP vient de contre-attaquer.",
-            "Dans une note publiée sur son blog, le lobby attaque la méthodologie…"
+            "L'AIPP vient de contre-attaquer.<br>Dans une note publiée sur son blog, le lobby attaque la méthodologie…"
           ],
           counterEffectsByTour: [
             { political: -10, score: -10 },
@@ -353,8 +348,7 @@ const GAME_DATA = {
             { resources: -10, public: 20, score: 15 },
           ],
           naomiCounterMessages: [
-            "Une tribune concurrente vient de sortir dans les médias détenus par Vincent Bolloray, le multipropriétaire des médias privés.<br>On se demande bien qui est derrière…",
-            "On est en train de rentrer dans une bataille d'opinion."
+            "Une tribune concurrente vient de sortir dans les médias détenus par Vincent Bolloray, le multipropriétaire des médias privés.<br>On se demande bien qui est derrière…<br>On est en train de rentrer dans une bataille d'opinion."
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -388,8 +382,7 @@ const GAME_DATA = {
           label: "Révéler un scandale industriel",
           description: "ANTIDOTE dispose de documents montrant les liens entre certains industriels et des responsables politiques. Les révéler peut provoquer une onde de choc médiatique - mais cela coûte cher en ressources et l'industrie contre-attaquera violemment.",
           naomiMessages: [
-            "Tu es sûr·e de vouloir aller sur ce terrain ? Ok.<br>On a des éléments solides.<br>On sait de source sûre que le nouveau conseiller de la ministre est l'ancien chargé des relations institutionnelles de l'AIPP.",
-            "On va rendre ça public, je transmets l'info à Mediapote.",
+            "Tu es sûr·e de vouloir aller sur ce terrain ? Ok.<br>On a des éléments solides.<br>On sait de source sûre que le nouveau conseiller de la ministre est l'ancien chargé des relations institutionnelles de l'AIPP.<br>On va rendre ça public, je transmets l'info à Mediapote.",
             "Et voilà !<br><img src=\"images/image16.png\" class=\"chat-img\">"
           ],
           effectsByTour: [
@@ -430,8 +423,7 @@ const GAME_DATA = {
             { resources: -10, political: 5,  public: 10, score: 10 },
           ],
           naomiCounterMessages: [
-            "L'AIPP vient de convaincre le syndicat agricole majoritaire d'entrer dans la danse.",
-            "D'après mes infos, ils vont faire intervenir plusieurs de leurs représentants sur les plateaux télés…",
+            "L'AIPP vient de convaincre le syndicat agricole majoritaire d'entrer dans la danse.<br>D'après mes infos, ils vont faire intervenir plusieurs de leurs représentants sur les plateaux télés…",
             "Regarde le cadrage…<br>Ils parlent de contraintes, de rendements, de survie économique.<br><img src=\"images/image19.png\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
@@ -453,8 +445,7 @@ const GAME_DATA = {
             { resources: -10, political: 5,  public: 15, score: 10 },
           ],
           naomiCounterMessages: [
-            "L'AIPP, en lien avec le syndicat majoritaire, a réagi vite !",
-            "Leurs représentants font le tour des plateaux pour continuer à défendre la proposition de loi.<br>On ne va plus parler de la tribune…"
+            "L'AIPP, en lien avec le syndicat majoritaire, a réagi vite !<br>Leurs représentants font le tour des plateaux pour continuer à défendre la proposition de loi.<br>On ne va plus parler de la tribune…"
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -475,8 +466,7 @@ const GAME_DATA = {
             { resources: -20, political: 10, public: 10, score: 10 },
           ],
           naomiCounterMessages: [
-            "L'AIPP, en lien avec le syndicat agricole majoritaire, continue de conduire des actions de communication à destination de la presse et des chambres d'agriculture au niveau local.",
-            "On est invisibilisés !"
+            "L'AIPP, en lien avec le syndicat agricole majoritaire, continue de conduire des actions de communication à destination de la presse et des chambres d'agriculture au niveau local.<br>On est invisibilisés !"
           ],
           counterEffectsByTour: [
             { political: -5,  public: -5,  score: -10 },
@@ -499,7 +489,7 @@ const GAME_DATA = {
           label: "Mobiliser des influenceurs",
           description: "Des créateurs de contenu engagés peuvent toucher des millions de personnes jeunes peu habituées aux canaux traditionnels du militantisme. Mais cette visibilité peut attirer la critique sur le sérieux de la campagne.",
           naomiMessages: [
-            "OK, on propose à plusieurs créateurs de contenu de diffuser du contenu.",
+            "OK, on propose à plusieurs influenceurs de diffuser du contenu.",
             "Bonne nouvelle !<br>Le Trauma accepte de relayer notre campagne.<br>Il est quand même suivi par 500k followers sur Instagram !<br><img src=\"images/image10.png\" class=\"chat-img\">"
           ],
           effectsByTour: [
@@ -508,8 +498,7 @@ const GAME_DATA = {
             { resources: -10, public: 25, score: 15 },
           ],
           naomiCounterMessages: [
-            "Je suis dégoûtée, regarde ça.",
-            "Brout vient de publier une vidéo \"reportage\"… sponsorisée par l'AIPP.<br><img src=\"images/image12.png\" class=\"chat-img\">",
+            "Je suis dégoûtée, regarde ça.<br>Brout vient de publier une vidéo \"reportage\"… sponsorisée par l'AIPP.<br><img src=\"images/image12.png\" class=\"chat-img\">",
             "Un \"reportage vrai/faux\" sur les \"caricatures\" autour des pesticides. Ils se moquent vraiment du monde."
           ],
           counterEffectsByTour: [
@@ -531,8 +520,7 @@ const GAME_DATA = {
             { resources: -10, public: 25, score: 15 },
           ],
           naomiCounterMessages: [
-            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.",
-            "Ce sont des contenus générés avec l'IA.<br>Regarde ce faux podcast…<br><img src=\"images/image1.png\" class=\"chat-img\">"
+            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.<br>Ce sont des contenus générés avec l'IA.<br>Regarde ce faux podcast…<br><img src=\"images/image1.png\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -553,8 +541,7 @@ const GAME_DATA = {
             { resources: -10, political: 5, public: 15, score: 10 },
           ],
           naomiCounterMessages: [
-            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.<br>Ce sont des contenus générés avec l'IA.<br>Nos messages sont complètement dilués.",
-            "Regarde ce faux podcast…<br><img src=\"images/image1.png\" class=\"chat-img\">"
+            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.<br>Ce sont des contenus générés avec l'IA.<br>Nos messages sont complètement dilués.<br>Regarde ce faux podcast…<br><img src=\"images/image1.png\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -5,  score: -10 },
@@ -587,8 +574,7 @@ const GAME_DATA = {
             { resources: -10, public: 20, score: 10 },
           ],
           naomiCounterMessages: [
-            "Un sondage vient d'être publié : \"78% des Français soutiennent les agriculteurs et sont favorables à la simplification des normes\".",
-            "Devine qui est derrière cette opération…<br>C'est une façon de décrédibiliser la pétition.<br><img src=\"images/image20.png\" class=\"chat-img\">"
+            "Un sondage vient d'être publié : \"78% des Français soutiennent les agriculteurs et sont favorables à la simplification des normes\".<br>Devine qui est derrière cette opération…<br>C'est une façon de décrédibiliser la pétition.<br><img src=\"images/image20.png\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -610,8 +596,7 @@ const GAME_DATA = {
             { resources: -20, political: -5,  public: 20, score: 10 },
           ],
           naomiCounterMessages: [
-            "Une partie des médias privés reprennent les éléments de langage de l'AIPP et parlent d'une mobilisation \"idéologique\".",
-            "Certains éditos insistent sur le fait qu'on s'attaque aux agriculteurs.<br>Ça me rend dingue !"
+            "Une partie des médias privés reprennent les éléments de langage de l'AIPP et parlent d'une mobilisation \"idéologique\".<br>Certains éditos insistent sur le fait qu'on s'attaque aux agriculteurs.<br>Ça me rend dingue !"
           ],
           counterEffectsByTour: [
             { political: -10, score: -10 },
@@ -632,8 +617,7 @@ const GAME_DATA = {
             { resources: -20, political: -5,  public: 20, score: 10 },
           ],
           naomiCounterMessages: [
-            "L'AIPP n'a pas apprécié.",
-            "Ils viennent de publier un communiqué pour dénoncer une \"manipulation émotionnelle\" de la part de \"dangereux écologistes qui ont mis en danger l'intégrité physique du siège\"…"
+            "L'AIPP n'a pas apprécié.<br>Ils viennent de publier un communiqué pour dénoncer une \"manipulation émotionnelle\" de la part de \"dangereux écologistes qui ont mis en danger l'intégrité physique du siège\"…"
           ],
           counterEffectsByTour: [
             { political: -10, score: -10 },
@@ -665,9 +649,7 @@ const GAME_DATA = {
             { resources: -10, political: 20, score: 20 },
           ],
           naomiCounterMessages: [
-            "Tu as regardé la liasse des amendements qui circulent ?<br>Beaucoup viennent de l'AIPP… mais très peu sont sourcés, comme d'habitude.",
-            "Au moins 7 députés ont déposé le même amendement pour soutenir et renforcer le texte.<br>C'est dingue !",
-            "Le rapport de force n'est pas bon pour nous."
+            "Tu as regardé la liasse des amendements qui circulent ?<br>Beaucoup viennent de l'AIPP… mais très peu sont sourcés, comme d'habitude.<br>Au moins 7 députés ont déposé le même amendement pour soutenir et renforcer le texte.<br>C'est dingue !<br>Le rapport de force n'est pas bon pour nous."
           ],
           counterEffectsByTour: [
             { political: -10, score: -10 },
@@ -688,8 +670,7 @@ const GAME_DATA = {
             { resources: -10, political: 15, score: 15 },
           ],
           naomiCounterMessages: [
-            "L'AIPP a vu nos amendements.<br>Ils mobilisent leurs propres juristes pour déposer des contre-amendements.",
-            "Ça va être du détail contre détail dans l'hémicycle.<br>Le rapport de force va se jouer dans les couloirs."
+            "L'AIPP a vu nos amendements.<br>Ils mobilisent leurs propres juristes pour déposer des contre-amendements.<br>Ça va être du détail contre détail dans l'hémicycle.<br>Le rapport de force va se jouer dans les couloirs."
           ],
           counterEffectsByTour: [
             { political: -10, score: -10 },
@@ -710,8 +691,7 @@ const GAME_DATA = {
             { resources: -10, political: 15, score: 15 },
           ],
           naomiCounterMessages: [
-            "L'AIPP a fait la même chose, appuyé par une \"note économique sur l'impact sur les filières\" produite par un grand cabinet de conseil…",
-            "Apparemment, le ministre de l'Économie et des Finances pousse en faveur du texte auprès des parlementaires.<br><img src=\"images/image15.png\" class=\"chat-img\">"
+            "L'AIPP a fait la même chose, appuyé par une \"note économique sur l'impact sur les filières\" produite par un grand cabinet de conseil…<br>Apparemment, le ministre de l'Économie et des Finances pousse en faveur du texte auprès des parlementaires.<br><img src=\"images/image15.png\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { political: -5, score: -10 },
