@@ -1,6 +1,22 @@
 /* ─── Reset & base ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ── Flash de transition entre écrans ── */
+#flash-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+#flash-overlay.visible { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  #flash-overlay { display: none; }
+}
+
 :root {
   --black:       #111111;
   --white:       #ffffff;

@@ -172,9 +172,10 @@ function startGame() {
   closeActionsPanel();
   updateScoreboard();
   updateProgress();
-  showScreen('screen-game');
-  showDormantInput();
-  showTyping();
+  flashToScreen('screen-game', function() {
+    showDormantInput();
+    showTyping();
+  });
 
   setTimeout(function() {
     hideTyping();
@@ -204,6 +205,24 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   setTimeout(() => scrollToTop(), 60);
+}
+
+function flashToScreen(id, cb) {
+  const overlay = document.getElementById('flash-overlay');
+  if (!overlay) { showScreen(id); if (cb) cb(); return; }
+  overlay.classList.add('visible');
+  setTimeout(function() {
+    showScreen(id);
+    if (cb) cb();
+    requestAnimationFrame(function() {
+      overlay.style.transition = 'opacity 250ms ease';
+      overlay.classList.remove('visible');
+      overlay.addEventListener('transitionend', function reset() {
+        overlay.style.transition = '';
+        overlay.removeEventListener('transitionend', reset);
+      });
+    });
+  }, 150);
 }
 
 /* ════════════════════════════════════════════
@@ -1524,7 +1543,7 @@ function _doShowEarlyEnd(zeroKey) {
   document.getElementById('end-scores').innerHTML        = buildScoresSummary();
   document.getElementById('end-actions').innerHTML       = buildActionsList();
 
-  setTimeout(() => showScreen('screen-end'), 60);
+  setTimeout(() => flashToScreen('screen-end'), 60);
 }
 
 function sendSorry() {
@@ -1578,10 +1597,7 @@ function _doShowFinalResult() {
   document.getElementById('result-scores').innerHTML        = buildScoresSummary();
   document.getElementById('result-actions').innerHTML       = buildActionsList();
 
-  setTimeout(() => {
-    showScreen('screen-result');
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, 60);
+  setTimeout(() => flashToScreen('screen-result'), 60);
 }
 
 function sendJArrive() {
