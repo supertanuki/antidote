@@ -1652,13 +1652,13 @@ function computeScoreTimeline() {
       pub = Math.max(0, pub + (entry.counterEffects.public     || 0));
       pol = Math.max(0, pol + (entry.counterEffects.political  || 0));
       res = Math.max(0, res + (entry.counterEffects.resources  || 0));
-      timeline.push({ label: 'T.' + entry.turnNumber, public: pub, political: pol, resources: res });
+      timeline.push({ label: 'T.' + entry.turnNumber, public: pub, political: pol, resources: res, tooltip: entry.action });
     } else if (entry.type === 'event') {
       evtCount++;
       pub = Math.max(0, pub + (entry.effects.public     || 0));
       pol = Math.max(0, pol + (entry.effects.political  || 0));
       res = Math.max(0, res + (entry.effects.resources  || 0));
-      timeline.push({ label: 'E' + evtCount, public: pub, political: pol, resources: res, isEvent: true });
+      timeline.push({ label: 'E' + evtCount, public: pub, political: pol, resources: res, isEvent: true, tooltip: entry.title });
     }
   });
 
@@ -1694,7 +1694,7 @@ function buildScoreGraph() {
   for (var yv = 0; yv <= yMax; yv += yStep) {
     var yy = yp(yv).toFixed(1);
     o += '<line x1="' + ML + '" y1="' + yy + '" x2="' + (W - MR) + '" y2="' + yy + '" stroke="#e4e1dc" stroke-width="0.8"/>';
-    o += '<text x="' + (ML - 3) + '" y="' + (parseFloat(yy) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9" font-family="Arial,sans-serif" fill="#bbb">' + yv + '</text>';
+    o += '<text x="' + (ML - 3) + '" y="' + (parseFloat(yy) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9" font-family="Arial,sans-serif" fill="#666">' + yv + '</text>';
   }
 
   // Marqueurs verticaux événements
@@ -1717,10 +1717,21 @@ function buildScoreGraph() {
     });
   });
 
-  // Labels axe X
+  // Labels axe X (avec tooltip au survol)
   timeline.forEach(function(p, i) {
-    var fill = p.isEvent ? '#b8860b' : '#bbb';
-    o += '<text x="' + xp(i).toFixed(1) + '" y="' + (MT + CH + 14) + '" text-anchor="middle" font-size="9" font-family="Arial,sans-serif" fill="' + fill + '">' + p.label + '</text>';
+    var fill = p.isEvent ? '#8B6914' : '#555';
+    var xv = xp(i).toFixed(1);
+    var ty = MT + CH + 14;
+    if (p.tooltip) {
+      var esc = p.tooltip.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      o += '<g style="cursor:help">'
+        + '<title>' + esc + '</title>'
+        + '<rect x="' + (xp(i) - 13).toFixed(1) + '" y="' + (MT + CH + 2) + '" width="26" height="14" fill="transparent"/>'
+        + '<text x="' + xv + '" y="' + ty + '" text-anchor="middle" font-size="9" font-family="Arial,sans-serif" fill="' + fill + '">' + p.label + '</text>'
+        + '</g>';
+    } else {
+      o += '<text x="' + xv + '" y="' + ty + '" text-anchor="middle" font-size="9" font-family="Arial,sans-serif" fill="' + fill + '">' + p.label + '</text>';
+    }
   });
 
   o += '</svg>';
