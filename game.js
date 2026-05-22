@@ -7,6 +7,8 @@ let scores         = {};
 let playedPhases   = [];
 let playedActions  = [];
 let gameHistory    = [];
+let _usedMerciLabels  = [];
+let _activeMerciLabel = null;
 let phaseOrder     = [];
 let eventOrder     = [];
 let eventCount     = 0;
@@ -152,6 +154,8 @@ function startGame() {
   playedPhases       = [];
   playedActions      = [];
   gameHistory        = [];
+  _usedMerciLabels   = [];
+  _activeMerciLabel  = null;
   phaseOrder         = shuffle(GAME_DATA.phases.map((_, i) => i));
   eventOrder         = shuffle(GAME_DATA.events.map((_, i) => i));
   eventCount         = 0;
@@ -936,6 +940,7 @@ function sendMerci() {
   const inputEl = document.getElementById('chat-input-text');
   const text = (inputEl.textContent || '').trim() || 'Merci Naomi\u00a0!';
   document.getElementById('quick-replies').style.display = 'none';
+  if (_activeMerciLabel) { _usedMerciLabels.push(_activeMerciLabel); _activeMerciLabel = null; }
   currentStep = 'waiting';
   showDormantInput();
   playSound('760370__froey__message-sent.mp3');
@@ -1371,10 +1376,16 @@ function askAction() {
 
 /* ── Affiche "Merci Naomi" pré-rempli + Send actif ── */
 const MERCI_SUGGESTIONS = [
-  { label: 'Merci', text: 'Merci, on continue !' },
-  { label: 'Bien reçu', text: 'Bien reçu, on y va.' },
-  { label: 'Je réfléchis', text: 'Ok, je réfléchis.' },
+  { label: 'Merci', text: 'Merci, on continue...' },
+  { label: 'Bien reçu', text: 'Bien reçu, merci.' },
+  { label: 'On a encore du travail...', text: 'On a encore du travail...' },
   { label: 'Compris', text: 'Compris. A+' },
+  { label: 'C\'est noté', text: 'C\'est noté' },
+  { label: '👍', text: '👍' },
+  { label: '😡', text: '😡' },
+  { label: '😠', text: '😠' },
+  { label: '🤔', text: '🤔' },
+  { label: '😑', text: '😑' },
 ];
 
 function showMerciInput(cb, customSuggestions) {
@@ -1386,7 +1397,15 @@ function showMerciInput(cb, customSuggestions) {
   const sendBtn = document.getElementById('chat-send-btn');
   sendBtn.style.display = 'flex';
   inputEl.style.display = 'block';
-  const suggestions = customSuggestions || shuffle(MERCI_SUGGESTIONS).slice(0, 2);
+  const trackUsage = !customSuggestions;
+  let suggestions;
+  if (customSuggestions) {
+    suggestions = customSuggestions;
+  } else {
+    const pool = shuffle(MERCI_SUGGESTIONS.filter(function(s) { return !_usedMerciLabels.includes(s.label); }));
+    suggestions = (pool.length >= 2 ? pool : shuffle(MERCI_SUGGESTIONS)).slice(0, 2);
+  }
+  _activeMerciLabel = trackUsage ? suggestions[0].label : null;
   animateInputText(suggestions[0].text);
   enableSendBtn();
   _pendingSend = cb;
@@ -1403,6 +1422,7 @@ function showMerciInput(cb, customSuggestions) {
       animateInputText(s.text);
       qr.querySelectorAll('.qr-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
+      if (trackUsage) _activeMerciLabel = s.label;
       if (s.cb) { _pendingSend = s.cb; }
     });
     qr.appendChild(btn);
