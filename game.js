@@ -1422,7 +1422,7 @@ function showSequentialMessages(messages, onComplete) {
 function showExplanations() {
   showSequentialMessages([
     `Une proposition de loi vient d'être déposée au Sénat.<br>Officiellement, elle vise à "simplifier" les règles pour les agriculteurs.<br>Dans les faits : réintroduire des pesticides interdits.<br>L'AIPP (l'Association industrielle de protection des plantes), le lobby des pesticides, est déjà mobilisée pour la faire passer.`,
-    `Tu disposes de 8 tours avant le vote final.<br>À chaque tour, tu choisis une action : mobiliser des scientifiques, alerter les médias, convaincre des parlementaires…<br>C'est toi qui décide.`,
+    `Tu disposes de 8 tours avant le vote final pour augmenter le soutien public ou l'influence politique.<br>À chaque tour, tu choisis une action : mobiliser des scientifiques, alerter les médias, convaincre des parlementaires…<br>C'est toi qui décide.`,
     `Chaque action a un coût et un effet sur trois indicateurs :<br>→ Soutien du public<br>→ Influence politique<br>→ Ressources<br>Si l'un des trois tombe à zéro, la campagne s'arrête.`,
     `Dernière chose : le lobby ne restera pas passif.<br>À chaque action qu'on lance, l'AIPP réagira.`,
     `On y va ?`,
