@@ -1237,7 +1237,7 @@ body.notif-open .notif-overlay { display: block; }
 }
 
 .end-card p  { font-size: .93rem; line-height: 1.7; }
-.end-card .cta-text { font-style: italic; color: var(--text-muted); font-size: .9rem; margin-top: 8px; }
+.end-card .cta-text { margin-top: 8px; }
 
 .scores-summary { display: flex; gap: 10px; flex-wrap: wrap; }
 
@@ -1439,6 +1439,51 @@ body.notif-open .notif-overlay { display: block; }
   border: 2px solid var(--grey-light);
   border-top: none;
   padding: 12px;
+}
+
+.hint-accordion-wrap {
+  margin-top: 24px;
+}
+
+.hint-accordion-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background: #fffbe6;
+  border: 2px solid #f0c040;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: .85rem;
+  font-weight: 900;
+  color: #7a5800;
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s, border-color .15s;
+  letter-spacing: .03em;
+}
+
+.hint-accordion-btn:hover { background: #fff3b0; border-color: #d4a800; }
+
+.hint-accordion-btn[aria-expanded="true"] {
+  border-bottom-color: transparent;
+}
+
+.hint-accordion-body {
+  border-color: #f0c040 !important;
+  background: #fffdf0;
+  font-size: .88rem;
+  line-height: 1.55;
+  color: var(--black)
+}
+
+.hint-list {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.hint-list li {
+  margin-bottom: 8px;
 }
 
 .result-type-badge { text-align: center; margin-bottom: 18px; }

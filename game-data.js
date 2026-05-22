@@ -162,9 +162,9 @@ const GAME_DATA = {
             "C'est une réussite ! La salle est pleine, les échanges sont riches.<br>Et surtout, ça donne une image unitaire de notre mobilisation."
           ],
           effectsByTour: [
-            { resources: -10, political: 10, public: 15, score: 10 },
-            { resources: -10, political: 10, public: 10, score: 10 },
-            { resources: -10, political: 5,  public: 10, score: 10 },
+            { resources: -20, political: 10, public: 15, score: 10 },
+            { resources: -20, political: 10, public: 10, score: 10 },
+            { resources: -20, political: 5,  public: 10, score: 10 },
           ],
           naomiCounterMessages: [
             "L'AIPP vient de qualifier notre forum de \"grand-messe idéologique\" dans un communiqué.<br>Repris par plusieurs médias proches du lobby.<br>Ils essaient de réduire ça à du militantisme.<br>On va devoir tenir le cap."

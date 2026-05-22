@@ -1580,6 +1580,7 @@ function _doShowEarlyEnd(zeroKey) {
   document.getElementById('end-scores').innerHTML        = buildScoresSummary();
   document.getElementById('end-graph').innerHTML         = buildScoreGraph();
   document.getElementById('end-actions').innerHTML       = buildActionsList();
+  document.getElementById('end-hint').innerHTML          = buildHintAccordion();
 
   setTimeout(() => flashToScreen('screen-end'), 60);
 }
@@ -1635,6 +1636,7 @@ function _doShowFinalResult() {
   document.getElementById('result-scores').innerHTML        = buildScoresSummary();
   document.getElementById('result-graph').innerHTML         = buildScoreGraph();
   document.getElementById('result-actions').innerHTML       = buildActionsList();
+  document.getElementById('result-hint').innerHTML          = result.id !== 'complete_win' ? buildHintAccordion() : '';
 
   setTimeout(() => flashToScreen('screen-result'), 60);
 }
@@ -1815,6 +1817,25 @@ function toggleRecapAccordion(btn) {
   btn.setAttribute('aria-expanded', open ? 'false' : 'true');
   body.hidden = open;
   btn.querySelector('.recap-accordion-arrow').innerHTML = open ? '&#9660;' : '&#9650;';
+}
+
+function buildHintAccordion() {
+  var body = '<div class="hint-accordion-body">'
+    + '<p><strong>Les 3 premiers tours sont décisifs.</strong> Pour construire une stratégie solide, essayez les options suivantes :</p>'
+    + '<ol class="hint-list">'
+    + '<li><strong>Alliance avec des associations de santé :</strong> cela booste immédiatement le soutien public et crédibilise votre plaidoyer sur un terrain légitime.</li>'
+    + '<li><strong>Audition en commission parlementaire :</strong> une audience directe avec les élus renforce votre influence politique au moment où le lobby n\'a pas encore contre-attaqué.</li>'
+    + '<li><strong>Méta-analyse scientifique :</strong> un rapport indépendant consolide la crédibilité de vos arguments et rend les positions du lobby plus difficiles à défendre.</li>'
+    + '</ol>'
+    + '<p style="margin-bottom:0">Ces trois actions combinées établissent un avantage durable sur les deux indicateurs <strong>Soutien du public</strong> et <strong>Influence politique</strong> avant que le lobby des pesticides ne monte en puissance.</p>'
+    + '</div>';
+  return '<div class="hint-accordion-wrap">'
+    + '<button class="hint-accordion-btn" onclick="toggleRecapAccordion(this)" aria-expanded="false">'
+    + '<span>&#128161; Voir un indice avant de rejouer</span>'
+    + '<span class="recap-accordion-arrow" aria-hidden="true">&#9660;</span>'
+    + '</button>'
+    + '<div class="recap-accordion-body hint-accordion-body" hidden>' + body + '</div>'
+    + '</div>';
 }
 
 function buildScoresSummary() {
