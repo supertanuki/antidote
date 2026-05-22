@@ -23,26 +23,15 @@
   --off-white:   #f5f3ee;
   --red:         #e8001c;
   --red-dark:    #b0001a;
-  --yellow:      #fff4ae;
+  --yellow:      #ffe600;
   --grey:        #888888;
   --grey-light:  #e0ddd8;
   --grey-mid:    #cccccc;
   --chat-bg:     #e0ddd8;
   --text:        #111111;
   --text-muted:  #555555;
-
-  --grey-dark:    #111111;
-  --green:        #333333;
-  --green-light:  #ffe600;
-  --green-bubble: #ffe600;
-  --green-pale:   #f5f3ee;
-  --orange:       #e8001c;
-  --blue:         #0055aa;
-  --blue-light:   #dde8ff;
-  --red-light:    #fce8e8;
-
-  --radius:      0px;
-  --shadow:      3px 3px 0 #111111;
+  --grey-dark:   #111111;
+  --green:       green;
   --transition:  .2s ease;
 }
 
@@ -68,7 +57,7 @@ body {
 #screen-welcome {
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, var(--grey-light) 0%, var(--grey-mid) 100%);
+  background: var(--yellow);
   padding: 40px 16px;
   min-height: 100vh;
   animation: fadeIn .3s ease;
@@ -107,8 +96,7 @@ body {
 
 .welcome-card {
   background: var(--off-white);
-  border: 2px solid var(--white);
-  border-left: 5px solid var(--red);
+  border: 5px solid var(--red);
   padding: 20px 24px;
   margin-bottom: 20px;
   text-align: left;
@@ -266,7 +254,7 @@ body {
   right: 1px;
   width: 9px;
   height: 9px;
-  background: var(--yellow);
+  background: var(--green);
   border-radius: 50%;
   border: 2px solid var(--black);
   transition: background .4s;

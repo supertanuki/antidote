@@ -813,13 +813,13 @@ function selectPhaseFromOverlay(phaseIndex) {
   pendingAction = { phaseIndex: phaseIndex };
   pendingOption = null;
 
-  // Mode panel (tous sauf tours 1, 4, 7 ; le tour 10 va toujours au panel)
-  if (playedPhases.length % 3 !== 0 || playedPhases.length === 9) {
+  // Mode panel
+  //if (playedPhases.length % 3 !== 0 || playedPhases.length === 9) {
     openStrategyPanel(phaseIndex);
     return;
-  }
+  //}
 
-  // Mode chat (tours 1, 4, 7) : demander à Naomi
+  // Mode chat : demander à Naomi
   closeActionsPanel();
   currentStep = 'option';
   typewriterInput('Que me recommandes-tu comme stratégies pour\u00a0: ' + GAME_DATA.phases[phaseIndex].title + '\u00a0?', null);
@@ -1422,7 +1422,7 @@ function showSequentialMessages(messages, onComplete) {
 function showExplanations() {
   showSequentialMessages([
     `Une proposition de loi vient d'être déposée au Sénat.<br>Officiellement, elle vise à "simplifier" les règles pour les agriculteurs.<br>Dans les faits : réintroduire des pesticides interdits.<br>L'AIPP (l'Association industrielle de protection des plantes), le lobby des pesticides, est déjà mobilisée pour la faire passer.`,
-    `Tu disposes de 8 tours avant le vote final.<br>À chaque tour, tu choisis une action : mobiliser des scientifiques, alerter les médias, convaincre des parlementaires…<br>C'est toi qui décides.`,
+    `Tu disposes de 8 tours avant le vote final.<br>À chaque tour, tu choisis une action : mobiliser des scientifiques, alerter les médias, convaincre des parlementaires…<br>C'est toi qui décide.`,
     `Chaque action a un coût et un effet sur trois indicateurs :<br>→ Soutien du public<br>→ Influence politique<br>→ Ressources<br>Si l'un des trois tombe à zéro, la campagne s'arrête.`,
     `Dernière chose : le lobby ne restera pas passif.<br>À chaque action qu'on lance, l'AIPP réagira.`,
     `On y va ?`,
@@ -1626,8 +1626,8 @@ function buildActionsList() {
 }
 
 function buildScoresSummary() {
-  return '<div class="summary-item"><div class="si-icon" aria-hidden="true">👥</div><div class="si-label">Soutien du Public</div><div class="si-val">' + scores.public + '</div></div>' +
-    '<div class="summary-item"><div class="si-icon" aria-hidden="true">🏛️</div><div class="si-label">Influence Politique</div><div class="si-val">' + scores.political + '</div></div>' +
+  return '<div class="summary-item"><div class="si-icon" aria-hidden="true">👥</div><div class="si-label">Soutien du public</div><div class="si-val">' + scores.public + '</div></div>' +
+    '<div class="summary-item"><div class="si-icon" aria-hidden="true">🏛️</div><div class="si-label">Influence politique</div><div class="si-val">' + scores.political + '</div></div>' +
     '<div class="summary-item"><div class="si-icon" aria-hidden="true">💶</div><div class="si-label">Ressources</div><div class="si-val">' + scores.resources + '</div></div>';
 }
 
