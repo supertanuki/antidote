@@ -1364,6 +1364,46 @@ body.notif-open .notif-overlay { display: block; }
 
 .recap-event .recap-delta-chips { margin-top: 0; }
 
+/* ─── Graphique de progression (écrans de fin) ─── */
+.score-graph-wrap {
+  background: #fff;
+  border: 1px solid var(--grey-light);
+  border-radius: 4px;
+  padding: 10px 8px 4px;
+  margin-bottom: 14px;
+}
+
+.graph-legend {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  padding-bottom: 2px;
+}
+
+.graph-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .74rem;
+  color: var(--text-muted);
+}
+
+.gl-line {
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.gl-line-evt {
+  background: none;
+  border-top: 2px dashed #d4a72c;
+  height: 0;
+}
+
 .result-type-badge { text-align: center; margin-bottom: 18px; }
 
 .result-type-badge span {

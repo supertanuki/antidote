@@ -1558,6 +1558,7 @@ function _doShowEarlyEnd(zeroKey) {
   document.getElementById('end-conclusion').textContent  = data.conclusion;
   document.getElementById('end-cta').textContent         = data.cta;
   document.getElementById('end-scores').innerHTML        = buildScoresSummary();
+  document.getElementById('end-graph').innerHTML         = buildScoreGraph();
   document.getElementById('end-actions').innerHTML       = buildActionsList();
 
   setTimeout(() => flashToScreen('screen-end'), 60);
@@ -1612,6 +1613,7 @@ function _doShowFinalResult() {
   document.getElementById('result-conclusion').textContent  = result.conclusion;
   document.getElementById('result-cta').textContent         = result.cta;
   document.getElementById('result-scores').innerHTML        = buildScoresSummary();
+  document.getElementById('result-graph').innerHTML         = buildScoreGraph();
   document.getElementById('result-actions').innerHTML       = buildActionsList();
 
   setTimeout(() => flashToScreen('screen-result'), 60);
@@ -1633,6 +1635,107 @@ function sendJArrive() {
 /* ════════════════════════════════════════════
    RÉCAP
 ════════════════════════════════════════════ */
+
+/* ── Reconstruit la progression des scores depuis gameHistory ── */
+function computeScoreTimeline() {
+  var pub = GAME_DATA.initialScores.public;
+  var pol = GAME_DATA.initialScores.political;
+  var res = GAME_DATA.initialScores.resources;
+  var timeline = [{ label: 'Départ', public: pub, political: pol, resources: res }];
+  var evtCount = 0;
+
+  gameHistory.forEach(function(entry) {
+    if (entry.type === 'action') {
+      pub = Math.max(0, pub + (entry.effects.public     || 0));
+      pol = Math.max(0, pol + (entry.effects.political  || 0));
+      res = Math.max(0, res + (entry.effects.resources  || 0));
+      pub = Math.max(0, pub + (entry.counterEffects.public     || 0));
+      pol = Math.max(0, pol + (entry.counterEffects.political  || 0));
+      res = Math.max(0, res + (entry.counterEffects.resources  || 0));
+      timeline.push({ label: 'T.' + entry.turnNumber, public: pub, political: pol, resources: res });
+    } else if (entry.type === 'event') {
+      evtCount++;
+      pub = Math.max(0, pub + (entry.effects.public     || 0));
+      pol = Math.max(0, pol + (entry.effects.political  || 0));
+      res = Math.max(0, res + (entry.effects.resources  || 0));
+      timeline.push({ label: 'E' + evtCount, public: pub, political: pol, resources: res, isEvent: true });
+    }
+  });
+
+  return timeline;
+}
+
+/* ── Graphique SVG de progression ── */
+function buildScoreGraph() {
+  if (!gameHistory.length) return '';
+  var timeline = computeScoreTimeline();
+  if (timeline.length < 2) return '';
+
+  var W = 560, H = 180;
+  var ML = 34, MR = 10, MT = 12, MB = 34;
+  var CW = W - ML - MR;
+  var CH = H - MT - MB;
+  var n  = timeline.length;
+
+  // Échelle Y
+  var yMax = 20;
+  timeline.forEach(function(p) {
+    yMax = Math.max(yMax, p.public, p.political, p.resources);
+  });
+  yMax = Math.max(Math.ceil((yMax + 10) / 25) * 25, 50);
+  var yStep = yMax > 150 ? 50 : 25;
+
+  function xp(i) { return ML + (n < 2 ? CW / 2 : (i / (n - 1)) * CW); }
+  function yp(v) { return MT + CH * (1 - Math.min(v, yMax) / yMax); }
+
+  var o = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">';
+
+  // Grille Y
+  for (var yv = 0; yv <= yMax; yv += yStep) {
+    var yy = yp(yv).toFixed(1);
+    o += '<line x1="' + ML + '" y1="' + yy + '" x2="' + (W - MR) + '" y2="' + yy + '" stroke="#e4e1dc" stroke-width="0.8"/>';
+    o += '<text x="' + (ML - 3) + '" y="' + (parseFloat(yy) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9" font-family="Arial,sans-serif" fill="#bbb">' + yv + '</text>';
+  }
+
+  // Marqueurs verticaux événements
+  timeline.forEach(function(p, i) {
+    if (!p.isEvent) return;
+    var xv = xp(i).toFixed(1);
+    o += '<line x1="' + xv + '" y1="' + MT + '" x2="' + xv + '" y2="' + (MT + CH) + '" stroke="#d4a72c" stroke-width="1.2" stroke-dasharray="3 2" opacity="0.55"/>';
+  });
+
+  // 3 lignes (resources en dessous, public au-dessus)
+  var COLS = { public: '#2d8a4e', political: '#1a5fb4', resources: '#e0882a' };
+  ['resources', 'political', 'public'].forEach(function(key) {
+    var pts = timeline.map(function(p, i) {
+      return xp(i).toFixed(1) + ',' + yp(p[key]).toFixed(1);
+    }).join(' ');
+    o += '<polyline points="' + pts + '" fill="none" stroke="' + COLS[key] + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    timeline.forEach(function(p, i) {
+      var r = p.isEvent ? '2' : '2.8';
+      o += '<circle cx="' + xp(i).toFixed(1) + '" cy="' + yp(p[key]).toFixed(1) + '" r="' + r + '" fill="' + COLS[key] + '"/>';
+    });
+  });
+
+  // Labels axe X
+  timeline.forEach(function(p, i) {
+    var fill = p.isEvent ? '#b8860b' : '#bbb';
+    o += '<text x="' + xp(i).toFixed(1) + '" y="' + (MT + CH + 14) + '" text-anchor="middle" font-size="9" font-family="Arial,sans-serif" fill="' + fill + '">' + p.label + '</text>';
+  });
+
+  o += '</svg>';
+
+  // Légende HTML sous le SVG
+  o += '<div class="graph-legend">'
+    + '<span class="graph-legend-item"><span class="gl-line" style="background:#2d8a4e"></span>👥 Soutien public</span>'
+    + '<span class="graph-legend-item"><span class="gl-line" style="background:#1a5fb4"></span>🏛️ Influence politique</span>'
+    + '<span class="graph-legend-item"><span class="gl-line" style="background:#e0882a"></span>💶 Ressources</span>'
+    + '<span class="graph-legend-item"><span class="gl-line gl-line-evt"></span>Événements</span>'
+    + '</div>';
+
+  return '<div class="score-graph-wrap">' + o + '</div>';
+}
+
 function buildActionsList() {
   if (!gameHistory.length) return '<p style="opacity:.7;font-size:.85rem;">Aucune action jouée.</p>';
 
