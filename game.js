@@ -1737,40 +1737,53 @@ function buildScoreGraph() {
 }
 
 function buildActionsList() {
-  if (!gameHistory.length) return '<p style="opacity:.7;font-size:.85rem;">Aucune action jouée.</p>';
+  if (!gameHistory.length) return '';
 
-  var html = '<div class="actions-recap">';
+  var inner = '<div class="actions-recap">';
   gameHistory.forEach(function(entry) {
     if (entry.type === 'action') {
-      html += '<div class="recap-turn">';
-      html += '<div class="recap-turn-header">';
-      html += '<span class="recap-turn-num">Tour ' + entry.turnNumber + '</span>';
-      html += '<span class="recap-turn-phase">' + entry.phase + '</span>';
-      html += '</div>';
-      html += '<div class="recap-turn-action">' + entry.action + '</div>';
-      html += '<div class="recap-deltas">';
-      html += '<div class="recap-delta-row">';
-      html += '<span class="recap-delta-label">Votre action</span>';
-      html += '<span class="recap-delta-chips">' + buildDeltaChips(entry.effects) + '</span>';
-      html += '</div>';
-      html += '<div class="recap-delta-row">';
-      html += '<span class="recap-delta-label">Contre-offensive du lobby</span>';
-      html += '<span class="recap-delta-chips">' + buildDeltaChips(entry.counterEffects) + '</span>';
-      html += '</div>';
-      html += '</div>';
-      html += '</div>';
+      inner += '<div class="recap-turn">';
+      inner += '<div class="recap-turn-header">';
+      inner += '<span class="recap-turn-num">Tour ' + entry.turnNumber + '</span>';
+      inner += '<span class="recap-turn-phase">' + entry.phase + '</span>';
+      inner += '</div>';
+      inner += '<div class="recap-turn-action">' + entry.action + '</div>';
+      inner += '<div class="recap-deltas">';
+      inner += '<div class="recap-delta-row">';
+      inner += '<span class="recap-delta-label">Votre action</span>';
+      inner += '<span class="recap-delta-chips">' + buildDeltaChips(entry.effects) + '</span>';
+      inner += '</div>';
+      inner += '<div class="recap-delta-row">';
+      inner += '<span class="recap-delta-label">Contre-offensive du lobby</span>';
+      inner += '<span class="recap-delta-chips">' + buildDeltaChips(entry.counterEffects) + '</span>';
+      inner += '</div>';
+      inner += '</div>';
+      inner += '</div>';
     } else if (entry.type === 'event') {
-      html += '<div class="recap-event">';
-      html += '<div class="recap-event-header">';
-      html += '<span class="recap-event-icon" aria-hidden="true">' + entry.icon + '</span>';
-      html += '<span class="recap-event-title">' + entry.title + '</span>';
-      html += '</div>';
-      html += '<div class="recap-delta-chips">' + buildDeltaChips(entry.effects) + '</div>';
-      html += '</div>';
+      inner += '<div class="recap-event">';
+      inner += '<div class="recap-event-header">';
+      inner += '<span class="recap-event-icon" aria-hidden="true">' + entry.icon + '</span>';
+      inner += '<span class="recap-event-title">' + entry.title + '</span>';
+      inner += '</div>';
+      inner += '<div class="recap-delta-chips">' + buildDeltaChips(entry.effects) + '</div>';
+      inner += '</div>';
     }
   });
-  html += '</div>';
-  return html;
+  inner += '</div>';
+
+  return '<button class="recap-accordion-btn" onclick="toggleRecapAccordion(this)" aria-expanded="false">'
+    + '<span>Voir le détail tour par tour</span>'
+    + '<span class="recap-accordion-arrow" aria-hidden="true">&#9660;</span>'
+    + '</button>'
+    + '<div class="recap-accordion-body" hidden>' + inner + '</div>';
+}
+
+function toggleRecapAccordion(btn) {
+  var body = btn.nextElementSibling;
+  var open = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+  body.hidden = open;
+  btn.querySelector('.recap-accordion-arrow').innerHTML = open ? '&#9660;' : '&#9650;';
 }
 
 function buildScoresSummary() {

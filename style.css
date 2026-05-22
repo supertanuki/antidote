@@ -1275,7 +1275,6 @@ body.notif-open .notif-overlay { display: block; }
 .actions-recap { display: flex; flex-direction: column; gap: 8px; }
 
 .recap-turn {
-  border: 2px solid var(--grey-light);
   padding: 10px 12px;
   background: var(--white);
 }
@@ -1402,6 +1401,44 @@ body.notif-open .notif-overlay { display: block; }
   background: none;
   border-top: 2px dashed #d4a72c;
   height: 0;
+}
+
+/* ─── Accordéon "Voir le détail tour par tour" ─── */
+.recap-accordion-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--off-white);
+  border: 2px solid var(--grey-light);
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: .82rem;
+  font-weight: 900;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s, border-color .15s;
+  letter-spacing: .03em;
+}
+
+.recap-accordion-btn:hover { background: var(--grey-light); border-color: var(--grey); }
+
+.recap-accordion-btn[aria-expanded="true"] {
+  border-bottom-color: transparent;
+}
+
+.recap-accordion-arrow {
+  font-size: .75rem;
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+
+.recap-accordion-body {
+  border: 2px solid var(--grey-light);
+  border-top: none;
+  padding: 12px;
 }
 
 .result-type-badge { text-align: center; margin-bottom: 18px; }
