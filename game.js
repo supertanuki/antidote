@@ -6,6 +6,7 @@
 let scores         = {};
 let playedPhases   = [];
 let playedActions  = [];
+let gameHistory    = [];
 let phaseOrder     = [];
 let eventOrder     = [];
 let eventCount     = 0;
@@ -150,6 +151,7 @@ function startGame() {
   scores             = { ...GAME_DATA.initialScores };
   playedPhases       = [];
   playedActions      = [];
+  gameHistory        = [];
   phaseOrder         = shuffle(GAME_DATA.phases.map((_, i) => i));
   eventOrder         = shuffle(GAME_DATA.events.map((_, i) => i));
   eventCount         = 0;
@@ -1074,6 +1076,14 @@ function sendActionChoice() {
 
   _resourcesWentNegative = false;
   playedActions.push({ phase: phase.title, action: action.label });
+  gameHistory.push({
+    type: 'action',
+    turnNumber: playedPhases.length + 1,
+    phase: phase.title,
+    action: action.label,
+    effects: effects,
+    counterEffects: counterEffects,
+  });
   playedPhases.push(phaseIndex);
 
   pendingCounterData = {
@@ -1468,6 +1478,13 @@ function triggerEvent() {
     applyEffects(event.effects);
     updateScoreboard(changedKeys(event.effects));
     showScoreDelta(event.effects);
+    gameHistory.push({
+      type: 'event',
+      icon: event.icon,
+      title: event.title,
+      description: event.description,
+      effects: event.effects,
+    });
 
     const zeroKey = checkZero();
 
@@ -1617,12 +1634,40 @@ function sendJArrive() {
    RÉCAP
 ════════════════════════════════════════════ */
 function buildActionsList() {
-  if (!playedActions.length) return '<p style="opacity:.7;font-size:.85rem;">Aucune action jouée.</p>';
-  return '<ol class="actions-recap-list">' +
-    playedActions.map(function(a) {
-      return '<li><span class="ar-phase">' + a.phase + '</span> - ' + a.action + '</li>';
-    }).join('') +
-    '</ol>';
+  if (!gameHistory.length) return '<p style="opacity:.7;font-size:.85rem;">Aucune action jouée.</p>';
+
+  var html = '<div class="actions-recap">';
+  gameHistory.forEach(function(entry) {
+    if (entry.type === 'action') {
+      html += '<div class="recap-turn">';
+      html += '<div class="recap-turn-header">';
+      html += '<span class="recap-turn-num">Tour ' + entry.turnNumber + '</span>';
+      html += '<span class="recap-turn-phase">' + entry.phase + '</span>';
+      html += '</div>';
+      html += '<div class="recap-turn-action">' + entry.action + '</div>';
+      html += '<div class="recap-deltas">';
+      html += '<div class="recap-delta-row">';
+      html += '<span class="recap-delta-label">Votre action</span>';
+      html += '<span class="recap-delta-chips">' + buildDeltaChips(entry.effects) + '</span>';
+      html += '</div>';
+      html += '<div class="recap-delta-row">';
+      html += '<span class="recap-delta-label">Contre-offensive du lobby</span>';
+      html += '<span class="recap-delta-chips">' + buildDeltaChips(entry.counterEffects) + '</span>';
+      html += '</div>';
+      html += '</div>';
+      html += '</div>';
+    } else if (entry.type === 'event') {
+      html += '<div class="recap-event">';
+      html += '<div class="recap-event-header">';
+      html += '<span class="recap-event-icon" aria-hidden="true">' + entry.icon + '</span>';
+      html += '<span class="recap-event-title">' + entry.title + '</span>';
+      html += '</div>';
+      html += '<div class="recap-delta-chips">' + buildDeltaChips(entry.effects) + '</div>';
+      html += '</div>';
+    }
+  });
+  html += '</div>';
+  return html;
 }
 
 function buildScoresSummary() {
@@ -1660,23 +1705,90 @@ document.addEventListener('keydown', function(e) {
    DEBUG : accès direct aux écrans de résultat
    ?lobby_win | ?partial_win | ?statu_quo | ?complete_win
    ?resourcesZero | ?publicZero | ?politicalZero
+   ?result  → simule une partie complète aléatoire
 ════════════════════════════════════════════ */
 (function() {
-  const params = new URLSearchParams(window.location.search);
-  const finalIds = ['lobby_win', 'partial_win', 'statu_quo', 'complete_win'];
-  const endKeys  = { resourcesZero: 'resources', publicZero: 'public', politicalZero: 'political' };
+  var params = new URLSearchParams(window.location.search);
+  var finalIds = ['lobby_win', 'partial_win', 'statu_quo', 'complete_win'];
+  var endKeys  = { resourcesZero: 'resources', publicZero: 'public', politicalZero: 'political' };
 
-  const finalId = finalIds.find(function(id) { return params.has(id); });
-  const endParam = Object.keys(endKeys).find(function(k) { return params.has(k); });
+  var finalId  = finalIds.find(function(id) { return params.has(id); });
+  var endParam = Object.keys(endKeys).find(function(k) { return params.has(k); });
+
+  /* ── Simulation aléatoire d'une partie complète ── */
+  if (params.has('result')) {
+    scores        = { ...GAME_DATA.initialScores };
+    playedPhases  = [];
+    playedActions = [];
+    gameHistory   = [];
+
+    var simEventOrder = shuffle(GAME_DATA.events.map(function(_, i) { return i; }));
+    var simEventCount = 0;
+
+    for (var turn = 0; turn < GAME_DATA.phases.length; turn++) {
+      if (scores.public <= 0 || scores.political <= 0 || scores.resources <= 0) break;
+
+      // Phases disponibles (hors déjà jouées et verrouillées)
+      var available = GAME_DATA.phases
+        .map(function(_, i) { return i; })
+        .filter(function(i) {
+          var lu = GAME_DATA.phases[i].lockedUntil;
+          return !playedPhases.includes(i) && !(lu && playedPhases.length < lu);
+        });
+      if (!available.length) break;
+
+      var phaseIndex = available[Math.floor(Math.random() * available.length)];
+      var phase      = GAME_DATA.phases[phaseIndex];
+      var band       = getTourBand(); // lu avant push dans playedPhases
+      var actionIdx  = Math.floor(Math.random() * phase.actions.length);
+      var action     = phase.actions[actionIdx];
+
+      var effects        = action.effectsByTour        ? action.effectsByTour[band]        : (action.effects        || {});
+      var counterEffects = action.counterEffectsByTour ? action.counterEffectsByTour[band] : (action.counterEffects || {});
+
+      gameHistory.push({
+        type: 'action',
+        turnNumber: playedPhases.length + 1,
+        phase: phase.title,
+        action: action.label,
+        effects: effects,
+        counterEffects: counterEffects,
+      });
+
+      applyEffects(effects);
+      applyEffects(counterEffects);
+      playedPhases.push(phaseIndex);
+      playedActions.push({ phase: phase.title, action: action.label });
+
+      // Événement aléatoire tous les 2 tours (sauf après le dernier tour)
+      if (playedPhases.length % 2 === 0 && playedPhases.length < GAME_DATA.phases.length) {
+        var evtIdx = simEventOrder[simEventCount % simEventOrder.length];
+        var evt    = GAME_DATA.events[evtIdx];
+        simEventCount++;
+        applyEffects(evt.effects);
+        gameHistory.push({
+          type: 'event',
+          icon: evt.icon,
+          title: evt.title,
+          description: evt.description,
+          effects: evt.effects,
+        });
+      }
+    }
+
+    _doShowFinalResult();
+    return;
+  }
 
   if (!finalId && !endParam) return;
 
   scores        = { ...GAME_DATA.initialScores, score: 0 };
   playedPhases  = [];
   playedActions = [];
+  gameHistory   = [];
 
   if (finalId) {
-    const scoreMap = { complete_win: 95, partial_win: 70, statu_quo: 35, lobby_win: 5 };
+    var scoreMap = { complete_win: 95, partial_win: 70, statu_quo: 35, lobby_win: 5 };
     scores.score = scoreMap[finalId];
     _doShowFinalResult();
   } else {
