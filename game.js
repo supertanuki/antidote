@@ -361,6 +361,41 @@ function onSettingsOverlayClick(e) {
   if (e.target === document.getElementById('settings-overlay')) closeSettings();
 }
 
+/* ════════════════════════════════════════════
+   MODALE QUITTER LA PARTIE
+════════════════════════════════════════════ */
+function openQuitModal() {
+  document.getElementById('quit-overlay').classList.add('open');
+}
+
+function closeQuitModal() {
+  document.getElementById('quit-overlay').classList.remove('open');
+}
+
+function onQuitOverlayClick(e) {
+  if (e.target === document.getElementById('quit-overlay')) closeQuitModal();
+}
+
+function confirmQuit() {
+  closeQuitModal();
+  if (counterTimer) { clearTimeout(counterTimer); counterTimer = null; }
+  if (pushTimer)    { clearTimeout(pushTimer); pushTimer = null; }
+  scores             = {};
+  playedPhases       = [];
+  playedActions      = [];
+  gameHistory        = [];
+  _usedMerciLabels   = [];
+  _activeMerciLabel  = null;
+  pendingAction      = null;
+  pendingOption      = null;
+  pendingCounterData = null;
+  pendingInputText   = null;
+  currentStep        = 'pick';
+  typingRowEl        = null;
+  document.body.classList.remove('notif-open');
+  flashToScreen('screen-welcome');
+}
+
 function calNav(dir) {
   _calMonth += dir;
   if (_calMonth > 12) { _calMonth = 1;  _calYear++; }

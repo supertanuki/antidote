@@ -104,8 +104,11 @@
   <!-- Header chat (2 lignes mobile, 1 ligne desktop) -->
   <div class="chat-header">
 
-    <!-- Ligne 1 : avatar + infos -->
+    <!-- Ligne 1 : logo + avatar + infos -->
     <div class="chat-header-row1">
+      <button class="chat-logo-btn" onclick="openQuitModal()" aria-label="Retourner à l'accueil">
+        <img src="images/logo-temporaire.png" alt="Antidote" class="chat-logo-img" />
+      </button>
       <div class="chat-avatar-wrap">
         <span class="chat-avatar-emoji" aria-hidden="true">👩🏽‍💼</span>
         <span class="chat-online-dot" aria-hidden="true"></span>
@@ -327,6 +330,25 @@
 
       <div style="text-align:center; margin-top:18px;">
         <button class="btn btn-primary" onclick="closeSettings()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MODALE : Quitter la partie
+═══════════════════════════════════════════════ -->
+<div class="cal-overlay" id="quit-overlay" onclick="onQuitOverlayClick(event)" role="dialog" aria-modal="true" aria-labelledby="quit-modal-title">
+  <div class="cal-modal quit-modal">
+    <div class="pn-header">
+      <span id="quit-modal-title" class="pn-app-name">Quitter la partie</span>
+      <button class="pn-close" onclick="closeQuitModal()" aria-label="Fermer">✕</button>
+    </div>
+    <div class="cal-inner">
+      <p class="quit-modal-text">Souhaitez-vous quitter la partie et retourner à la page d'accueil&nbsp;?</p>
+      <div class="quit-modal-actions">
+        <button class="btn btn-primary" onclick="confirmQuit()">Oui</button>
+        <button class="btn" onclick="closeQuitModal()">Non</button>
       </div>
     </div>
   </div>
