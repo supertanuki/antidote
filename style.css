@@ -21,9 +21,9 @@
   --black:       #111111;
   --white:       #ffffff;
   --off-white:   #f5f3ee;
-  --red:         #e8001c;
+  --red:         #fe4445;
   --red-dark:    #b0001a;
-  --yellow:      #ffe600;
+  --yellow:      #fcf58b;
   --grey:        #888888;
   --grey-light:  #e0ddd8;
   --grey-mid:    #cccccc;
@@ -31,7 +31,7 @@
   --text:        #111111;
   --text-muted:  #555555;
   --grey-dark:   #111111;
-  --green:       green;
+  --green:       #4dd066;
   --transition:  .2s ease;
 }
 
@@ -75,7 +75,7 @@ body {
   color: var(--grey-dark);
 }
 
-.welcome-box .big-icon { font-size: 5rem; margin-bottom: 16px; display: block; }
+.welcome-box .logo { width: 400px; max-width: 100%; margin-bottom: 2rem; }
 
 .welcome-box h1,
 .welcome-box h2 {
