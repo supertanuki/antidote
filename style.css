@@ -476,7 +476,7 @@ body.notif-open .notif-overlay { display: block; }
 /* Ligne 2 : indicateurs */
 .chat-header-scores {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto auto;
   gap: 5px;
 }
 
@@ -1584,6 +1584,69 @@ body.notif-open .chat-header {
 .zoom-opt:hover { border-color: var(--black); }
 
 /* ════════════════════════════════════════════
+   LIEN À PROPOS (accueil)
+════════════════════════════════════════════ */
+.about-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  background: none;
+  border: none;
+  font-size: .8rem;
+  color: var(--text);
+  cursor: pointer;
+  letter-spacing: .05em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color .15s;
+}
+.about-link:hover { color: var(--black); }
+
+/* ════════════════════════════════════════════
+   ÉCRAN À PROPOS
+════════════════════════════════════════════ */
+#screen-about {
+  background: var(--yellow);
+  align-items: center;
+  min-height: 100vh;
+  overflow-y: auto;
+  animation: fadeIn .25s ease;
+}
+
+.about-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px 40px;
+}
+
+.about-topbar {
+  width: 100%;
+  max-width: 640px;
+  padding: 14px 0 8px;
+  display: flex;
+  align-items: center;
+}
+
+.about-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 2px solid var(--black);
+  color: var(--black);
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: .8rem;
+  font-weight: 900;
+  letter-spacing: .05em;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  box-shadow: 3px 3px 0 var(--black);
+}
+.about-back-btn:hover { background: var(--black); color: var(--yellow); }
+
+/* ════════════════════════════════════════════
    LOGO CLIQUABLE DANS LE HEADER
 ════════════════════════════════════════════ */
 .chat-logo-btn {
@@ -1646,7 +1709,7 @@ body.notif-open .chat-header {
   .chat-header-scores {
     flex-shrink: 0;
     gap: 10px;
-    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto auto;
   }
   .chp-tour-pill { height: 70px; }
   .score-pill {

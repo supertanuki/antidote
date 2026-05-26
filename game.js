@@ -362,6 +362,21 @@ function onSettingsOverlayClick(e) {
 }
 
 /* ════════════════════════════════════════════
+   ÉCRAN À PROPOS
+════════════════════════════════════════════ */
+let _aboutFromScreen = 'screen-welcome';
+
+function openAbout() {
+  const active = document.querySelector('.screen.active');
+  _aboutFromScreen = active ? active.id : 'screen-welcome';
+  showScreen('screen-about');
+}
+
+function closeAbout() {
+  showScreen(_aboutFromScreen);
+}
+
+/* ════════════════════════════════════════════
    MODALE QUITTER LA PARTIE
 ════════════════════════════════════════════ */
 function openQuitModal() {
