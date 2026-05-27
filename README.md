@@ -1,4 +1,4 @@
-# ANTIDOTE — Bataille contre le lobby des pesticides
+# ANTIDOTE : Bataille contre le lobby des pesticides
 
 Jeu de simulation pédagogique sur le lobbying environnemental. En incarnant une chargée de plaidoyer de l'association fictive **ANTIDOTE**, le joueur découvre les mécanismes d'influence politique, la communication publique et la gestion des ressources d'une association face à un lobby industriel puissant.
 
@@ -44,11 +44,11 @@ antidote/
 ### Modifier le contenu du jeu
 
 Tout le contenu narratif et les règles du jeu se trouvent dans `game-data.js` :
-- `initialScores` — valeurs de départ des trois indicateurs
-- `phases` — les 8 champs d'action disponibles (avec leurs stratégies et effets)
-- `events` — événements aléatoires déclenchés par le lobby adverse
-- `finalResults` — les 4 issues possibles selon le score final
-- `endConditions` — textes des fins prématurées (indicateur à zéro)
+- `initialScores` : valeurs de départ des trois indicateurs
+- `phases` : les 8 champs d'action disponibles (avec leurs stratégies et effets)
+- `events` : événements aléatoires déclenchés par le lobby adverse
+- `finalResults` : les 4 issues possibles selon le score final
+- `endConditions` : textes des fins prématurées (indicateur à zéro)
 
 ## Équipe
 
