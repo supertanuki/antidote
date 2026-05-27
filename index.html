@@ -115,8 +115,60 @@
 
     <!-- SCREEN : GAME (Messagerie) -->
     <div id="screen-game" class="screen">
-      <!-- Header chat (2 lignes mobile, 1 ligne desktop) -->
-      <div class="chat-header">
+      <div class="game-layout">
+
+        <!-- ── Colonne gauche (desktop ≥1100px) ── -->
+        <aside class="game-sidebar">
+          <button class="sb-logo-btn" onclick="openQuitModal()" aria-label="Retourner à l'accueil">
+            <img src="images/logo-temporaire.png" alt="Antidote" class="sb-logo-img" />
+          </button>
+
+          <button class="chp-tour-pill sb-tour-pill" id="chp-label-sb" onclick="openCalendar()" aria-label="Voir le calendrier">
+            <span class="sp-icon" aria-hidden="true">📅</span>
+            <div class="sp-content">
+              <div class="chp-tour-num sp-label" id="chp-tour-num-sb">Tour 1&nbsp;/&nbsp;10</div>
+              <div class="chp-tour-name" id="chp-tour-name-sb">-</div>
+              <div class="chp-bar-bg"><div class="chp-bar" id="chp-bar-sb"></div></div>
+            </div>
+          </button>
+
+          <div class="sb-scores">
+            <div class="sb-score-item" id="pill-public-sb">
+              <div class="sb-score-top">
+                <span class="sb-score-icon" aria-hidden="true">👥</span>
+                <span class="sb-score-label">Soutien du public</span>
+                <span class="sb-score-val" id="score-public-sb">40</span>
+              </div>
+              <div class="sb-bar-bg"><div class="sb-bar" id="bar-public-sb"></div></div>
+            </div>
+            <div class="sb-score-item" id="pill-political-sb">
+              <div class="sb-score-top">
+                <span class="sb-score-icon" aria-hidden="true">🏛️</span>
+                <span class="sb-score-label">Influence politique</span>
+                <span class="sb-score-val" id="score-political-sb">60</span>
+              </div>
+              <div class="sb-bar-bg"><div class="sb-bar" id="bar-political-sb"></div></div>
+            </div>
+            <div class="sb-score-item" id="pill-resources-sb">
+              <div class="sb-score-top">
+                <span class="sb-score-icon" aria-hidden="true">💶</span>
+                <span class="sb-score-label">Ressources</span>
+                <span class="sb-score-val" id="score-resources-sb">100</span>
+              </div>
+              <div class="sb-bar-bg"><div class="sb-bar" id="bar-resources-sb"></div></div>
+            </div>
+          </div>
+
+          <div class="sb-bottom">
+            <button class="sb-action-btn" onclick="openSettings()">Paramètres</button>
+            <button class="sb-action-btn" onclick="openAbout()">À propos</button>
+          </div>
+        </aside>
+
+        <!-- ── Zone messagerie ── -->
+        <div class="game-chat">
+          <!-- Header chat -->
+          <div class="chat-header">
         <!-- Ligne 1 : logo + avatar + infos -->
         <div class="chat-header-row1">
           <button
@@ -298,10 +350,10 @@
             <span>Envoyer</span>
             <span class="send-icon" aria-hidden="true">➤</span>
           </button>
-        </div>
-      </div>
-    </div>
-    <!-- /screen-game -->
+        </div><!-- /chat-bottom -->
+        </div><!-- /game-chat -->
+      </div><!-- /game-layout -->
+    </div><!-- /screen-game -->
 
     <!-- Overlay grisé pour la notification -->
     <div class="notif-overlay" id="notif-overlay" aria-hidden="true"></div>

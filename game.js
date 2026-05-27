@@ -240,27 +240,30 @@ function updateScoreboard(animateKeys) {
   ['public','political','resources'].forEach(key => {
     const val = scores[key];
     const ref = BAR_REF[key];
-    const elV  = document.getElementById('score-' + key);
-    const elB  = document.getElementById('bar-'   + key);
-    const pill = document.getElementById('pill-'  + key);
 
-    elV.textContent = val;
-    const pct = Math.max(0, Math.min(100, (val / ref) * 100));
-    elB.style.width = pct + '%';
+    ['', '-sb'].forEach(sfx => {
+      const elV  = document.getElementById('score-' + key + sfx);
+      const elB  = document.getElementById('bar-'   + key + sfx);
+      const pill = document.getElementById('pill-'  + key + sfx);
+      if (!elV || !elB || !pill) return;
 
-    elB.classList.remove('danger','warning');
-    pill.classList.remove('danger','warning');
-    let status = '';
-    if (val <= ref * 0.10)      { elB.classList.add('danger');  pill.classList.add('danger');  status = ' - niveau critique'; }
-    else if (val <= ref * 0.20) { elB.classList.add('warning'); pill.classList.add('warning'); status = ' - niveau faible'; }
+      elV.textContent = val;
+      const pct = Math.max(0, Math.min(100, (val / ref) * 100));
+      elB.style.width = pct + '%';
 
-    // Mettre à jour l'aria-label du pill pour refléter valeur et état (RGAA 3.1)
-    if (pill) pill.setAttribute('aria-label', SCORE_LABELS[key] + '\u00a0: ' + val + status);
+      elB.classList.remove('danger','warning');
+      pill.classList.remove('danger','warning');
+      let status = '';
+      if (val <= ref * 0.10)      { elB.classList.add('danger');  pill.classList.add('danger');  status = ' - niveau critique'; }
+      else if (val <= ref * 0.20) { elB.classList.add('warning'); pill.classList.add('warning'); status = ' - niveau faible'; }
 
-    if (animateKeys && animateKeys.includes(key)) {
-      elV.style.color = '#f5c842';
-      setTimeout(() => { elV.style.color = ''; }, 700);
-    }
+      if (!sfx) pill.setAttribute('aria-label', SCORE_LABELS[key] + '\u00a0: ' + val + status);
+
+      if (animateKeys && animateKeys.includes(key)) {
+        elV.style.color = '#f5c842';
+        setTimeout(() => { elV.style.color = ''; }, 700);
+      }
+    });
   });
 }
 
@@ -272,19 +275,21 @@ function updateProgress() {
   const played = playedPhases.length;
   const pct    = (played / total) * 100;
 
-  const bar   = document.getElementById('chp-bar');
-  const num   = document.getElementById('chp-tour-num');
-  const name  = document.getElementById('chp-tour-name');
-  const label = document.getElementById('chp-label');
+  ['', '-sb'].forEach(sfx => {
+    const bar   = document.getElementById('chp-bar'        + sfx);
+    const num   = document.getElementById('chp-tour-num'   + sfx);
+    const name  = document.getElementById('chp-tour-name'  + sfx);
+    const label = document.getElementById('chp-label'      + sfx);
 
-  if (bar) bar.style.width = pct + '%';
+    if (bar) bar.style.width = pct + '%';
 
-  const currentPhaseIdx = Math.min(played, total - 1);
-  const phase = GAME_DATA.phases[currentPhaseIdx];
+    const currentPhaseIdx = Math.min(played, total - 1);
+    const phase = GAME_DATA.phases[currentPhaseIdx];
 
-  if (label) label.dataset.phaseIdx = currentPhaseIdx;
-  if (num)   num.textContent  = 'Tour\u00a0' + (currentPhaseIdx + 1) + '\u00a0/\u00a0' + total;
-  if (name)  name.textContent = phase && phase.tourLabel ? phase.tourLabel : '-';
+    if (label) label.dataset.phaseIdx = currentPhaseIdx;
+    if (num)   num.textContent  = 'Tour\u00a0' + (currentPhaseIdx + 1) + '\u00a0/\u00a0' + total;
+    if (name)  name.textContent = phase && phase.tourLabel ? phase.tourLabel : '-';
+  });
 }
 
 /* ════════════════════════════════════════════
@@ -514,7 +519,10 @@ function showScoreDelta(effects) {
     var key   = entry[0];
     var delta = entry[1];
     if (!delta) return;
-    var pill = document.getElementById('pill-' + key);
+    var pill = document.getElementById('pill-' + key + '-sb');
+    if (!pill || pill.getBoundingClientRect().width === 0) {
+      pill = document.getElementById('pill-' + key);
+    }
     if (!pill) return;
     var rect = pill.getBoundingClientRect();
     var el   = document.createElement('div');
