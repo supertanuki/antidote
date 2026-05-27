@@ -31,6 +31,8 @@ const PHASE_ICONS = ['🤝','🏛️','🔬','📺','🌾','📣','📱','⚖️
 
 /* ── Sons ── */
 let _soundEnabled = false;
+let _bgMusic = null;
+const _prevPillState = { public: '', political: '', resources: '' };
 
 function playSound(filename) {
   if (!_soundEnabled) return;
@@ -39,6 +41,21 @@ function playSound(filename) {
     audio.volume = 0.5;
     audio.play().catch(function() {});
   } catch (e) {}
+}
+
+function startBgMusic() {
+  if (!_soundEnabled) return;
+  stopBgMusic();
+  try {
+    _bgMusic = new Audio('sfx/solarflex-chill-chill-music-515515.mp3');
+    _bgMusic.volume = 0.2;
+    _bgMusic.loop = true;
+    _bgMusic.play().catch(function() {});
+  } catch (e) {}
+}
+
+function stopBgMusic() {
+  if (_bgMusic) { _bgMusic.pause(); _bgMusic = null; }
 }
 
 /* ── Options de la page d'accueil + modale paramètres ── */
@@ -178,7 +195,9 @@ function startGame() {
   closeActionsPanel();
   updateScoreboard();
   updateProgress();
+  _prevPillState.public = _prevPillState.political = _prevPillState.resources = '';
   flashToScreen('screen-game', function() {
+    startBgMusic();
     showDormantInput();
     showTyping();
   });
@@ -240,6 +259,12 @@ function updateScoreboard(animateKeys) {
   ['public','political','resources'].forEach(key => {
     const val = scores[key];
     const ref = BAR_REF[key];
+
+    const newState = val <= ref * 0.10 ? 'danger' : val <= ref * 0.20 ? 'warning' : '';
+    if (newState && newState !== _prevPillState[key]) {
+      playSound('soundshelfstudio-ui-error-pop-515668.mp3');
+    }
+    _prevPillState[key] = newState;
 
     ['', '-sb'].forEach(sfx => {
       const elV  = document.getElementById('score-' + key + sfx);
@@ -397,6 +422,7 @@ function onQuitOverlayClick(e) {
 }
 
 function confirmQuit() {
+  stopBgMusic();
   closeQuitModal();
   if (counterTimer) { clearTimeout(counterTimer); counterTimer = null; }
   if (pushTimer)    { clearTimeout(pushTimer); pushTimer = null; }
@@ -515,6 +541,8 @@ function changedKeys(effects) {
 
 /* ── Animation flottante +/- sur les pills de score ── */
 function showScoreDelta(effects) {
+  const hasNeg = ['public','political','resources'].some(k => (effects[k] || 0) < 0);
+  if (hasNeg) playSound('miraclei-sample_error_input02_kofi_by_miraclei-363642.mp3');
   Object.entries(effects).forEach(function(entry) {
     var key   = entry[0];
     var delta = entry[1];
@@ -803,6 +831,7 @@ function hideInputArea() {
    PANEL GRILLE D'ACTIONS
 ════════════════════════════════════════════ */
 function openActionsPanel() {
+  playSound('juniorsoundays-ui-sound-73-527841.mp3');
   const grid = document.getElementById('ao-grid');
   grid.innerHTML = '';
 
@@ -1626,6 +1655,8 @@ function showEarlyEnd(zeroKey) {
 }
 
 function _doShowEarlyEnd(zeroKey) {
+  stopBgMusic();
+  playSound('alphix-game-over-417465.mp3');
   const map = {
     public:    GAME_DATA.endConditions.publicZero,
     political: GAME_DATA.endConditions.politicalZero,
@@ -1683,12 +1714,19 @@ function showFinalResult() {
 }
 
 function _doShowFinalResult() {
+  stopBgMusic();
   const s = scores.score || 0;
   let result;
   if      (s >= 40) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'complete_win'; });
   else if (s >= 25) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'partial_win'; });
   else if (s >= 15) result = GAME_DATA.finalResults.find(function(r) { return r.id === 'statu_quo'; });
   else              result = GAME_DATA.finalResults.find(function(r) { return r.id === 'lobby_win'; });
+
+  if (result.id === 'lobby_win' || result.id === 'statu_quo') {
+    playSound('alphix-game-over-417465.mp3');
+  } else {
+    playSound('freesound_community-winsquare-6993.mp3');
+  }
 
   document.getElementById('result-icon').textContent        = result.icon;
   document.getElementById('result-title').textContent       = result.title;
