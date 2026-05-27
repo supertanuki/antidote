@@ -35,7 +35,7 @@
   --transition:  .2s ease;
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; font-size: 120%; }
 
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -1605,7 +1605,13 @@ body.notif-open .chat-header {
 
 /* ── Desktop ≥1100px ── */
 @media (min-width: 1100px) {
-  html, body { height: 100%; overflow: hidden; }
+  html { height: 100%; overflow: hidden; }
+  body { height: calc(100vh / var(--page-zoom, 1)); overflow: hidden; }
+
+  /* Les écrans scrollables ont min-height: 100vh en mobile ;
+     sur desktop la hauteur vient du flex et non du min-height,
+     sinon min-height: 100vh dépasse la hauteur compensée du body. */
+  #screen-welcome, #screen-about, #screen-end, #screen-result { min-height: 0; }
 
   #screen-game { overflow: hidden; }
 
@@ -1684,7 +1690,7 @@ body.notif-open .chat-header {
 }
 
 .sb-score-item {
-  padding: 14px;
+  padding: 20px 14px;
   margin: 10px;
   border: 1px solid rgba(255,255,255,.06);
   background: rgba(255,255,255,.06);

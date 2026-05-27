@@ -103,7 +103,13 @@ document.addEventListener('DOMContentLoaded', function() {
     setSound.addEventListener('change', function() {
       _soundEnabled = setSound.checked;
       if (optSound) optSound.checked = _soundEnabled;
-      if (_soundEnabled) playSound('545495__ienba__notification.mp3');
+      if (_soundEnabled) {
+        playSound('545495__ienba__notification.mp3');
+        const gameScreen = document.getElementById('screen-game');
+        if (gameScreen && gameScreen.classList.contains('active')) startBgMusic();
+      } else {
+        stopBgMusic();
+      }
     });
   }
 
@@ -114,14 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // La modale est synchro à l'ouverture via openSettings()
   });
 
-  // Taille des textes
-  document.querySelectorAll('input[name="zoom"]').forEach(function(r) {
-    r.addEventListener('change', function() {
-      if (r.checked) {
-        document.documentElement.style.zoom = (parseInt(r.value, 10) / 100).toString();
-      }
-    });
-  });
 });
 
 function shuffle(arr) {
@@ -372,11 +370,6 @@ function openSettings() {
   const setSound = document.getElementById('set-sound');
   if (setSound) setSound.checked = _soundEnabled;
 
-  const currentZoom = Math.round(parseFloat(document.documentElement.style.zoom || '1') * 100) || 100;
-  document.querySelectorAll('input[name="zoom"]').forEach(function(r) {
-    r.checked = parseInt(r.value, 10) === currentZoom;
-  });
-
   document.getElementById('settings-overlay').classList.add('open');
   document.getElementById('settings-btn').setAttribute('aria-expanded', 'true');
 }
@@ -386,6 +379,7 @@ function closeSettings() {
   document.getElementById('settings-btn').setAttribute('aria-expanded', 'false');
   document.getElementById('settings-btn').focus();
 }
+
 
 function onSettingsOverlayClick(e) {
   if (e.target === document.getElementById('settings-overlay')) closeSettings();
