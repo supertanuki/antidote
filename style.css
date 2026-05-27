@@ -153,6 +153,7 @@ body {
   cursor: pointer;
   transition: transform var(--transition), box-shadow var(--transition);
   box-shadow: 4px 4px 0 var(--red-dark);
+  text-decoration: none;
 }
 
 .btn:hover  { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--red-dark); }
