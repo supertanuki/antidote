@@ -294,9 +294,10 @@ function updateScoreboard(animateKeys) {
    PROGRESS (barre dans le header)
 ════════════════════════════════════════════ */
 function updateProgress() {
-  const total  = GAME_DATA.phases.length;
-  const played = playedPhases.length;
-  const pct    = (played / total) * 100;
+  const total           = GAME_DATA.phases.length;
+  const played          = playedPhases.length;
+  const currentPhaseIdx = Math.min(played, total - 1);
+  const pct             = ((currentPhaseIdx + 1) / total) * 100;
 
   ['', '-sb'].forEach(sfx => {
     const bar   = document.getElementById('chp-bar'        + sfx);
@@ -305,8 +306,6 @@ function updateProgress() {
     const label = document.getElementById('chp-label'      + sfx);
 
     if (bar) bar.style.width = pct + '%';
-
-    const currentPhaseIdx = Math.min(played, total - 1);
     const phase = GAME_DATA.phases[currentPhaseIdx];
 
     if (label) label.dataset.phaseIdx = currentPhaseIdx;
@@ -1558,7 +1557,7 @@ function triggerEvent() {
 
   // Titre et contenu de la notification
   const titleEl = document.getElementById('pn-title-text');
-  if (titleEl) titleEl.textContent = event.icon + '\u00a0' + event.title;
+  if (titleEl) titleEl.textContent = event.title;
 
   // Notification : description uniquement (sans outcome)
   document.getElementById('pn-text').textContent = event.description;

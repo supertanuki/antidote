@@ -71,7 +71,6 @@ const GAME_DATA = {
   events: [
     {
       id: "health_data",
-      icon: "🔬",
       title: "Nouvelles données choc sur les pesticides",
       description: "Une agence publique publie de nouvelles données sur l'exposition aux pesticides dans les zones agricoles. Le débat prend une dimension sanitaire inattendue.",
       outcome: "Les données appuient les arguments d'ANTIDOTE.<br>Les médias s'emparent du sujet, plusieurs parlementaires se mobilisent dans la presse contre la proposition de loi.",
@@ -79,7 +78,6 @@ const GAME_DATA = {
     },
     {
       id: "journalism",
-      icon: "📰",
       title: "Pesticides : notre enquête sur les liens entre lobby et politique",
       description: "Publication d'une enquête révélant les liens étroits entre plusieurs responsables de l'industrie des pesticides et des décideurs politiques. En effet, l'ancien collaborateur parlementaire du rapporteur du texte vient de rejoindre l'équipe affaires publiques de l'AIPP.",
       outcome: "L'enquête fragilise publiquement la position du lobby.<br>Les parlementaires les plus proches des industriels sont sur la défensive.",
@@ -87,7 +85,6 @@ const GAME_DATA = {
     },
     {
       id: "farm_mobilization",
-      icon: "🚜",
       title: "Pesticides : forte mobilisation agricole",
       description: "Le syndicat agricole majoritaire appelle à soutenir la réautorisation des pesticides et organise une journée nationale de mobilisation.",
       outcome: "La mobilisation des agriculteurs met les parlementaires ruraux sous forte pression.<br>Le rapport de force se durcit en faveur du lobby.",
@@ -95,7 +92,6 @@ const GAME_DATA = {
     },
     {
       id: "gov_arbitration",
-      icon: "🏛️",
       title: "La ministre soutient la réautorisation",
       description: "La ministre de l'Agriculture prend position publiquement dans le débat sur la réautorisation des pesticides, invoquant les difficultés économiques du monde agricole.",
       outcome: "La prise de position de la ministre fragilise la coalition parlementaire opposée à la loi.<br>Nous devons redoubler d'efforts pour maintenir nos alliés.",
