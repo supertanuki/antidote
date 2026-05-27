@@ -1524,13 +1524,12 @@ body.notif-open .chat-header {
   cursor: pointer;
   font-size: 1.1rem;
   width: 60px;
-  height: 100%;
+  height: 54px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   transition: border-color .15s, background .15s;
-  align-self: center;
 }
 .settings-btn:hover { border-color: var(--yellow); background: rgba(255,230,0,.1); }
 
