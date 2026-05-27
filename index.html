@@ -13,7 +13,7 @@
     <!-- SCREEN : WELCOME -->
     <div id="screen-welcome" class="screen active">
       <div class="welcome-box">
-        <img src="images/logo-temporaire.png" alt="Antidote" class="logo" />
+        <img src="images/logo-temporaire.svg" alt="Antidote" class="logo" />
 
         <div class="welcome-card avatar-card">
           <div class="wc-content">
@@ -113,6 +113,166 @@
       </div>
     </div>
 
+
+
+    <!-- SCREEN : À PROPOS -->
+    <div id="screen-about" class="screen">
+      <div class="about-wrap">
+        <div class="about-topbar">
+          <button class="about-back-btn" onclick="closeAbout()">
+            <span aria-hidden="true">←</span> Retour
+          </button>
+        </div>
+
+        <div class="welcome-box" style="padding-bottom: 48px">
+          <h2 style="margin-bottom: 2rem">À propos</h2>
+
+          <div class="welcome-card">
+            <p>
+              <strong>ANTIDOTE</strong> est un jeu de simulation pédagogique sur
+              le lobbying environnemental. En incarnant une chargée de plaidoyer
+              d'une association fictive, vous découvrez les mécanismes
+              d'influence politique, la communication publique et les ressources
+              nécessaires pour défendre une cause face à des intérêts
+              industriels puissants.
+            </p>
+            <p>
+              [À compléter : contexte, objectifs pédagogiques, public visé…]
+            </p>
+          </div>
+
+          <div class="welcome-card">
+            <h3>Les auteurs</h3>
+            <div class="team-grid">
+              <div class="team-card">
+                <img src="images/jordan.jpg" alt="Jordan" class="team-photo" />
+                <div class="team-name">Jordan</div>
+                <div class="team-role">Lobbyiste écologiste</div>
+              </div>
+              <div class="team-card">
+                <img src="images/richard.jpg" alt="Céline" class="team-photo" />
+                <div class="team-name">Céline</div>
+                <div class="team-role">Graphiste indépendante et engagée</div>
+              </div>
+              <div class="team-card">
+                <img
+                  src="images/richard.jpg"
+                  alt="Richard"
+                  class="team-photo"
+                />
+                <div class="team-name">Richard</div>
+                <div class="team-role">
+                  Développeur militant, bénévole dans une ferme agro-écologique
+                  en Île-de-France
+                </div>
+              </div>
+            </div>
+            <h3 style="margin-top: 2rem">Nous soutenir</h3>
+            <p>
+              Ce jeu a été réalisé bénévolement. Si vous en avez la possibilité,
+              merci de soutenir notre travail et pour pouvoir développer de
+              nouvelles initiatives.
+            </p>
+            <div style="margin-top: 14px">
+              <button class="btn btn-primary">Faire un don</button>
+            </div>
+          </div>
+
+          <div class="welcome-card">
+            <h3>Licence</h3>
+            <p>
+              Jeu mis à disposition selon les termes de la
+              <a
+                href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"
+                target="_blank"
+                style="color: var(--black)"
+                >licence CC BY-NC-SA 4.0</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- écran game over -->
+    <div id="screen-end" class="screen">
+      <div class="end-box">
+        <span class="end-icon" id="end-icon" aria-hidden="true"></span>
+        <h2 id="end-title"></h2>
+        <p class="end-subtitle" id="end-subtitle"></p>
+        <div class="end-card"><p id="end-description"></p></div>
+        <div class="end-card">
+          <h3>Score final</h3>
+          <div class="scores-summary" id="end-scores"></div>
+        </div>
+        <div class="end-card">
+          <p id="end-conclusion"></p>
+          <p class="cta-text" id="end-cta"></p>
+        </div>
+        <div class="end-card">
+          <h3>Historique de vos actions</h3>
+          <div id="end-graph"></div>
+          <div id="end-actions"></div>
+        </div>
+        <div id="end-hint"></div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+          "
+        >
+          <button class="btn btn-primary" onclick="openAbout()">
+            Nous soutenir
+          </button>
+          <button class="btn" onclick="restartGame()">Rejouer</button>
+          <button class="about-link" onclick="openAbout()">À propos</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN : résultat final -->
+    <div id="screen-result" class="screen">
+      <div class="end-box">
+        <span class="end-icon" id="result-icon" aria-hidden="true"></span>
+        <h2 id="result-title"></h2>
+        <div class="end-card"><p id="result-description"></p></div>
+        <div class="end-card">
+          <h3>Score final</h3>
+          <div class="scores-summary" id="result-scores"></div>
+        </div>
+        <div class="end-card">
+          <p id="result-conclusion"></p>
+          <p class="cta-text" id="result-cta"></p>
+        </div>
+        <div class="end-card">
+          <h3>Historique de vos actions</h3>
+          <div id="result-graph"></div>
+          <div id="result-actions"></div>
+        </div>
+        <div id="result-hint"></div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+          "
+        >
+          <button class="btn btn-primary" onclick="openAbout()">
+            Nous soutenir
+          </button>
+          <button class="btn" onclick="restartGame()">Rejouer</button>
+          <button class="about-link" onclick="openAbout()">À propos</button>
+        </div>
+      </div>
+    </div>
+
     <!-- SCREEN : GAME (Messagerie) -->
     <div id="screen-game" class="screen">
       <div class="game-layout">
@@ -120,7 +280,7 @@
         <!-- ── Colonne gauche (desktop ≥1100px) ── -->
         <aside class="game-sidebar">
           <button class="sb-logo-btn" onclick="openQuitModal()" aria-label="Retourner à l'accueil">
-            <img src="images/logo-temporaire.png" alt="Antidote" class="sb-logo-img" />
+            <img src="images/logo-temporaire.svg" alt="Antidote" class="sb-logo-img" />
           </button>
 
           <button class="chp-tour-pill sb-tour-pill" id="chp-label-sb" onclick="openCalendar()" aria-label="Voir le calendrier">
@@ -177,7 +337,7 @@
             aria-label="Retourner à l'accueil"
           >
             <img
-              src="images/logo-temporaire.png"
+              src="images/logo-temporaire.svg"
               alt="Antidote"
               class="chat-logo-img"
             />
@@ -383,162 +543,6 @@
           <div class="pn-title" id="pn-title-text"></div>
           <div class="pn-text" id="pn-text"></div>
           <div class="pn-deltas" id="pn-deltas"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- écran game over -->
-    <div id="screen-end" class="screen">
-      <div class="end-box">
-        <span class="end-icon" id="end-icon" aria-hidden="true"></span>
-        <h2 id="end-title"></h2>
-        <p class="end-subtitle" id="end-subtitle"></p>
-        <div class="end-card"><p id="end-description"></p></div>
-        <div class="end-card">
-          <h3>Score final</h3>
-          <div class="scores-summary" id="end-scores"></div>
-        </div>
-        <div class="end-card">
-          <p id="end-conclusion"></p>
-          <p class="cta-text" id="end-cta"></p>
-        </div>
-        <div class="end-card">
-          <h3>Historique de vos actions</h3>
-          <div id="end-graph"></div>
-          <div id="end-actions"></div>
-        </div>
-        <div id="end-hint"></div>
-        <div
-          style="
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-top: 20px;
-          "
-        >
-          <button class="btn btn-primary" onclick="openAbout()">
-            Nous soutenir
-          </button>
-          <button class="btn" onclick="restartGame()">Rejouer</button>
-          <button class="about-link" onclick="openAbout()">À propos</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- SCREEN : résultat final -->
-    <div id="screen-result" class="screen">
-      <div class="end-box">
-        <span class="end-icon" id="result-icon" aria-hidden="true"></span>
-        <h2 id="result-title"></h2>
-        <div class="end-card"><p id="result-description"></p></div>
-        <div class="end-card">
-          <h3>Score final</h3>
-          <div class="scores-summary" id="result-scores"></div>
-        </div>
-        <div class="end-card">
-          <p id="result-conclusion"></p>
-          <p class="cta-text" id="result-cta"></p>
-        </div>
-        <div class="end-card">
-          <h3>Historique de vos actions</h3>
-          <div id="result-graph"></div>
-          <div id="result-actions"></div>
-        </div>
-        <div id="result-hint"></div>
-        <div
-          style="
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-top: 20px;
-          "
-        >
-          <button class="btn btn-primary" onclick="openAbout()">
-            Nous soutenir
-          </button>
-          <button class="btn" onclick="restartGame()">Rejouer</button>
-          <button class="about-link" onclick="openAbout()">À propos</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- SCREEN : À PROPOS -->
-    <div id="screen-about" class="screen">
-      <div class="about-wrap">
-        <div class="about-topbar">
-          <button class="about-back-btn" onclick="closeAbout()">
-            <span aria-hidden="true">←</span> Retour
-          </button>
-        </div>
-
-        <div class="welcome-box" style="padding-bottom: 48px">
-          <h2 style="margin-bottom: 2rem">À propos</h2>
-
-          <div class="welcome-card">
-            <p>
-              <strong>ANTIDOTE</strong> est un jeu de simulation pédagogique sur
-              le lobbying environnemental. En incarnant une chargée de plaidoyer
-              d'une association fictive, vous découvrez les mécanismes
-              d'influence politique, la communication publique et les ressources
-              nécessaires pour défendre une cause face à des intérêts
-              industriels puissants.
-            </p>
-            <p>
-              [À compléter : contexte, objectifs pédagogiques, public visé…]
-            </p>
-          </div>
-
-          <div class="welcome-card">
-            <h3>Les auteurs</h3>
-            <div class="team-grid">
-              <div class="team-card">
-                <img src="images/jordan.jpg" alt="Jordan" class="team-photo" />
-                <div class="team-name">Jordan</div>
-                <div class="team-role">Lobbyiste écologiste</div>
-              </div>
-              <div class="team-card">
-                <img src="images/richard.jpg" alt="Céline" class="team-photo" />
-                <div class="team-name">Céline</div>
-                <div class="team-role">Graphiste indépendante et engagée</div>
-              </div>
-              <div class="team-card">
-                <img
-                  src="images/richard.jpg"
-                  alt="Richard"
-                  class="team-photo"
-                />
-                <div class="team-name">Richard</div>
-                <div class="team-role">
-                  Développeur militant, bénévole dans une ferme agro-écologique
-                  en Île-de-France
-                </div>
-              </div>
-            </div>
-            <h3 style="margin-top: 2rem">Nous soutenir</h3>
-            <p>
-              Ce jeu a été réalisé bénévolement. Si vous en avez la possibilité,
-              merci de soutenir notre travail et pour pouvoir développer de
-              nouvelles initiatives.
-            </p>
-            <div style="margin-top: 14px">
-              <button class="btn btn-primary">Faire un don</button>
-            </div>
-          </div>
-
-          <div class="welcome-card">
-            <h3>Licence</h3>
-            <p>
-              Jeu mis à disposition selon les termes de la
-              <a
-                href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"
-                target="_blank"
-                style="color: var(--black)"
-                >licence CC BY-NC-SA 4.0</a
-              >
-            </p>
-          </div>
         </div>
       </div>
     </div>

@@ -589,17 +589,15 @@ function addDateSeparator(label) {
 }
 
 function scrollToBottom() {
-  window.scrollTo({
-    top: document.body.scrollHeight,
-    behavior: 'smooth'
-  });
+  const chat = document.getElementById('chat-messages');
+  if (chat) chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
 function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'instant'
-  });
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  const active = document.querySelector('.screen.active');
+  if (active) active.scrollTop = 0;
 }
 
 function addColleagueMessage(htmlContent) {
@@ -1190,20 +1188,26 @@ function sendActionChoice() {
   }, 400);
 }
 
-/* ── Vérifie si le scroll est en bas de page (±50px) ── */
+/* ── Vérifie si le scroll est en bas (±50px) ── */
 function isNearBottom() {
+  const chat = document.getElementById('chat-messages');
+  if (chat && chat.scrollHeight > chat.clientHeight) {
+    return chat.scrollHeight - chat.scrollTop - chat.clientHeight < 50;
+  }
   return (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 50;
 }
 
 function waitForBottom(cb) {
   if (isNearBottom()) { cb(); return; }
+  const chat = document.getElementById('chat-messages');
+  const target = (chat && chat.scrollHeight > chat.clientHeight) ? chat : window;
   function onScroll() {
     if (isNearBottom()) {
-      window.removeEventListener('scroll', onScroll);
+      target.removeEventListener('scroll', onScroll);
       cb();
     }
   }
-  window.addEventListener('scroll', onScroll);
+  target.addEventListener('scroll', onScroll);
 }
 
 /* ── Affiche plusieurs messages Naomi séquentiellement ── */
