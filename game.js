@@ -13,6 +13,9 @@ let phaseOrder     = [];
 let eventOrder     = [];
 let eventCount     = 0;
 let _unlockedShown     = [];
+let usedJokers            = [];
+let _leakJokerUsed    = false;
+let _journalismShown  = false;
 let pendingAction      = null;
 let pendingOption      = null;
 let pendingCounterData = null;
@@ -177,6 +180,9 @@ function startGame() {
   _unlockedShown     = [];
   _pendingSend       = null;
   _pendingUnlocks    = [];
+  usedJokers           = [];
+  _leakJokerUsed    = false;
+  _journalismShown  = false;
   pendingAction      = null;
   pendingOption      = null;
   pendingCounterData = null;
@@ -309,7 +315,7 @@ function updateProgress() {
     const phase = GAME_DATA.phases[currentPhaseIdx];
 
     if (label) label.dataset.phaseIdx = currentPhaseIdx;
-    if (num)   num.textContent  = 'Tour\u00a0' + (currentPhaseIdx + 1) + '\u00a0/\u00a0' + total;
+    if (num) { num.textContent = 'Tour\u00a0' + (currentPhaseIdx + 1) + '\u00a0/\u00a0' + total; num.dataset.short = (currentPhaseIdx + 1) + '/' + total; }
     if (name)  name.textContent = phase && phase.tourLabel ? phase.tourLabel : '-';
   });
 }
@@ -431,6 +437,9 @@ function confirmQuit() {
   pendingInputText   = null;
   currentStep        = 'pick';
   typingRowEl        = null;
+  usedJokers           = [];
+  _leakJokerUsed    = false;
+  _journalismShown  = false;
   document.body.classList.remove('notif-open');
   flashToScreen('screen-welcome');
 }
@@ -755,6 +764,7 @@ function showDormantInput() {
 
 /* ── Mode picker : bouton Actions + champ + envoyer (désactivés) ── */
 function showPickerBtn() {
+  currentStep = 'pick';
   const area    = document.getElementById('chat-input-area');
   const inputEl = document.getElementById('chat-input-text');
   const sendBtn = document.getElementById('chat-send-btn');
@@ -867,6 +877,36 @@ function openActionsPanel() {
     }
     grid.appendChild(card);
   });
+
+  // Section jokers — visible à partir du tour 4
+  if (playedPhases.length >= 0/*3*/ && GAME_DATA.jokers && GAME_DATA.jokers.length > 0) {
+    const sep = document.createElement('div');
+    sep.className   = 'ao-joker-sep';
+    sep.textContent = 'Actions bonus';
+    grid.appendChild(sep);
+
+    GAME_DATA.jokers.forEach(function(joker) {
+      const isUsed = usedJokers.includes(joker.id);
+      const jCard  = document.createElement('button');
+      jCard.className = 'ao-card ao-card-joker' + (isUsed ? ' used' : '');
+      jCard.disabled  = isUsed;
+      jCard.setAttribute('aria-label', joker.label + (isUsed ? ' — déjà utilisé' : ''));
+
+      const usedBadge = isUsed
+        ? '<span class="ao-card-played-badge" aria-hidden="true">✓ Utilisé</span>'
+        : '';
+      jCard.innerHTML = usedBadge +
+        '<div class="ao-card-icon-wrap" aria-hidden="true">🃏</div>' +
+        '<div class="ao-card-title">' + joker.label + '</div>';
+
+      if (!isUsed) {
+        (function(jokerId) {
+          jCard.addEventListener('click', function() { selectJokerFromOverlay(jokerId); });
+        })(joker.id);
+      }
+      grid.appendChild(jCard);
+    });
+  }
 
   document.getElementById('actions-panel').classList.add('open');
   const actBtn = document.getElementById('chat-actions-btn');
@@ -981,6 +1021,110 @@ function closeStrategyPanel() {
   document.getElementById('sp-list').innerHTML = '';
 }
 
+/* ════════════════════════════════════════════
+   JOKERS (actions bonus à usage unique)
+════════════════════════════════════════════ */
+function selectJokerFromOverlay(jokerId) {
+  if (currentStep !== 'pick' && currentStep !== 'action') return;
+  const joker = GAME_DATA.jokers.find(function(j) { return j.id === jokerId; });
+  if (!joker || usedJokers.includes(jokerId)) return;
+
+  pendingAction = { jokerId: jokerId };
+  pendingOption = null;
+  openJokerPanel(joker);
+}
+
+function openJokerPanel(joker) {
+  const panel = document.getElementById('strategy-panel');
+  const list  = document.getElementById('sp-list');
+  const title = document.getElementById('sp-title');
+
+  title.textContent = joker.label;
+  list.innerHTML = '';
+
+  const desc = document.createElement('div');
+  desc.className = 'joker-panel-desc';
+  desc.textContent = joker.description;
+  list.appendChild(desc);
+
+  panel.classList.add('open');
+
+  const area    = document.getElementById('chat-input-area');
+  const inputEl = document.getElementById('chat-input-text');
+  const sendBtn = document.getElementById('chat-send-btn');
+  area.style.display    = 'flex';
+  area.classList.remove('dormant');
+  document.getElementById('chat-actions-btn').style.display = 'flex';
+  inputEl.style.display = 'block';
+  sendBtn.style.display = 'flex';
+
+  pendingOption = 0;
+  pendingInputText = 'Je sugg\u00e8re de lancer\u00a0: ' + joker.label;
+  animateInputText(pendingInputText);
+  enableSendBtn();
+  currentStep = 'action';
+  scrollToBottom();
+}
+
+function sendJokerChoice() {
+  finishInputAnimation();
+  const jokerId = pendingAction.jokerId;
+  const joker   = GAME_DATA.jokers.find(function(j) { return j.id === jokerId; });
+
+  const inputText = (pendingInputText && pendingInputText.trim())
+    ? pendingInputText
+    : 'Je sugg\u00e8re de lancer\u00a0: ' + joker.label;
+  pendingInputText = null;
+
+  closeStrategyPanel();
+  closeActionsPanel();
+  freezeOptionCards();
+  showDormantInput();
+  playSound('760370__froey__message-sent.mp3');
+  addPlayerMessage(inputText);
+
+  usedJokers.push(jokerId);
+  currentStep = 'result';
+  pendingAction = null;
+  pendingOption = null;
+
+  const hasEffects = joker.effects && Object.values(joker.effects).some(function(v) { return v !== 0; });
+  if (hasEffects) {
+    applyEffects(joker.effects);
+    updateScoreboard(changedKeys(joker.effects));
+    showScoreDelta(joker.effects);
+  }
+  gameHistory.push({ type: 'joker', label: joker.label, effects: joker.effects || {} });
+
+  function afterJoker() {
+    showTyping();
+    setTimeout(function() {
+      hideTyping();
+      addColleagueMessage('Quelle action souhaites-tu lancer\u00a0?');
+      currentStep = 'pick';
+      showPickerBtn();
+      scrollToBottom();
+    }, 600);
+  }
+
+  setTimeout(function() {
+    showTyping();
+    setTimeout(function() {
+      hideTyping();
+      const deltaHtml = hasEffects
+        ? '<div class="delta-row">' + buildDeltaChips(joker.effects) + '</div>'
+        : '';
+      addColleagueMessage('<div class="result-scenario-text">' + joker.naomiMessage + '</div>' + deltaHtml);
+      scrollToBottom();
+
+      if (joker.triggerEvent) _leakJokerUsed = true;
+      setTimeout(function() {
+        const zeroKey = checkZero();
+        if (zeroKey) { showEarlyEnd(zeroKey); } else { afterJoker(); }
+      }, 1500);
+    }, 1000);
+  }, 400);
+}
 function selectOptionFromPanel(cardEl, origIdx, phaseIndex) {
   // Désélectionner les autres
   document.querySelectorAll('#sp-list .option-card').forEach(function(c) { c.classList.remove('selected'); });
@@ -1135,6 +1279,7 @@ function selectOption(cardEl) {
 
 function sendActionChoice() {
   if (pendingOption === null) return;
+  if (pendingAction && pendingAction.jokerId) { sendJokerChoice(); return; }
   finishInputAnimation();
 
   const phaseIndex = pendingAction.phaseIndex;
@@ -1436,10 +1581,15 @@ function askAction() {
           let unlockedActionsText = '';
 
           if (unlocks.length === 1) {
-            unlockedActionsText += '<br>🔥 Une nouvelle action peut être lancée si tu penses que c\'est pertinent\u00a0: <b>' + unlocks[0].title + '</b>.';
+            unlockedActionsText += '<br>🔥 Une nouvelle action peut être lancée si tu penses que c\'est pertinent : <b>' + unlocks[0].title + '</b>.';
           } else if (unlocks.length > 1) {
-            unlockedActionsText += '<br>🔥 On peut lancer de nouvelles actions maintenant\u00a0:<br>'
+            unlockedActionsText += '<br>🔥 On peut lancer de nouvelles actions maintenant :<br>'
               + unlocks.map(function(p) { return '- ' + p.title; }).join('<br>');
+          }
+
+          // Au tour 4 : annoncer les jokers dans le même message
+          if (playedPhases.length === 1/*3*/) {
+            unlockedActionsText += '<br>🔥 Des actions bonus viennent d\'être débloquées : l\'appel au don et la fuite de documents compromettants le lobby industriel. Chacune de ces actions ne peut être utilisée qu\'une seule fois ! Choisis bien le moment !';
           }
 
           text = base.replace('(new_actions)', unlockedActionsText);
@@ -1550,21 +1700,13 @@ function showExplanations() {
 /* ════════════════════════════════════════════
    ÉVÉNEMENTS → notification push
 ════════════════════════════════════════════ */
-function triggerEvent() {
-  const idx   = eventOrder[eventCount % eventOrder.length];
-  const event = GAME_DATA.events[idx];
-  eventCount++;
-
-  // Titre et contenu de la notification
+function _showEventNotif(event, afterCallback) {
   const titleEl = document.getElementById('pn-title-text');
   if (titleEl) titleEl.textContent = event.title;
-
-  // Notification : description uniquement (sans outcome)
   document.getElementById('pn-text').textContent = event.description;
   document.getElementById('pn-deltas').innerHTML = buildDeltaChips(event.effects);
 
   const notif = document.getElementById('push-notification');
-
   playSound('545495__ienba__notification.mp3');
   notif.classList.add('show');
   setTimeout(function() {
@@ -1577,8 +1719,6 @@ function triggerEvent() {
 
   notif._onClose = function() {
     document.body.classList.remove('notif-open');
-
-    // Appliquer les effets et animer les indicateurs à la fermeture
     applyEffects(event.effects);
     updateScoreboard(changedKeys(event.effects));
     showScoreDelta(event.effects);
@@ -1592,12 +1732,11 @@ function triggerEvent() {
 
     const zeroKey = checkZero();
 
-    // Naomi commente l'outcome puis passe à la suite
     function afterOutcome() {
       if (zeroKey !== null) {
         setTimeout(function() { showEarlyEnd(zeroKey); }, 400);
       } else {
-        setTimeout(function() { askAction(); }, 400);
+        setTimeout(afterCallback, 400);
       }
     }
 
@@ -1605,7 +1744,7 @@ function triggerEvent() {
       showTyping();
       setTimeout(function() {
         hideTyping();
-        addColleagueMessage('🔥 Tu as vu la nouvelle\u00a0?<br>' + event.outcome);
+        addColleagueMessage('🔥 Tu as vu la nouvelle ?<br>' + event.outcome);
         scrollToBottom();
         setTimeout(afterOutcome, 2500);
       }, 1000);
@@ -1616,6 +1755,39 @@ function triggerEvent() {
   document.body.classList.add('notif-open');
 }
 
+function triggerEvent() {
+  const isLastEvent = (playedPhases.length === GAME_DATA.phases.length - 2);
+  let event;
+
+  // Dernier slot d'événement : forcer journalisme si joker utilisé et event non encore déclenché
+  if (isLastEvent && _leakJokerUsed && !_journalismShown) {
+    event = GAME_DATA.events.find(function(e) { return e.id === 'journalism'; });
+  }
+
+  // Cycle normal : skip journalisme si joker non utilisé OU déjà déclenché
+  if (!event) {
+    let tries = 0;
+    while (tries < GAME_DATA.events.length) {
+      const idx       = eventOrder[(eventCount + tries) % eventOrder.length];
+      const candidate = GAME_DATA.events[idx];
+      tries++;
+      if (candidate.id !== 'journalism' || (_leakJokerUsed && !_journalismShown)) {
+        event = candidate;
+        eventCount += tries;
+        break;
+      }
+    }
+  }
+
+  // Fallback : ne devrait pas arriver
+  if (!event) {
+    event = GAME_DATA.events[eventOrder[eventCount % eventOrder.length]];
+    eventCount++;
+  }
+
+  if (event.id === 'journalism') _journalismShown = true;
+  _showEventNotif(event, function() { askAction(); });
+}
 /* ════════════════════════════════════════════
    DÉBLOCAGE DE NOUVELLES ACTIONS
 ════════════════════════════════════════════ */
@@ -1774,6 +1946,10 @@ function computeScoreTimeline() {
       pol = Math.max(0, pol + (entry.effects.political  || 0));
       res = Math.max(0, res + (entry.effects.resources  || 0));
       timeline.push({ label: 'E' + evtCount, public: pub, political: pol, resources: res, isEvent: true, tooltip: entry.title });
+    } else if (entry.type === 'joker') {
+      pub = Math.max(0, pub + (entry.effects.public     || 0));
+      pol = Math.max(0, pol + (entry.effects.political  || 0));
+      res = Math.max(0, res + (entry.effects.resources  || 0));
     }
   });
 
@@ -1892,6 +2068,17 @@ function buildActionsList() {
       inner += '<span class="recap-event-title">' + entry.title + '</span>';
       inner += '</div>';
       inner += '<div class="recap-delta-chips">' + buildDeltaChips(entry.effects) + '</div>';
+      inner += '</div>';
+    } else if (entry.type === 'joker') {
+      inner += '<div class="recap-event">';
+      inner += '<div class="recap-event-header">';
+      inner += '<span class="recap-event-icon" aria-hidden="true">🃏</span>';
+      inner += '<span class="recap-event-title">Action bonus : ' + entry.label + '</span>';
+      inner += '</div>';
+      var jokerHasEffects = entry.effects && Object.values(entry.effects).some(function(v) { return v !== 0; });
+      if (jokerHasEffects) {
+        inner += '<div class="recap-delta-chips">' + buildDeltaChips(entry.effects) + '</div>';
+      }
       inner += '</div>';
     }
   });

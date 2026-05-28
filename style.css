@@ -978,7 +978,7 @@ body.notif-open .notif-overlay { display: block; }
   border-top: 3px solid var(--yellow);
 }
 .actions-panel.open {
-  max-height: 340px;
+  max-height: 480px;
   overflow-y: auto;
 }
 
@@ -992,7 +992,7 @@ body.notif-open .notif-overlay { display: block; }
 
 @media (min-width: 480px) {
   .ap-grid { grid-template-columns: repeat(4, 1fr); }
-  .actions-panel.open { max-height: 200px; }
+  .actions-panel.open { max-height: 360px; }
 }
 
 /* ════════════════════════════════════════════
@@ -1028,6 +1028,13 @@ body.notif-open .notif-overlay { display: block; }
   flex-direction: column;
   gap: 4px;
   padding: 6px 8px;
+}
+
+.joker-panel-desc {
+  padding: 8px 4px;
+  font-size: .78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
 }
 
 /* Surcharges option-card dans strategy panel */
@@ -1104,6 +1111,46 @@ body.notif-open .notif-overlay { display: block; }
   font-size: .55rem;
   font-weight: 700;
   padding: 2px 5px;
+}
+
+/* ── Section jokers dans le panel actions ── */
+.ao-joker-sep {
+  grid-column: 1 / -1;
+  color: var(--yellow);
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .06em;
+  padding: 8px 4px 4px;
+  border-top: 1px solid rgba(255,230,0,.3);
+  margin-top: 4px;
+}
+
+.ao-card-joker {
+  border-color: rgba(255,230,0,.45);
+}
+
+.ao-card-joker:hover:not(.used) {
+  background: rgba(255,230,0,.14);
+  border-color: var(--yellow);
+  transform: scale(1.02);
+}
+
+.ao-card-joker.used {
+  opacity: .35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.joker-use-btn {
+  background: var(--yellow);
+  color: var(--black);
+  font-size: .62rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  margin-top: 2px;
+  pointer-events: none;
+  letter-spacing: .03em;
 }
 
 /* ════════════════════════════════════════════
@@ -1926,6 +1973,10 @@ body.notif-open .chat-header {
   .msg-row            { max-width: 93%; }
   .end-box h2         { font-size: 1.5rem; }
   .chat-send-btn span:first-child { display: none; }
+  .chp-tour-name { display: none; }
+  .chp-tour-pill .chp-bar-bg { display: none; }
+  .chp-tour-pill .chp-tour-num { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 0; }
+  .chp-tour-pill .chp-tour-num::after { content: attr(data-short); font-family: 'Arial Black', Arial, sans-serif; font-size: .92rem; font-weight: 900; line-height: 1; color: var(--white); }
 }
 
 @media (min-width: 640px) {

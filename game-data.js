@@ -99,6 +99,24 @@ const GAME_DATA = {
     }
   ],
 
+  jokers: [
+    {
+      id: "emergency_donors",
+      label: "Appel d'urgence à des dons",
+      description: "Appel d'urgence à des donateurs pour augmenter nos ressources afin de continuer nos actions",
+      effects: { resources: 20, public: 15, score: 5 },
+      naomiMessage: "Incroyable !<br>On vient de lancer un appel d'urgence et les dons ont afflué !<br>Nos ressources sont renflouées et le soutien du public s'en ressent."
+    },
+    {
+      id: "leak_documents",
+      label: "Fuite de documents confidentiels",
+      description: "Faire fuiter des documents sur les liens entre politiques et lobbyistes des pesticides",
+      effects: {},
+      triggerEvent: "journalism",
+      naomiMessage: "On vient de transmettre les documents à des rédactions et des journalistes. On verra si cela va être utile…"
+    }
+  ],
+
   phases: [
     {
       id: 1,
@@ -478,7 +496,7 @@ const GAME_DATA = {
       tourDescription: "Le texte arrive dans l'hémicycle et les débats commencent.",
       tourDate: { day: 29, month: 6, year: 2026 },
       title: "Mobiliser les réseaux sociaux",
-      lockedUntil: 4,
+      lockedUntil: 5,
       description: "Les réseaux sociaux permettent de toucher des millions de personnes à faible coût. Mais ils sont aussi le terrain favori des contre-offensives industrielles : campagnes sponsorisées, trolls organisés, désinformation ciblée. Une arme à double tranchant.",
       actions: [
         {
@@ -553,7 +571,7 @@ const GAME_DATA = {
       tourDescription: "Les députés discutent et votent les articles et amendements.",
       tourDate: { day: 1, month: 7, year: 2026 },
       title: "Actions militantes",
-      lockedUntil: 4,
+      lockedUntil: 5,
       description: "Les actions militantes, pétitions, manifestations, happenings... créent de l'événement médiatique et montrent une mobilisation concrète. Elles peuvent galvaniser les soutiens. Mais un incident peut aussi se retourner contre la campagne.",
       actions: [
         {
@@ -629,7 +647,7 @@ const GAME_DATA = {
       tourDescription: "Les députés se prononcent sur l'ensemble du texte.",
       tourDate: { day: 8, month: 7, year: 2026 },
       title: "Travail légistique",
-      lockedUntil: 3,
+      lockedUntil: 4,
       description: "Avec le dépôt des amendements en commission, le travail légistique prend toute son importance. Rédiger des amendements précis, transmettre des analyses aux cabinets : ce sont les leviers les plus directs pour modifier le texte - et les plus difficiles à contrer pour les industriels.",
       actions: [
         {
