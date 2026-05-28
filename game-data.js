@@ -155,7 +155,7 @@ const GAME_DATA = {
           description: "Organiser un événement public réunissant associations, citoyens et experts permet de donner une visibilité concrète à la mobilisation. Un forum citoyen crée de l'événement, fédère les énergies et envoie un signal fort aux médias et aux décideurs.",
           naomiMessages: [
             "Bonne idée. On organise un forum citoyen ouvert au public.<br>Associations, chercheurs, agriculteurs bio, représentants de patients…<br>On met tout le monde dans la même pièce.",
-            "C'est une réussite ! La salle est pleine, les échanges sont riches.<br>Et surtout, ça donne une image unitaire de notre mobilisation."
+            "C'est une réussite ! La salle est pleine, les échanges sont riches.<br>Et surtout, ça donne une image unitaire de notre mobilisation.<br><img src=\"images/salle-pleine-claudio-schwarz-_wDZkpybAfY-unsplash.jpg\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -20, political: 20, public: 10, score: 15 },
