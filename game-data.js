@@ -173,7 +173,7 @@ const GAME_DATA = {
           description: "Organiser un événement public réunissant associations, citoyens et experts permet de donner une visibilité concrète à la mobilisation. Un forum citoyen crée de l'événement, fédère les énergies et envoie un signal fort aux médias et aux décideurs.",
           naomiMessages: [
             "Bonne idée. On organise un forum citoyen ouvert au public.<br>Associations, chercheurs, agriculteurs bio, représentants de patients…<br>On met tout le monde dans la même pièce.",
-            "C'est une réussite ! La salle est pleine, les échanges sont riches.<br>Et surtout, ça donne une image unitaire de notre mobilisation.<br><img src=\"images/salle-pleine-claudio-schwarz-_wDZkpybAfY-unsplash.jpg\" class=\"chat-img\">"
+            { playerMsg: true, html: "C'est une réussite ! La salle est pleine, les échanges sont riches.<br><img src=\"images/salle-pleine-claudio-schwarz-_wDZkpybAfY-unsplash.jpg\" class=\"chat-img\">", text: "C'est une réussite ! La salle est pleine." }
           ],
           effectsByTour: [
             { resources: -20, political: 20, public: 10, score: 15 },
@@ -181,7 +181,7 @@ const GAME_DATA = {
             { resources: -20, political: 15, public: 10, score: 10 },
           ],
           naomiCounterMessages: [
-            "L'AIPP vient de qualifier notre forum de \"grand-messe idéologique\" dans un communiqué.<br>Repris par plusieurs médias proches du lobby.<br>Ils essaient de réduire ça à du militantisme.<br>On va devoir tenir le cap."
+            "Bravo ! Et en plus, ça donne une image d'unité derrière notre mobilisation.<br>Mais... l'AIPP vient de qualifier notre forum de \"grand-messe idéologique\" dans un communiqué.<br>Repris par plusieurs médias proches du lobby.<br>Ils essaient de réduire ça à du militantisme.<br>On va devoir tenir le cap."
           ],
           counterEffectsByTour: [
             { public: -5,  score: -10 },
@@ -375,8 +375,8 @@ const GAME_DATA = {
           description: "Une conférence de presse bien préparée, avec des chiffres solides et des témoignages percutants, peut déclencher une vague d'articles et de reportages favorables à la cause.",
           naomiMessages: [
             "OK, on passe en mode offensif.<br>On organise une conférence de presse.",
-            "Les journalistes sont là, les prises de parole s'enchaînent.<br>Tu viens ?<br><img src=\"images/image24.png\" class=\"chat-img\">",
-            "J'ai eu un échange avec l'Agence des Français de la Presse.<br>Une dépêche va sortir demain, avec nos chiffres et nos analyses.<br>Ça devrait être repris dans plusieurs médias.<br>Bien joué !"
+            { playerMsg: true, html: "Tous les journalistes sont là, les prises de parole sont inspirantes !", text: "Tous les journalistes sont là" },
+            "Bravo, bien joué ! J'ai eu un échange avec l'Agence des Français de la Presse.<br>Une dépêche va sortir demain, avec nos chiffres et nos analyses.<br>Ça devrait être repris dans plusieurs médias.<br>Bien joué !"
           ],
           effectsByTour: [
             { resources: -20, public: 10, score: 10 },
@@ -472,7 +472,7 @@ const GAME_DATA = {
           description: "Organiser des rencontres directes sur le terrain permet de construire des relations de confiance avec des agriculteurs qui ne sont pas convaincus par les pesticides. Ce travail de fond prend du temps mais construit des alliances solides.",
           naomiMessages: [
             "Tu as raison, se rencontrer c'est toujours plus solide.<br>On organise des échanges sur le terrain avec des agriculteurs et on travaille sur des pistes de collaboration.",
-            "Bon, c'est passé inaperçu pour l'instant."
+            "Bon, c'est passé presque inaperçu pour l'instant."
           ],
           effectsByTour: [
             { resources: -20, political: 15, public: 10, score: 10 },
@@ -580,7 +580,7 @@ const GAME_DATA = {
           naomiMessages: [
             "Bonne idée.<br>On lance une pétition nationale.",
             "Les signatures montent rapidement.<br>Le sujet parle aux gens.",
-            "1 million de signatures !<br>C'est dingue !<br><img src=\"images/image3.png\" class=\"chat-img\">"
+            { playerMsg: true, html: "1 million de signatures ! C'est dingue !<br><img src=\"images/image3.png\" class=\"chat-img\">", text: "1 million de signatures ! C'est dingue !" }
           ],
           effectsByTour: [
             { resources: -20, public: 20, score: 15 },

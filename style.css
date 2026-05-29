@@ -1266,7 +1266,7 @@ body.notif-open .notif-overlay { display: block; }
   color: var(--black);
 }
 
-.end-box .end-subtitle { font-size: .82rem; text-align: center; color: var(--grey); margin-bottom: 20px; letter-spacing: .08em; }
+.end-box .end-subtitle { font-size: .82rem; text-align: center; color: var(--red-dark); margin-bottom: 20px; letter-spacing: .08em; font-weight: bold; }
 
 .end-card {
   background: var(--off-white);
@@ -1676,7 +1676,6 @@ body.notif-open .chat-header {
     width: 25%;
     flex-shrink: 0;
     background: var(--black);
-    border-right: 3px solid var(--red);
     overflow-y: auto;
     gap: 0;
   }

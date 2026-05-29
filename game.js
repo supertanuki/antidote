@@ -19,6 +19,7 @@ let _journalismShown  = false;
 let pendingAction      = null;
 let pendingOption      = null;
 let pendingCounterData = null;
+let pendingPlayerMsg   = null;
 let pendingEarlyEnd         = null;
 let pendingFinalResult      = false;
 let _resourcesWentNegative  = false;
@@ -187,6 +188,7 @@ function startGame() {
   pendingOption      = null;
   pendingCounterData = null;
   pendingInputText   = null;
+  pendingPlayerMsg   = null;
   currentStep        = 'pick';
   typingRowEl        = null;
   if (counterTimer) { clearTimeout(counterTimer); counterTimer = null; }
@@ -435,6 +437,7 @@ function confirmQuit() {
   pendingOption      = null;
   pendingCounterData = null;
   pendingInputText   = null;
+  pendingPlayerMsg   = null;
   currentStep        = 'pick';
   typingRowEl        = null;
   usedJokers           = [];
@@ -879,7 +882,7 @@ function openActionsPanel() {
   });
 
   // Section jokers — visible à partir du tour 4
-  if (playedPhases.length >= 0/*3*/ && GAME_DATA.jokers && GAME_DATA.jokers.length > 0) {
+  if (playedPhases.length >= 3 && GAME_DATA.jokers && GAME_DATA.jokers.length > 0) {
     const sep = document.createElement('div');
     sep.className   = 'ao-joker-sep';
     sep.textContent = 'Actions bonus';
@@ -1156,6 +1159,8 @@ function sendMessage() {
     sendPhaseChoice();
   } else if (currentStep === 'action') {
     sendActionChoice();
+  } else if (currentStep === 'playerMsgSend') {
+    sendPlayerMsg();
   } else if (currentStep === 'sorry') {
     sendSorry();
   } else if (currentStep === 'jarrive') {
@@ -1284,6 +1289,7 @@ function selectOption(cardEl) {
 }
 
 function sendActionChoice() {
+  if (currentStep === 'playerMsgSend') { sendPlayerMsg(); return; }
   if (pendingOption === null) return;
   if (pendingAction && pendingAction.jokerId) { sendJokerChoice(); return; }
   finishInputAnimation();
@@ -1353,8 +1359,14 @@ function sendActionChoice() {
 
           setNaomiOffline(false);
           addDateSeparator("Aujourd'hui");
-          showTyping();
-          setTimeout(function() { hideTyping(); showResult(action, effects, 1); }, 1200);
+          var firstResultMsg = (action.naomiMessages || [])[1];
+          var firstIsPlayerMsg = firstResultMsg && typeof firstResultMsg === 'object' && firstResultMsg.playerMsg;
+          if (firstIsPlayerMsg) {
+            setTimeout(function() { showResult(action, effects, 1); }, 400);
+          } else {
+            showTyping();
+            setTimeout(function() { hideTyping(); showResult(action, effects, 1); }, 1200);
+          }
         }, 3000);
       }, 2000);
     }, 1000);
@@ -1422,12 +1434,16 @@ function showSequentialNaomiMessages(msgs, onComplete) {
 /* ── Résultat - contre-attaque auto après délai ── */
 function showResult(action, effects, fromIndex) {
   effects = effects || action.effects || {};
-  applyEffects(effects);
-  updateScoreboard(changedKeys(effects));
-  showScoreDelta(effects);
 
   var allMsgs = action.naomiMessages || [action.scenario];
   var rawMsgs = allMsgs.slice(fromIndex || 0);
+  var hasPlayerMsg = rawMsgs.some(function(m) { return typeof m === 'object' && m.playerMsg; });
+
+  if (!hasPlayerMsg) {
+    applyEffects(effects);
+    updateScoreboard(changedKeys(effects));
+    showScoreDelta(effects);
+  }
 
   var scheduleCounter = function() {
     if (counterTimer) clearTimeout(counterTimer);
@@ -1442,17 +1458,85 @@ function showResult(action, effects, fromIndex) {
     return;
   }
 
-  var imgIdx = rawMsgs.findIndex(function(m) { return m.indexOf('chat-img') !== -1; });
+  var imgIdx = rawMsgs.findIndex(function(m) {
+    var html = typeof m === 'object' ? m.html : m;
+    return html.indexOf('chat-img') !== -1;
+  });
   var deltaIdx = imgIdx !== -1 ? imgIdx : rawMsgs.length - 1;
-  var msgs = rawMsgs.map(function(m, i) {
-    if (i === deltaIdx) {
-      return '<div class="result-scenario-text">' + m + '</div>' +
-             '<div class="delta-row">' + buildDeltaChips(effects) + '</div>';
+
+  var naomiMsgs = [], playerEntry = null, playerHasDelta = false, afterPlayerMsgs = [], foundPlayer = false;
+
+  rawMsgs.forEach(function(m, i) {
+    var deltaHtml = i === deltaIdx ? '<div class="delta-row">' + buildDeltaChips(effects) + '</div>' : '';
+    if (foundPlayer) {
+      afterPlayerMsgs.push('<div class="result-scenario-text">' + m + '</div>' + deltaHtml);
+    } else if (typeof m === 'object' && m.playerMsg) {
+      foundPlayer = true;
+      playerEntry = m;
+      playerHasDelta = (i === deltaIdx);
+    } else {
+      naomiMsgs.push('<div class="result-scenario-text">' + m + '</div>' + deltaHtml);
     }
-    return '<div class="result-scenario-text">' + m + '</div>';
   });
 
-  showSequentialNaomiMessages(msgs, scheduleCounter);
+  if (!foundPlayer) {
+    showSequentialNaomiMessages(naomiMsgs, scheduleCounter);
+    return;
+  }
+
+  var afterPlayer = function() {
+    if (afterPlayerMsgs.length > 0) {
+      setTimeout(function() {
+        showTyping();
+        setTimeout(function() {
+          hideTyping();
+          showSequentialNaomiMessages(afterPlayerMsgs, scheduleCounter);
+        }, 1000);
+      }, 1000);
+    } else {
+      scheduleCounter();
+    }
+  };
+
+  var promptPlayer = function() {
+    var deltaHtml = playerHasDelta ? '<div class="delta-row">' + buildDeltaChips(effects) + '</div>' : '';
+    showPlayerMsgPrompt(playerEntry, deltaHtml, effects, afterPlayer);
+  };
+
+  if (naomiMsgs.length > 0) {
+    showSequentialNaomiMessages(naomiMsgs, function() { setTimeout(promptPlayer, 800); });
+  } else {
+    promptPlayer();
+  }
+}
+
+function showPlayerMsgPrompt(entry, deltaHtml, effects, onComplete) {
+  pendingPlayerMsg = { html: entry.html, deltaHtml: deltaHtml, effects: effects, onComplete: onComplete };
+  typewriterInput(entry.text, null);
+  enableSendBtn();
+  currentStep = 'playerMsgSend';
+  scrollToBottom();
+}
+
+function sendPlayerMsg() {
+  finishInputAnimation();
+  var data = pendingPlayerMsg;
+  pendingPlayerMsg = null;
+  pendingInputText = null;
+
+  showDormantInput();
+  playSound('760370__froey__message-sent.mp3');
+  addPlayerMessage(data.html + (data.deltaHtml || ''));
+  scrollToBottom();
+
+  if (data.effects) {
+    applyEffects(data.effects);
+    updateScoreboard(changedKeys(data.effects));
+    setTimeout(function() { showScoreDelta(data.effects); }, 1000);
+  }
+
+  currentStep = 'result';
+  setTimeout(function() { if (data.onComplete) data.onComplete(); }, 500);
 }
 
 /* ════════════════════════════════════════════
@@ -1594,7 +1678,7 @@ function askAction() {
           }
 
           // Au tour 4 : annoncer les jokers dans le même message
-          if (playedPhases.length === 1/*3*/) {
+          if (playedPhases.length === 3) {
             unlockedActionsText += '<br>🔥 Des actions bonus viennent d\'être débloquées : l\'appel au don et la fuite de documents compromettants le lobby industriel. Chacune de ces actions ne peut être utilisée qu\'une seule fois ! Choisis bien le moment !';
           }
 
@@ -1750,7 +1834,10 @@ function _showEventNotif(event, afterCallback) {
       showTyping();
       setTimeout(function() {
         hideTyping();
-        addColleagueMessage('🔥 Tu as vu la nouvelle ?<br>' + event.outcome);
+        var eventDeltaHtml = event.effects && Object.values(event.effects).some(function(v) { return v !== 0; })
+          ? '<div class="delta-row">' + buildDeltaChips(event.effects) + '</div>'
+          : '';
+        addColleagueMessage('🔥 Tu as vu la nouvelle ?<br>' + event.outcome + eventDeltaHtml);
         scrollToBottom();
         setTimeout(afterOutcome, 2500);
       }, 1000);
@@ -2070,7 +2157,6 @@ function buildActionsList() {
     } else if (entry.type === 'event') {
       inner += '<div class="recap-event">';
       inner += '<div class="recap-event-header">';
-      inner += '<span class="recap-event-icon" aria-hidden="true">' + entry.icon + '</span>';
       inner += '<span class="recap-event-title">' + entry.title + '</span>';
       inner += '</div>';
       inner += '<div class="recap-delta-chips">' + buildDeltaChips(entry.effects) + '</div>';
