@@ -103,8 +103,8 @@ const GAME_DATA = {
     {
       id: "emergency_donors",
       label: "Appel d'urgence à des dons",
-      description: "Appel d'urgence à des donateurs pour augmenter nos ressources afin de continuer nos actions",
-      effects: { resources: 20, public: 15, score: 5 },
+      description: "Appel d'urgence à des donateurs pour augmenter nos ressources afin de continuer nos actions. Les gains attendus dépendent du soutien du public en cours.",
+      effects: { public: 15, score: 5 },
       naomiMessage: "Incroyable !<br>On vient de lancer un appel d'urgence et les dons ont afflué !<br>Nos ressources sont renflouées et le soutien du public s'en ressent."
     },
     {

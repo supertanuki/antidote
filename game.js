@@ -1088,13 +1088,19 @@ function sendJokerChoice() {
   pendingAction = null;
   pendingOption = null;
 
-  const hasEffects = joker.effects && Object.values(joker.effects).some(function(v) { return v !== 0; });
-  if (hasEffects) {
-    applyEffects(joker.effects);
-    updateScoreboard(changedKeys(joker.effects));
-    showScoreDelta(joker.effects);
+  let effects = joker.effects ? Object.assign({}, joker.effects) : {};
+  if (jokerId === 'emergency_donors') {
+    const raw = 10 + (scores.public / 100) * 20;
+    effects.resources = Math.max(10, Math.min(30, Math.round(raw / 5) * 5));
   }
-  gameHistory.push({ type: 'joker', label: joker.label, effects: joker.effects || {} });
+
+  const hasEffects = Object.values(effects).some(function(v) { return v !== 0; });
+  if (hasEffects) {
+    applyEffects(effects);
+    updateScoreboard(changedKeys(effects));
+    showScoreDelta(effects);
+  }
+  gameHistory.push({ type: 'joker', label: joker.label, effects: effects });
 
   function afterJoker() {
     showTyping();
@@ -1112,7 +1118,7 @@ function sendJokerChoice() {
     setTimeout(function() {
       hideTyping();
       const deltaHtml = hasEffects
-        ? '<div class="delta-row">' + buildDeltaChips(joker.effects) + '</div>'
+        ? '<div class="delta-row">' + buildDeltaChips(effects) + '</div>'
         : '';
       addColleagueMessage('<div class="result-scenario-text">' + joker.naomiMessage + '</div>' + deltaHtml);
       scrollToBottom();
