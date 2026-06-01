@@ -97,23 +97,27 @@ body {
 
 .welcome-card {
   background: var(--off-white);
-  border: 3px solid var(--red);
+  border: 3px solid var(--black);
   padding: 20px 24px;
   margin-bottom: 20px;
   text-align: left;
   color: var(--black);
 }
 
-.welcome-card h3 {
+.welcome-card h3, .end-card h3 {
   font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
-  font-size: 1.09rem;
+  font-size: 1.15rem;
   font-weight: 900;
-  margin-bottom: 10px;
-  color: var(--grey-dark);
   letter-spacing: .08em;
+  background: var(--black);
+  color: var(--white);
+  margin: -20px -24px 16px;
+  padding: 10px 24px;
+  text-align: center;
 }
 
-.welcome-card p { font-size: .9rem; line-height: 1.65; opacity: .95; margin: .8rem 0; color: var(--black); }
+.welcome-card p { font-size: .9rem; line-height: 1.45; opacity: .95; margin: 0 0 .75rem; color: var(--black); }
+.welcome-card p:last-of-type { margin-bottom: 0; }
 
 .welcome-card.avatar-card { display: flex; gap: 16px; align-items: flex-start; }
 .wc-avatar { font-size: 2.8rem; line-height: 1; flex-shrink: 0; margin-top: 2px; }
@@ -124,14 +128,14 @@ body {
 .indicator-chip {
   flex: 1;
   min-width: 100px;
-  background: var(--black);
+  background: var(--red);
   padding: 10px 12px;
   text-align: center;
   color: var(--white);
 }
 
 .indicator-chip .chip-icon { font-size: 1.4rem; display: block; margin-bottom: 4px; }
-.indicator-chip .chip-name { font-size: .9rem; color: var(--white); letter-spacing: .04em; }
+.indicator-chip .chip-name { font-size: .8rem; color: var(--white); letter-spacing: .04em; font-weight: bold; }
 .indicator-chip .chip-val  {
   font-family: 'Arial Black', Arial, sans-serif;
   font-weight: 900;
@@ -151,21 +155,27 @@ body {
   text-transform: uppercase;
   letter-spacing: .06em;
   cursor: pointer;
-  transition: transform var(--transition), box-shadow var(--transition);
-  box-shadow: 4px 4px 0 var(--red-dark);
+  transition: opacity var(--transition);
   text-decoration: none;
 }
 
-.btn:hover  { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--red-dark); }
-.btn:active { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--red-dark); }
+.btn:hover  { opacity: .85; }
+.btn:active { opacity: .7; }
 .btn-primary { background: var(--red); color: var(--white); }
 
-/* ── Options d'accueil ── */
+/* ── Footer accueil ── */
+.welcome-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+  width: 100%;
+  gap: 12px;
+}
+
 .welcome-options {
   display: flex;
   gap: 20px;
-  justify-content: center;
-  margin-top: 2.5rem;
   flex-wrap: wrap;
 }
 
@@ -191,7 +201,7 @@ body {
 
 .welcome-toggle input:checked + .wt-box {
   background: var(--yellow);
-  border-color: var(--yellow);
+  border-color: var(--black);
 }
 
 .welcome-toggle input:checked + .wt-box::after {
@@ -770,12 +780,11 @@ body.notif-open .notif-overlay { display: block; }
   letter-spacing: .04em;
   cursor: pointer;
   margin-top: 10px;
-  transition: box-shadow .15s, transform .15s;
-  box-shadow: 3px 3px 0 var(--red-dark);
+  transition: opacity .15s;
 }
 
-.naomi-action-btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--red-dark); }
-.naomi-action-btn:disabled { opacity: .45; cursor: default; transform: none; box-shadow: none; }
+.naomi-action-btn:hover:not(:disabled) { opacity: .85; }
+.naomi-action-btn:disabled { opacity: .45; cursor: default; }
 
 /* ─── Badges ─── */
 .event-badge {
@@ -911,12 +920,11 @@ body.notif-open .notif-overlay { display: block; }
   cursor: pointer;
   flex-shrink: 0;
   white-space: nowrap;
-  transition: box-shadow .15s, transform .15s;
-  box-shadow: 3px 3px 0 var(--red-dark);
+  transition: opacity .15s;
 }
 
-.chat-send-btn:hover:not(:disabled) { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--red-dark); animation: none; }
-.chat-send-btn:disabled { background: var(--grey); border-color: #555; cursor: not-allowed; transform: none; box-shadow: none; animation: none; }
+.chat-send-btn:hover:not(:disabled) { opacity: .85; animation: none; }
+.chat-send-btn:disabled { background: var(--grey); border-color: #555; cursor: not-allowed; animation: none; }
 .chat-send-btn.pulse { animation: btnPulse .7s ease-in-out infinite; }
 
 /* ── Mode dormant ── */
@@ -1270,38 +1278,30 @@ body.notif-open .notif-overlay { display: block; }
 
 .end-card {
   background: var(--off-white);
-  border: 3px solid var(--red);
+  border: 3px solid var(--black);
   color: var(--black);
   padding: 20px 24px;
   margin-bottom: 14px;
 }
 
-.end-card h3 {
-  font-family: 'Arial Black', Arial, sans-serif;
-  font-size: 1.07rem;
-  letter-spacing: .08em;
-  color: var(--grey-dark);
-  margin-bottom: 10px;
-  font-weight: 900;
-}
-
 .end-card p  { font-size: .93rem; line-height: 1.7; }
 .end-card .cta-text { margin-top: 8px; }
 
-.scores-summary { display: flex; gap: 10px; flex-wrap: wrap; }
+.scores-summary { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.6rem; }
 
 .summary-item {
   flex: 1;
   min-width: 100px;
   text-align: center;
-  background: var(--black);
+  background: var(--red);
   border: 2px solid var(--white);
+  font-weight: bold;
   padding: 10px;
   color: var(--white);
 }
 
 .summary-item .si-icon  { font-size: 1.4rem; }
-.summary-item .si-label { font-size: .91rem; color: var(--grey); margin: 2px 0; letter-spacing: .04em; }
+.summary-item .si-label { font-size: .82rem; color: var(--white); margin: 2px 0; letter-spacing: .04em; }
 .summary-item .si-val   {
   font-family: 'Arial Black', Arial, sans-serif;
   font-size: 1.5rem;
@@ -1821,10 +1821,10 @@ body.notif-open .chat-header {
 ════════════════════════════════════════════ */
 .about-link {
   display: inline-block;
-  margin-top: 1.5rem;
+  margin-top: 0;
   background: none;
   border: none;
-  font-size: .8rem;
+  font-size: .82rem;
   color: var(--text);
   cursor: pointer;
   letter-spacing: .05em;
@@ -1875,7 +1875,6 @@ body.notif-open .chat-header {
   padding: 7px 16px;
   cursor: pointer;
   transition: background .15s, color .15s;
-  box-shadow: 3px 3px 0 var(--black);
 }
 .about-back-btn:hover { background: var(--black); color: var(--yellow); }
 

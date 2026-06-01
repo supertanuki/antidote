@@ -97,19 +97,21 @@
           Commencer
         </button>
 
-        <div class="welcome-options">
-          <label class="welcome-toggle">
-            <input type="checkbox" id="opt-sound" checked />
-            <span class="wt-box"></span>
-            <span class="wt-label">Effets sonores</span>
-          </label>
-          <label class="welcome-toggle">
-            <input type="checkbox" id="opt-fullscreen" />
-            <span class="wt-box"></span>
-            <span class="wt-label">Plein écran</span>
-          </label>
+        <div class="welcome-footer">
+          <div class="welcome-options">
+            <label class="welcome-toggle">
+              <input type="checkbox" id="opt-sound" checked />
+              <span class="wt-box"></span>
+              <span class="wt-label">Effets sonores</span>
+            </label>
+            <label class="welcome-toggle">
+              <input type="checkbox" id="opt-fullscreen" />
+              <span class="wt-box"></span>
+              <span class="wt-label">Plein écran</span>
+            </label>
+          </div>
+          <button class="about-link" onclick="openAbout()">À propos</button>
         </div>
-        <button class="about-link" onclick="openAbout()">À propos</button>
       </div>
     </div>
 
@@ -166,9 +168,10 @@
                 </div>
               </div>
             </div>
-            <h3 style="margin-top: 2rem">Nous contacter</h3>
-            <p><a href="mailto:contact@antidote-le-jeu.net">contact@antidote-le-jeu.net</a></p>
-            <h3 style="margin-top: 2rem">Nous soutenir</h3>
+          </div>
+
+          <div class="welcome-card">
+            <h3>Nous soutenir</h3>
             <p>
               Ce jeu a été réalisé bénévolement. Si vous en avez la possibilité,
               merci de soutenir notre travail afin de nous aider à développer de nouvelles initiatives.
@@ -190,6 +193,11 @@
               >
             </p>
           </div>
+
+          <div class="welcome-card">
+            <h3>Nous contacter</h3>
+            <p><a href="mailto:contact@antidote-le-jeu.net">contact@antidote-le-jeu.net</a></p>
+          </div>
         </div>
       </div>
     </div>
@@ -206,8 +214,6 @@
         <div class="end-card">
           <h3>Score final</h3>
           <div class="scores-summary" id="end-scores"></div>
-        </div>
-        <div class="end-card">
           <p id="end-conclusion"></p>
           <p class="cta-text" id="end-cta"></p>
         </div>
@@ -242,8 +248,6 @@
         <div class="end-card">
           <h3>Score final</h3>
           <div class="scores-summary" id="result-scores"></div>
-        </div>
-        <div class="end-card">
           <p id="result-conclusion"></p>
           <p class="cta-text" id="result-cta"></p>
         </div>
@@ -587,7 +591,6 @@
     >
       <div class="cal-modal settings-modal">
         <div class="pn-header">
-          <span class="pn-app-icon" aria-hidden="true">⚙️</span>
           <span id="settings-title" class="pn-app-name">Paramètres</span>
           <button
             class="pn-close"
