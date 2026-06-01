@@ -131,7 +131,7 @@ const GAME_DATA = {
           description: "Coordonner plusieurs ONG environnementales pour dénoncer publiquement la réautorisation. Un communiqué commun, une prise de parole unitaire, la coalition envoie un signal fort aux médias et aux élus.",
           naomiMessages: [
             "OK. On active notre réseau.",
-            "On a réussi à rassembler plusieurs ONG environnementales.<br>On sort une note de position commune.<br>Ça donne du poids à notre position… mais on reste entre convaincus."
+            "On a réussi à rassembler plusieurs ONG environnementales.<br>On sort une note de position commune.<br>Ça donne du poids à notre position… mais on reste entre convaincus.<br><img src=\"images/Note_position_Antidote.jpg\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 10, public: 15, score: 10 },
@@ -139,7 +139,7 @@ const GAME_DATA = {
             { resources: -10, political: 5,  public: 15, score: 10 },
           ],
           naomiCounterMessages: [
-            "Tu as vu le communiqué de l'AIPP ? Il évoque une \"offensive idéologique des ONG\".<br>L'info est reprise dans plusieurs médias.<br><img src=\"images/image17.png\" class=\"chat-img\">",
+            "Tu as vu le communiqué de l'AIPP ? Il évoque une \"offensive idéologique des ONG\".<br>L'info est reprise dans plusieurs médias.<br><img src=\"images/Communiqué_presse_AIPP_V2.jpg\" class=\"chat-img\">",
             "Ça fragilise un peu notre crédibilité auprès de certains décideurs."
           ],
           counterEffectsByTour: [
@@ -212,7 +212,7 @@ const GAME_DATA = {
             { resources: -10, political: 10, score: 5 },
           ],
           naomiCounterMessages: [
-            "Mauvaise nouvelle : l'AIPP a transmis une note aux députés du centre, de la droite et de l'extrême droite.<br>Elle présente notre sujet comme un clivage classique : écologie contre agriculture.<br>On va avoir du mal à convaincre de façon transpartisane.<br><img src=\"images/image2.png\" class=\"chat-img\">"
+            "Mauvaise nouvelle : l'AIPP a transmis une note aux députés du centre, de la droite et de l'extrême droite.<br>Elle présente notre sujet comme un clivage classique : écologie contre agriculture.<br>On va avoir du mal à convaincre de façon transpartisane.<br><img src=\"images/Note_position_AIPP_V2.jpg\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { political: -5,  score: -10 },
@@ -278,7 +278,7 @@ const GAME_DATA = {
           description: "Organiser la publication d'une tribune signée par plusieurs chercheurs reconnus permet de donner une visibilité médiatique à l'alerte scientifique sur les risques des pesticides.",
           naomiMessages: [
             "Plusieurs chercheurs se mobilisent.<br>Je te tiens au courant.",
-            "Les chercheurs viennent de cosigner et publier une tribune qui alerte sur les risques des pesticides.<br>Ça crédibilise clairement notre position, surtout auprès des médias et des députés.<br>Bravo !<br><img src=\"images/image14.png\" class=\"chat-img\">"
+            "Les chercheurs viennent de cosigner et publier une tribune qui alerte sur les risques des pesticides.<br>Ça crédibilise clairement notre position, surtout auprès des médias et des députés.<br>Bravo !<br><img src=\"images/Tribune_des_scientifiques.jpg\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 25, public: 5,  score: 10 },
@@ -286,7 +286,7 @@ const GAME_DATA = {
             { resources: -10, political: 15, public: 10, score: 10 },
           ],
           naomiCounterMessages: [
-            "On vient de m'envoyer ça ! Une tribune \"concurrente\" est sortie dans la foulée.<br>Avec d'autres scientifiques… ou présentés comme tels.<br><img src=\"images/image8.png\" class=\"chat-img\">",
+            "On vient de m'envoyer ça ! Une tribune \"concurrente\" est sortie dans la foulée.<br>Avec d'autres scientifiques… ou présentés comme tels.<br><img src=\"images/Tribune_lobby_phyto_V2.jpg\" class=\"chat-img\">",
             "Le débat devient technique.<br>Et surtout, il devient confus."
           ],
           counterEffectsByTour: [
@@ -321,8 +321,8 @@ const GAME_DATA = {
           description: "Obtenir la prise de position officielle d'une société savante reconnue - une académie, un collège de médecins - donne un poids institutionnel à la mobilisation scientifique.",
           naomiMessages: [
             "Très bon levier.<br>Une société savante prend rarement position publiquement.<br>Si on y arrive, on gagnera en crédibilité.<br>Ils seront plus difficilement contestables que nous.",
-            "Bravo !<br>J'ai eu un échange avec la présidente de la société savante sur le Cancer.<br>Ils devraient prendre position publiquement.",
-            "Voilà leur communiqué officiel.<br><img src=\"images/image11.png\" class=\"chat-img\">"
+            { playerMsg: true, html: "Salut Naomi ! J'ai eu un échange avec la présidente de la Société Française de Cancérologie et voilà leur communiqué officiel.<br><img src=\"images/Post_SFC.jpg\" class=\"chat-img\">", text: "J'ai eu un échange avec la société savante..." },
+            "Bravo ! Bien joué !"
           ],
           effectsByTour: [
             { resources: -15, political: 15, public: 10, score: 15 },
@@ -330,7 +330,7 @@ const GAME_DATA = {
             { resources: -15, political: 10, public: 15, score: 15 },
           ],
           naomiCounterMessages: [
-            "Comme par hasard, une réaction de pseudo-institutions vient de tomber…"
+            "Comme par hasard, une réaction de pseudo-institutions vient de tomber… critiquant cette prise de position sur la forme, mais rien sur le fond !"
           ],
           counterEffectsByTour: [
             { political: -10, score: -10 },
@@ -353,8 +353,8 @@ const GAME_DATA = {
           description: "Publier une tribune dans un quotidien national permet de toucher à la fois le grand public et les décideurs. Un texte bien argumenté peut avoir un impact durable sur le débat.",
           naomiMessages: [
             "Bonne idée !",
-            "C'est bon, j'ai Le Monde d'Aujourd'hui.<br>Notre tribune va être publiée dans les colonnes du journal.<br>La rédaction devrait par ailleurs en profiter pour consacrer la Une du journal à notre sujet !<br>C'est dingue !",
-            "Et voilà !<br><img src=\"images/image13.png\" class=\"chat-img\">"
+            "C'est bon, j'ai Le Quotidien.<br>Notre tribune va être publiée dans les colonnes du journal.<br>La rédaction devrait par ailleurs en profiter pour consacrer la Une du journal à notre sujet !<br>C'est dingue !",
+            "Et voilà !<br><img src=\"images/Une_journal_2.png\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, public: 10, score: 10 },
@@ -438,7 +438,7 @@ const GAME_DATA = {
           ],
           naomiCounterMessages: [
             "L'AIPP vient de convaincre le syndicat agricole majoritaire d'entrer dans la danse.<br>D'après mes infos, ils vont faire intervenir plusieurs de leurs représentants sur les plateaux télés…",
-            "Regarde le cadrage…<br>Ils parlent de contraintes, de rendements, de survie économique.<br><img src=\"images/image19.png\" class=\"chat-img\">"
+            "Regarde le cadrage…<br>Ils parlent de contraintes, de rendements, de survie économique.<br><img src=\"images/ITW_Agriculteur_FDMTV.jpg\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -5,  score: -10 },
@@ -580,7 +580,7 @@ const GAME_DATA = {
           naomiMessages: [
             "Bonne idée.<br>On lance une pétition nationale.",
             "Les signatures montent rapidement.<br>Le sujet parle aux gens.",
-            { playerMsg: true, html: "1 million de signatures ! C'est dingue !<br><img src=\"images/image3.png\" class=\"chat-img\">", text: "1 million de signatures ! C'est dingue !" }
+            { playerMsg: true, html: "1 million de signatures ! C'est dingue !<br><img src=\"images/Petition_V2.jpg\" class=\"chat-img\">", text: "1 million de signatures ! C'est dingue !" }
           ],
           effectsByTour: [
             { resources: -20, public: 20, score: 15 },
@@ -588,7 +588,7 @@ const GAME_DATA = {
             { resources: -20, public: 20, score: 15 },
           ],
           naomiCounterMessages: [
-            "Un sondage vient d'être publié : \"78% des Français soutiennent les agriculteurs et sont favorables à la simplification des normes\".<br>Devine qui est derrière cette opération…<br>C'est une façon de décrédibiliser la pétition.<br><img src=\"images/image20.png\" class=\"chat-img\">"
+            "Un sondage vient d'être publié : \"78% des Français soutiennent les agriculteurs et sont favorables à la simplification des normes\".<br>Devine qui est derrière cette opération…<br>C'est une façon de décrédibiliser la pétition.<br><img src=\"images/Sondage_V2.jpg\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -655,7 +655,7 @@ const GAME_DATA = {
           description: "Rédiger un amendement de suppression totale du texte en collaboration avec des parlementaires alliés et le transmettre officiellement. Si cet amendement est adopté, la proposition de loi tombe.",
           naomiMessages: [
             "Bonne idée.<br>Je te suggère de rédiger un amendement précis de suppression.<br>S'il est adopté, la proposition de loi tombe assez rapidement.",
-            "Le voici, on le transmet ensemble directement à plusieurs députés.<br><img src=\"images/image5.png\" class=\"chat-img\">"
+            "Le voici, on le transmet ensemble directement à plusieurs députés.<br><img src=\"images/Amendement.jpg\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 10, score: 5 },
