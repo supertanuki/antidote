@@ -123,6 +123,54 @@ const GAME_DATA = {
       tourLabel: "Inscription et désignation du rapporteur",
       tourDescription: "Le texte est inscrit à l'ordre du jour et un rapporteur est désigné pour piloter son examen.",
       tourDate: { day: 2, month: 6, year: 2026 },
+    },
+    {
+      id: 2,
+      tourLabel: "Auditions",
+      tourDescription: "Le rapporteur lance ses auditions et consulte les différents acteurs concernés.",
+      tourDate: { day: 8, month: 6, year: 2026 },
+    },
+    {
+      id: 3,
+      tourLabel: "Dépôt des amendements en commission",
+      tourDescription: "Les députés déposent leurs premiers amendements pour modifier le texte.",
+      tourDate: { day: 11, month: 6, year: 2026 },
+    },
+    {
+      id: 4,
+      tourLabel: "Examen en commission",
+      tourDescription: "La commission examine le texte et vote sur les amendements.",
+      tourDate: { day: 17, month: 6, year: 2026 },
+    },
+    {
+      id: 5,
+      tourLabel: "Dépôt des amendements en séance",
+      tourDescription: "De nouveaux amendements sont déposés en vue de la séance publique.",
+      tourDate: { day: 26, month: 6, year: 2026 },
+    },
+    {
+      id: 6,
+      tourLabel: "Début de la séance publique",
+      tourDescription: "Le texte arrive dans l'hémicycle et les débats commencent.",
+      tourDate: { day: 29, month: 6, year: 2026 },
+    },
+    {
+      id: 7,
+      tourLabel: "Suite des débats en séance",
+      tourDescription: "Les députés discutent et votent les articles et amendements.",
+      tourDate: { day: 1, month: 7, year: 2026 },
+    },
+    {
+      id: 8,
+      tourLabel: "Vote solennel",
+      tourDescription: "Les députés se prononcent sur l'ensemble du texte.",
+      tourDate: { day: 8, month: 7, year: 2026 },
+    },
+  ],
+
+  strategies: [
+    {
+      id: 1,
       title: "Construire une coalition",
       description: "Construire une coalition d'associations est souvent la première étape d'une stratégie de plaidoyer. En unissant leurs forces, les organisations multiplient leur visibilité et leur crédibilité. Mais chaque alliance a ses fragilités et le lobby s'empressera de les exploiter.",
       actions: [
@@ -193,9 +241,6 @@ const GAME_DATA = {
     },
     {
       id: 2,
-      tourLabel: "Auditions",
-      tourDescription: "Le rapporteur lance ses auditions et consulte les différents acteurs concernés.",
-      tourDate: { day: 8, month: 6, year: 2026 },
       title: "Sensibiliser les parlementaires",
       description: "Sans relais au sein des institutions, une association ne peut peser sur les votes. Construire une coalition parlementaire est l'un des leviers les plus puissants - mais aussi l'un des plus difficiles à maintenir face aux pressions des lobbies industriels.",
       actions: [
@@ -267,9 +312,6 @@ const GAME_DATA = {
     },
     {
       id: 3,
-      tourLabel: "Dépôt des amendements en commission",
-      tourDescription: "Les députés déposent leurs premiers amendements pour modifier le texte.",
-      tourDate: { day: 11, month: 6, year: 2026 },
       title: "Mobiliser l'expertise scientifique",
       description: "Dans les batailles réglementaires, l'expertise scientifique est un outil clé. Elle permet de contester les arguments des industriels et de donner une légitimité au plaidoyer. Mais l'industrie dispose de moyens considérables pour financer des contre-expertises et semer le doute.",
       actions: [
@@ -342,9 +384,6 @@ const GAME_DATA = {
     },
     {
       id: 4,
-      tourLabel: "Examen en commission",
-      tourDescription: "La commission examine le texte et vote sur les amendements.",
-      tourDate: { day: 17, month: 6, year: 2026 },
       title: "Sensibiliser les journalistes",
       description: "Les médias sont un terrain de bataille essentiel. La visibilité médiatique permet de peser sur l'opinion publique et d'exercer une pression indirecte sur les décideurs politiques. Mais l'industrie dispose de budgets de communication bien supérieurs à ceux d'une association.",
       actions: [
@@ -418,9 +457,6 @@ const GAME_DATA = {
     },
     {
       id: 5,
-      tourLabel: "Dépôt des amendements en séance",
-      tourDescription: "De nouveaux amendements sont déposés en vue de la séance publique.",
-      tourDate: { day: 26, month: 6, year: 2026 },
       title: "Dialoguer avec les agriculteurs",
       description: "L'AIPP s'appuie massivement sur la figure de l'agriculteur pour légitimer ses positions. Aller à la rencontre des agriculteurs, notamment ceux qui travaillent sans pesticides dangereux, permet de casser ce monopole de représentation.",
       actions: [
@@ -492,9 +528,6 @@ const GAME_DATA = {
     },
     {
       id: 6,
-      tourLabel: "Début de la séance publique",
-      tourDescription: "Le texte arrive dans l'hémicycle et les débats commencent.",
-      tourDate: { day: 29, month: 6, year: 2026 },
       title: "Mobiliser les réseaux sociaux",
       lockedUntil: 5,
       description: "Les réseaux sociaux permettent de toucher des millions de personnes à faible coût. Mais ils sont aussi le terrain favori des contre-offensives industrielles : campagnes sponsorisées, trolls organisés, désinformation ciblée. Une arme à double tranchant.",
@@ -567,9 +600,6 @@ const GAME_DATA = {
     },
     {
       id: 7,
-      tourLabel: "Suite des débats en séance",
-      tourDescription: "Les députés discutent et votent les articles et amendements.",
-      tourDate: { day: 1, month: 7, year: 2026 },
       title: "Actions militantes",
       lockedUntil: 5,
       description: "Les actions militantes, pétitions, manifestations, happenings... créent de l'événement médiatique et montrent une mobilisation concrète. Elles peuvent galvaniser les soutiens. Mais un incident peut aussi se retourner contre la campagne.",
@@ -602,7 +632,7 @@ const GAME_DATA = {
           naomiMessages: [
             "On mobilise nos militants.<br>J'envoie un appel à manifestation sur notre newsletter et nos réseaux sociaux.",
             "Autorisation obtenue en préfecture !<br>Rendez-vous confirmé pour la manifestation près de l'Assemblée nationale.",
-            "On est plein !<br>Ça fait plaisir !<br><img src=\"images/image4.png\" class=\"chat-img\">"
+            { playerMsg: true, html: "On est plein !<br>Ça fait plaisir !<br><img src=\"images/image4.png\" class=\"chat-img\">", text: "On est plein !" }
           ],
           effectsByTour: [
             { resources: -15, political: 15, public: 15, score: 15 },
@@ -643,9 +673,6 @@ const GAME_DATA = {
     },
     {
       id: 8,
-      tourLabel: "Vote solennel",
-      tourDescription: "Les députés se prononcent sur l'ensemble du texte.",
-      tourDate: { day: 8, month: 7, year: 2026 },
       title: "Travail légistique",
       lockedUntil: 4,
       description: "Avec le dépôt des amendements en commission, le travail légistique prend toute son importance. Rédiger des amendements précis, transmettre des analyses aux cabinets : ce sont les leviers les plus directs pour modifier le texte - et les plus difficiles à contrer pour les industriels.",
