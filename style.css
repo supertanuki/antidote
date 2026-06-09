@@ -47,6 +47,12 @@ body {
   overflow-x: hidden;
 }
 
+a[target="_blank"]::after {
+  content: " ↗";
+  font-size: 0.8em;
+  font-weight: 700;
+}
+
 /* ─── Screens ─── */
 .screen { display: none; flex-direction: column; flex: 1; }
 .screen.active { display: flex; }
@@ -116,8 +122,9 @@ body {
   text-align: center;
 }
 
-.welcome-card p { font-size: .9rem; line-height: 1.45; opacity: .95; margin: 0 0 .75rem; color: var(--black); }
-.welcome-card p:last-of-type { margin-bottom: 0; }
+.welcome-card ul { margin-top: .75rem; }
+.welcome-card p, .welcome-card li { font-size: .9rem; line-height: 1.45; opacity: .95; margin: 0 0 .75rem; color: var(--black); }
+.welcome-card p:last-of-type, .welcome-card li:last-of-type { margin-bottom: 0; }
 
 .welcome-card.avatar-card { display: flex; gap: 16px; align-items: flex-start; }
 .wc-avatar { font-size: 2.8rem; line-height: 1; flex-shrink: 0; margin-top: 2px; }
@@ -1813,6 +1820,7 @@ body.notif-open .chat-header {
   cursor: pointer;
   transition: background .15s, border-color .15s;
   text-align: left;
+  text-decoration: none;
 }
 .sb-action-btn:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.3); }
 
