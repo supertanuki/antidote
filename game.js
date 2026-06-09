@@ -1623,7 +1623,7 @@ function askAction() {
     showTyping();
     setTimeout(function() {
       hideTyping();
-      addColleagueMessage(`Le texte vient d'être inscrit à l'ordre du jour.<br>Un rapporteur vient d'être désigné : c'est lui qui va organiser les auditions et structurer le débat.`);
+      addColleagueMessage(`Le texte vient d'être inscrit à l'ordre du jour au Sénat.<br>Un rapporteur vient d'être désigné : c'est lui qui va organiser les auditions et structurer le débat.`);
       showTyping();
       setTimeout(function() {
         hideTyping();

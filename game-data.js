@@ -121,7 +121,7 @@ const GAME_DATA = {
     {
       id: 1,
       tourLabel: "Inscription et désignation du rapporteur",
-      tourDescription: "Le texte est inscrit à l'ordre du jour et un rapporteur est désigné pour piloter son examen.",
+      tourDescription: "Le texte est inscrit à l'ordre du jour au Sénat et un rapporteur est désigné pour piloter son examen.",
       tourDate: { day: 2, month: 6, year: 2026 },
     },
     {
@@ -200,7 +200,9 @@ const GAME_DATA = {
           label: "Nouer une alliance avec des associations de santé",
           description: "Nouer une alliance avec des associations de médecins et de patients permet de faire sortir le débat du seul cadre environnemental.<br>Les arguments liés à la santé publique touchent un public plus large et sont plus difficiles à contester politiquement.",
           naomiMessages: [
-            "Bravo !<br>Je viens de recevoir la confirmation : on a réussi à embarquer des associations de médecins et de patients.<br>On change complètement le cadre du débat : on ne parle plus seulement d'environnement, mais de santé publique."
+            "Je t'envoie une liste d'associations à contacter. Tu peux t'en charger stp ?",
+            { playerMsg: true, html: "Salut Naomi ! Je viens de recevoir la confirmation, on a réussi à embarquer des associations de médecins et de patients.", text: "On a réussi à embarquer des associations !" },
+            "Beau travail ! On change complètement le cadre du débat : on ne parle plus seulement d'environnement, mais de santé publique."
           ],
           effectsByTour: [
             { resources: -15, political: 20, public: 10, score: 15 },
@@ -208,7 +210,7 @@ const GAME_DATA = {
             { resources: -15, political: 15, public: 10, score: 15 },
           ],
           naomiCounterMessages: [
-            "L'AIPP vient de contester les données et met en avant ses propres experts.<br>C'est classique : ils créent du doute pour ralentir le débat.<br>Espérons que ces chiffres biaisés ne circulent pas trop."
+            "L'AIPP vient de contester les données indiquées par les assos dans la presse et met en avant ses propres experts.<br>C'est classique : ils créent du doute pour ralentir le débat.<br>Espérons que ces chiffres biaisés ne circulent pas trop."
           ],
           counterEffectsByTour: [
             { political: -10, public: -10, score: -10 },
@@ -393,7 +395,8 @@ const GAME_DATA = {
           naomiMessages: [
             "Bonne idée !",
             "C'est bon, j'ai Le Quotidien.<br>Notre tribune va être publiée dans les colonnes du journal.<br>La rédaction devrait par ailleurs en profiter pour consacrer la Une du journal à notre sujet !<br>C'est dingue !",
-            "Et voilà !<br><img src=\"images/Une_journal_2.png\" class=\"chat-img\">"
+            { playerMsg: true, html: "Et voilà, on est en Une !<br><img src=\"images/Une_journal_2.jpg\" class=\"chat-img\">", text: "On est en Une !" },
+            "😍",
           ],
           effectsByTour: [
             { resources: -10, public: 10, score: 10 },
@@ -423,7 +426,7 @@ const GAME_DATA = {
             { resources: -20, public: 20, score: 20 },
           ],
           naomiCounterMessages: [
-            "Regarde !<br>Il y a une grosse campagne de communication menée par l'AIPP.<br>Leurs représentants sont partout sur les plateaux des chaînes et radios privées…<br>Le directeur général de l'AIPP était ce matin sur CNAZE.<br><img src=\"images/image7.png\" class=\"chat-img\">"
+            "Regarde !<br>Il y a une grosse campagne de communication menée par l'AIPP.<br>Leurs représentants sont partout sur les plateaux des chaînes et radios privées…<br>Le directeur général de l'AIPP était ce matin sur CNAZE.<br><img src=\"images/lelobby-se-defend.jpg\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -436,7 +439,7 @@ const GAME_DATA = {
           description: "ANTIDOTE dispose de documents montrant les liens entre certains industriels et des responsables politiques. Les révéler peut provoquer une onde de choc médiatique - mais cela coûte cher en ressources et l'industrie contre-attaquera violemment.",
           naomiMessages: [
             "Tu es sûr·e de vouloir aller sur ce terrain ? Ok.<br>On a des éléments solides.<br>On sait de source sûre que le nouveau conseiller de la ministre est l'ancien chargé des relations institutionnelles de l'AIPP.<br>On va rendre ça public, je transmets l'info à Mediapote.",
-            "Et voilà !<br><img src=\"images/image16.png\" class=\"chat-img\">"
+            "Et voilà !<br><img src=\"images/mediapote.jpg\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -15, political: 20, public: 10, score: 20 },
@@ -465,7 +468,7 @@ const GAME_DATA = {
           description: "Mettre en avant des agriculteurs qui travaillent sans pesticides dangereux est un contre-récit puissant face à l'argument que \"les agriculteurs ont besoin de ces produits\". Des voix agricoles dans le débat changent la donne.",
           naomiMessages: [
             "Tu as raison.<br>Il faut éviter que notre mobilisation soit perçue comme une mobilisation contre les agriculteurs.<br>On ne s'oppose pas à l'agriculture, mais à certaines pratiques.<br>On publie des témoignages d'agriculteurs qui travaillent au contact des pesticides dangereux. Ce sont eux les premières victimes.",
-            "Et voilà !<br><img src=\"images/image23.png\" class=\"chat-img\">"
+            "Et voilà !<br><img src=\"images/post-antidote-agri.png\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 10, public: 10, score: 15 },
@@ -537,7 +540,7 @@ const GAME_DATA = {
           description: "Des créateurs de contenu engagés peuvent toucher des millions de personnes jeunes peu habituées aux canaux traditionnels du militantisme. Mais cette visibilité peut attirer la critique sur le sérieux de la campagne.",
           naomiMessages: [
             "OK, on propose à plusieurs influenceurs de diffuser du contenu.",
-            "Bonne nouvelle !<br>Le Trauma accepte de relayer notre campagne.<br>Il est quand même suivi par 500k followers sur Instagram !<br><img src=\"images/image10.png\" class=\"chat-img\">"
+            "Bonne nouvelle !<br>Le Trauma accepte de relayer notre campagne.<br>Il est quand même suivi par 500k followers sur Instagram !<br><img src=\"images/letrauma.jpg\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -15, public: 15, score: 10 },
@@ -545,7 +548,7 @@ const GAME_DATA = {
             { resources: -15, public: 20, score: 15 },
           ],
           naomiCounterMessages: [
-            "Je suis dégoûtée, regarde ça.<br>Brout vient de publier une vidéo \"reportage\"… sponsorisée par l'AIPP.<br><img src=\"images/image12.png\" class=\"chat-img\">",
+            "Je suis dégoûtée, regarde ça.<br>Brout vient de publier une vidéo \"reportage\" générée par l'IA évidemment… et sponsorisée par l'AIPP.<br><img src=\"images/aipp-caricatures.jpg\" class=\"chat-img\">",
             "Un \"reportage vrai/faux\" sur les \"caricatures\" autour des pesticides. Ils se moquent vraiment du monde."
           ],
           counterEffectsByTour: [
@@ -567,7 +570,7 @@ const GAME_DATA = {
             { resources: -10, public: 25, score: 15 },
           ],
           naomiCounterMessages: [
-            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.<br>Ce sont des contenus générés avec l'IA.<br>Regarde ce faux podcast…<br><img src=\"images/image1.png\" class=\"chat-img\">"
+            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.<br>Ce sont des contenus générés avec l'IA.<br>Regarde ce faux podcast…<br><img src=\"images/faux-podcast.jpg\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -627,12 +630,12 @@ const GAME_DATA = {
           ]
         },
         {
-          label: "Organiser une manifestation devant l'Assemblée nationale",
-          description: "Une grande manifestation dans la rue montre la réalité de la mobilisation. Des milliers de personnes devant l'Assemblée nationale envoient un signal fort aux décideurs politiques et aux médias.",
+          label: "Organiser une manifestation",
+          description: "Une grande manifestation dans la rue montre la réalité de la mobilisation. Des milliers de personnes mobilisés envoient un signal fort aux décideurs politiques et aux médias.",
           naomiMessages: [
             "On mobilise nos militants.<br>J'envoie un appel à manifestation sur notre newsletter et nos réseaux sociaux.",
-            "Autorisation obtenue en préfecture !<br>Rendez-vous confirmé pour la manifestation près de l'Assemblée nationale.",
-            { playerMsg: true, html: "On est plein !<br>Ça fait plaisir !<br><img src=\"images/image4.png\" class=\"chat-img\">", text: "On est plein !" }
+            "Autorisation obtenue en préfecture !<br>Rendez-vous confirmé pour la manifestation à République.",
+            { playerMsg: true, html: "On est plein !<br>Ça fait plaisir !<br><img src=\"images/jean-baptiste-d-WJjxFd_3x0U-unsplash.jpg\" class=\"chat-img\">", text: "On est plein !" }
           ],
           effectsByTour: [
             { resources: -15, political: 15, public: 15, score: 15 },
@@ -653,7 +656,7 @@ const GAME_DATA = {
           description: "Un happening créatif et surprenant peut créer un buzz médiatique important. Son impact dépend beaucoup de l'exécution et du contexte - et la réaction du public peut être imprévisible.",
           naomiMessages: [
             "C'est ambitieux, mais d'accord !<br>On tente quelque chose de plus marquant.<br>Je propose qu'on manifeste avec des faux cercueils devant le siège de l'AIPP.<br>Ça va attirer l'attention.",
-            "Elle claque cette opération !<br><img src=\"images/image6.png\" class=\"chat-img\">"
+            "Elle claque cette opération !<br><img src=\"images/happening.jpg\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 10, public: 15, score: 5 },
@@ -732,7 +735,7 @@ const GAME_DATA = {
             { resources: -10, political: 20, score: 15 },
           ],
           naomiCounterMessages: [
-            "L'AIPP a fait la même chose, appuyé par une \"note économique sur l'impact sur les filières\" produite par un grand cabinet de conseil…<br>Apparemment, le ministre de l'Économie et des Finances pousse en faveur du texte auprès des parlementaires.<br><img src=\"images/image15.png\" class=\"chat-img\">"
+            "L'AIPP a fait la même chose, appuyé par une \"note économique sur l'impact sur les filières\" produite par un grand cabinet de conseil…<br>Apparemment, le ministre de l'Économie et des Finances pousse en faveur du texte auprès des parlementaires.<br><img src=\"images/aipp-note-eco.jpg\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { political: -5, score: -10 },

@@ -53,6 +53,10 @@ a[target="_blank"]::after {
   font-weight: 700;
 }
 
+a {
+  color: var(--red-dark)
+}
+
 /* ─── Screens ─── */
 .screen { display: none; flex-direction: column; flex: 1; }
 .screen.active { display: flex; }
