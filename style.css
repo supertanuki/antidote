@@ -2079,3 +2079,60 @@ body.notif-open .chat-header {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Partage social ── */
+.share-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 4px;
+  width: 100%;
+}
+
+.share-label {
+  font-size: 0.85rem;
+  color: var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.share-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition);
+  text-decoration: none;
+  font-family: inherit;
+  color: #fff;
+}
+
+.btn-share:hover  { opacity: 0.85; transform: translateY(-1px); }
+.btn-share:active { opacity: 1;    transform: translateY(0); }
+
+.share-linkedin  { background: #0a66c2; }
+.share-instagram { background: #333; border: 1.5px solid #555; }
+.share-webapi    { background: var(--red); }
+
+.share-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.btn-share:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }

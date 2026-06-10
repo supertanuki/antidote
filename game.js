@@ -881,7 +881,7 @@ function openActionsPanel() {
     grid.appendChild(card);
   });
 
-  // Section jokers — visible à partir du tour 4
+  // Section jokers visible à partir du tour 4
   if (strategiesPlayed.length >= 3 && GAME_DATA.jokers && GAME_DATA.jokers.length > 0) {
     const sep = document.createElement('div');
     sep.className   = 'ao-joker-sep';
@@ -893,7 +893,7 @@ function openActionsPanel() {
       const jCard  = document.createElement('button');
       jCard.className = 'ao-card ao-card-joker' + (isUsed ? ' used' : '');
       jCard.disabled  = isUsed;
-      jCard.setAttribute('aria-label', joker.label + (isUsed ? ' — déjà utilisé' : ''));
+      jCard.setAttribute('aria-label', joker.label + (isUsed ? ' - déjà utilisé' : ''));
 
       const usedBadge = isUsed
         ? '<span class="ao-card-played-badge" aria-hidden="true">✓ Utilisé</span>'
@@ -1924,6 +1924,7 @@ function _doShowEarlyEnd(zeroKey) {
   document.getElementById('end-graph').innerHTML         = buildScoreGraph();
   document.getElementById('end-actions').innerHTML       = buildActionsList();
   document.getElementById('end-hint').innerHTML          = buildHintAccordion();
+  _initShareButtons(data.title);
 
   setTimeout(() => flashToScreen('screen-end'), 60);
 }
@@ -1987,6 +1988,7 @@ function _doShowFinalResult() {
   document.getElementById('result-graph').innerHTML         = buildScoreGraph();
   document.getElementById('result-actions').innerHTML       = buildActionsList();
   document.getElementById('result-hint').innerHTML          = result.id !== 'complete_win' ? buildHintAccordion() : '';
+  _initShareButtons(result.title);
 
   setTimeout(() => flashToScreen('screen-result'), 60);
 }
@@ -2206,6 +2208,187 @@ function buildScoresSummary() {
   return '<div class="summary-item"><div class="si-icon" aria-hidden="true">👥</div><div class="si-label">Soutien du public</div><div class="si-val">' + scores.public + '</div></div>' +
     '<div class="summary-item"><div class="si-icon" aria-hidden="true">🏛️</div><div class="si-label">Influence politique</div><div class="si-val">' + scores.political + '</div></div>' +
     '<div class="summary-item"><div class="si-icon" aria-hidden="true">💶</div><div class="si-label">Ressources</div><div class="si-val">' + scores.resources + '</div></div>';
+}
+
+/* ════════════════════════════════════════════
+   PARTAGE SOCIAL
+════════════════════════════════════════════ */
+const SHARE_URL  = 'https://antidote-le-jeu.net';
+const SHARE_TEXT = 'J\'ai joué à Antidote, le jeu de simulation gratuit qui plonge les joueurs dans les coulisses d\'une bataille de lobbying environnemental pour faire barrage au lobby des pesticides. Mon résultat :';
+
+let _shareResultTitle = '';
+
+function _initShareButtons(resultTitle) {
+  _shareResultTitle = resultTitle;
+  ['end-webshare-btn', 'result-webshare-btn'].forEach(function(id) {
+    const btn = document.getElementById(id);
+    if (btn) btn.style.display = navigator.share ? '' : 'none';
+  });
+}
+
+function _wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + ' ';
+    if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+      ctx.fillText(line.trim(), x, y);
+      line = words[n] + ' ';
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line.trim(), x, y);
+  return y;
+}
+
+async function generateShareImage(resultTitle) {
+  const W = 1080, H = 1080;
+  const canvas = document.createElement('canvas');
+  canvas.width  = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // Chargement du logo SVG
+  const logo = await new Promise(function(resolve) {
+    const img = new Image();
+    img.onload  = function() { resolve(img); };
+    img.onerror = function() { resolve(null); };
+    img.src = 'images/Antidote_Logo_noir_seul.svg';
+  });
+
+  // Fond jaune
+  ctx.fillStyle = '#fcf58b';
+  ctx.fillRect(0, 0, W, H);
+
+  // Logo
+  const logoH = 300;
+  if (logo) {
+    const nw = logo.naturalWidth, nh = logo.naturalHeight;
+    const logoW = (nw && nh) ? nw * (logoH / nh) : 500;
+    ctx.drawImage(logo, (W - logoW) / 2, 20, logoW, logoH);
+  } else {
+    ctx.fillStyle = '#111111';
+    ctx.font = 'bold 110px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText('ANTIDOTE', W / 2, 220);
+  }
+
+  // Texte "J'ai joué..."
+  ctx.fillStyle = '#111111';
+  ctx.font = '28px Arial, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  _wrapText(ctx, SHARE_TEXT, W / 2, 316, 900, 40);
+
+  // Carte blanche : résultat + indicateurs
+  const cardX = 80, cardY = 450, cardW = W - 160, cardBorder = 4;
+  const innerPad = 48;
+
+  // Titre résultat : calcul de la hauteur (max 2 lignes)
+  ctx.font = 'bold 62px Arial, sans-serif';
+  const titleLines = [];
+  (function() {
+    const words = resultTitle.split(' ');
+    let line = '';
+    for (let n = 0; n < words.length; n++) {
+      const test = line + words[n] + ' ';
+      if (ctx.measureText(test).width > cardW - innerPad * 2 && n > 0) {
+        titleLines.push(line.trim()); line = words[n] + ' ';
+      } else { line = test; }
+    }
+    titleLines.push(line.trim());
+  })();
+  const titleBlockH = titleLines.length * 74;
+
+  // 3 lignes de score
+  const scoreRowH = 70;
+  const scoreBlockH = 3 * scoreRowH;
+  const sepH = 3;
+  const cardH = innerPad + titleBlockH + 30 + sepH + 30 + scoreBlockH + innerPad;
+
+  // Fond blanc + bordure noire
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(cardX, cardY, cardW, cardH);
+  ctx.strokeStyle = '#111111';
+  ctx.lineWidth = cardBorder;
+  ctx.strokeRect(cardX + cardBorder / 2, cardY + cardBorder / 2, cardW - cardBorder, cardH - cardBorder);
+
+  // Titre du résultat
+  ctx.fillStyle = '#111111';
+  ctx.font = 'bold 62px Arial, sans-serif';
+  ctx.textAlign = 'center';
+  titleLines.forEach(function(line, i) {
+    ctx.fillText(line, W / 2, cardY + innerPad + 62 + i * 74);
+  });
+
+  // Séparateur interne
+  const sepY = cardY + innerPad + titleBlockH + 30;
+  ctx.fillStyle = '#111111';
+  ctx.fillRect(cardX + innerPad, sepY, cardW - innerPad * 2, sepH);
+
+  // Scores
+  const scoreItems = [
+    { label: 'Soutien du public',  val: scores.public    },
+    { label: 'Influence politique', val: scores.political },
+    { label: 'Ressources',          val: scores.resources },
+  ];
+  const scoreStartY = sepY + sepH + 30;
+  scoreItems.forEach(function(item, i) {
+    const y = scoreStartY + i * scoreRowH + 48;
+    ctx.fillStyle = '#111111';
+    ctx.font = '34px Arial, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(item.label, cardX + innerPad, y);
+    ctx.font = 'bold 52px Arial, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(item.val, cardX + cardW - innerPad, y);
+  });
+
+  // URL
+  const urlY = cardY + cardH + 68;
+  ctx.fillStyle = '#111111';
+  ctx.font = 'bold 30px Arial, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('antidote-le-jeu.net', W / 2, urlY);
+
+  return canvas.toDataURL('image/png');
+}
+
+function shareOnLinkedIn() {
+  const url = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(SHARE_URL);
+  window.open(url, '_blank', 'noopener,width=600,height=520');
+}
+
+async function downloadShareImage() {
+  const dataUrl = await generateShareImage(_shareResultTitle);
+  const a = document.createElement('a');
+  a.href     = dataUrl;
+  a.download = 'antidote-resultat.png';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+async function shareWithWebAPI() {
+  if (!navigator.share) return;
+  const shareData = {
+    title: 'ANTIDOTE - ' + _shareResultTitle,
+    text:  SHARE_TEXT + '\n\nRésultat : ' + _shareResultTitle,
+    url:   SHARE_URL
+  };
+  try {
+    const dataUrl = await generateShareImage(_shareResultTitle);
+    const blob = await (await fetch(dataUrl)).blob();
+    const file = new File([blob], 'antidote-resultat.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ ...shareData, files: [file] });
+      return;
+    }
+  } catch (e) { /* ignore */ }
+  try { await navigator.share(shareData); } catch (e) { /* ignore */ }
 }
 
 /* ════════════════════════════════════════════

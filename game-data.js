@@ -179,7 +179,7 @@ const GAME_DATA = {
           description: "Coordonner plusieurs ONG environnementales pour dénoncer publiquement la réautorisation. Un communiqué commun, une prise de parole unitaire, la coalition envoie un signal fort aux médias et aux élus.",
           naomiMessages: [
             "OK. On active notre réseau.",
-            "On a réussi à rassembler plusieurs ONG environnementales.<br>On sort une note de position commune.<br>Ça donne du poids à notre position… mais on reste entre convaincus.<br><img src=\"images/Note_position_Antidote.jpg\" class=\"chat-img\">"
+            "On a réussi à rassembler plusieurs ONG environnementales.<br>On sort une note de position commune.<br>Ça donne du poids à notre position… mais on reste entre convaincus.<br><img src=\"images/Note_position_Antidote.jpg\" alt=\"Couverture de la note de position d'Antidote : Maintenir l'interdiction des produits phytosanitaires pour protéger la santé humaine et préserver la biodiversité\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 10, public: 15, score: 10 },
@@ -187,7 +187,7 @@ const GAME_DATA = {
             { resources: -10, political: 5,  public: 15, score: 10 },
           ],
           naomiCounterMessages: [
-            "Tu as vu le communiqué de l'AIPP ? Il évoque une \"offensive idéologique des ONG\".<br>L'info est reprise dans plusieurs médias.<br><img src=\"images/Communiqué_presse_AIPP_V2.jpg\" class=\"chat-img\">",
+            "Tu as vu le communiqué de l'AIPP ? Il évoque une \"offensive idéologique des ONG\".<br>L'info est reprise dans plusieurs médias.<br><img src=\"images/Communiqué_presse_AIPP_V2.jpg\" alt=\"Communiqué de presse de l'AIPP : une offensive idéologique des ONG met en péril l'agriculture française\" class=\"chat-img\">",
             "Ça fragilise un peu notre crédibilité auprès de certains décideurs."
           ],
           counterEffectsByTour: [
@@ -223,7 +223,7 @@ const GAME_DATA = {
           description: "Organiser un événement public réunissant associations, citoyens et experts permet de donner une visibilité concrète à la mobilisation. Un forum citoyen crée de l'événement, fédère les énergies et envoie un signal fort aux médias et aux décideurs.",
           naomiMessages: [
             "Bonne idée. On organise un forum citoyen ouvert au public.<br>Associations, chercheurs, agriculteurs bio, représentants de patients…<br>On met tout le monde dans la même pièce.",
-            { playerMsg: true, html: "C'est une réussite ! La salle est pleine, les échanges sont riches.<br><img src=\"images/salle-pleine-claudio-schwarz-_wDZkpybAfY-unsplash.jpg\" class=\"chat-img\">", text: "C'est une réussite ! La salle est pleine." }
+            { playerMsg: true, html: "C'est une réussite ! La salle est pleine, les échanges sont riches.<br><img src=\"images/salle-pleine-claudio-schwarz-_wDZkpybAfY-unsplash.jpg\" alt=\"Salle de conférence pleine de monde\" class=\"chat-img\">", text: "C'est une réussite ! La salle est pleine." }
           ],
           effectsByTour: [
             { resources: -20, political: 20, public: 10, score: 15 },
@@ -259,7 +259,7 @@ const GAME_DATA = {
             { resources: -10, political: 10, score: 5 },
           ],
           naomiCounterMessages: [
-            "Mauvaise nouvelle : l'AIPP a transmis une note aux députés du centre, de la droite et de l'extrême droite.<br>Elle présente notre sujet comme un clivage classique : écologie contre agriculture.<br>On va avoir du mal à convaincre de façon transpartisane.<br><img src=\"images/Note_position_AIPP_V2.jpg\" class=\"chat-img\">"
+            "Mauvaise nouvelle : l'AIPP a transmis une note aux députés du centre, de la droite et de l'extrême droite.<br>Elle présente notre sujet comme un clivage classique : écologie contre agriculture.<br>On va avoir du mal à convaincre de façon transpartisane.<br><img src=\"images/Note_position_AIPP_V2.jpg\" alt=\"Note d'alerte de l'AIPP : l'écologie radicalisée menace une agriculture déjà fragilisée\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { political: -5,  score: -10 },
@@ -322,7 +322,7 @@ const GAME_DATA = {
           description: "Organiser la publication d'une tribune signée par plusieurs chercheurs reconnus permet de donner une visibilité médiatique à l'alerte scientifique sur les risques des pesticides.",
           naomiMessages: [
             "Plusieurs chercheurs se mobilisent.<br>Je te tiens au courant.",
-            "Les chercheurs viennent de cosigner et publier une tribune qui alerte sur les risques des pesticides.<br>Ça crédibilise clairement notre position, surtout auprès des médias et des députés.<br>Bravo !<br><img src=\"images/Tribune_des_scientifiques.jpg\" class=\"chat-img\">"
+            "Les chercheurs viennent de cosigner et publier une tribune qui alerte sur les risques des pesticides.<br>Ça crédibilise clairement notre position, surtout auprès des médias et des députés.<br>Bravo !<br><img src=\"images/Tribune_des_scientifiques.jpg\" alt=\"Page du journal indiquant une tribune : Nous, chercheurs et médecins cancérologues, alertons sur les conséquences désastreuses en cas d'adoption de la loi Pesticides.\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 25, public: 5,  score: 10 },
@@ -330,7 +330,7 @@ const GAME_DATA = {
             { resources: -10, political: 15, public: 10, score: 10 },
           ],
           naomiCounterMessages: [
-            "On vient de m'envoyer ça ! Une tribune \"concurrente\" est sortie dans la foulée.<br>Avec d'autres scientifiques… ou présentés comme tels.<br><img src=\"images/Tribune_lobby_phyto_V2.jpg\" class=\"chat-img\">",
+            "On vient de m'envoyer ça ! Une tribune \"concurrente\" est sortie dans la foulée.<br>Avec d'autres scientifiques… ou présentés comme tels.<br><img src=\"images/Tribune_lobby_phyto_V2.jpg\" alt=\"La Tribune du jeudi. Pesticides : des experts indépendants mettent en garde contre les conséquences graves d'une interdiction précipitée\" class=\"chat-img\">",
             "Le débat devient technique.<br>Et surtout, il devient confus."
           ],
           counterEffectsByTour: [
@@ -365,7 +365,7 @@ const GAME_DATA = {
           description: "Obtenir la prise de position officielle d'une société savante reconnue - une académie, un collège de médecins - donne un poids institutionnel à la mobilisation scientifique.",
           naomiMessages: [
             "Très bon levier.<br>Une société savante prend rarement position publiquement.<br>Si on y arrive, on gagnera en crédibilité.<br>Ils seront plus difficilement contestables que nous.",
-            { playerMsg: true, html: "Salut Naomi ! J'ai eu un échange avec la présidente de la Société Française de Cancérologie et voilà leur communiqué officiel.<br><img src=\"images/Post_SFC.jpg\" class=\"chat-img\">", text: "J'ai eu un échange avec la société savante..." },
+            { playerMsg: true, html: "Salut Naomi ! J'ai eu un échange avec la présidente de la Société Française de Cancérologie et voilà leur communiqué officiel.<br><img src=\"images/Post_SFC.jpg\" alt=\"Communiqué de la Société Française de Cancérologie : en tant que société savante dédiée à la lutte contre le cance, nous exprimons notre profonde inquiétude face aux conséquences de la loi Pesticides si elle était adoptée.\" class=\"chat-img\">", text: "J'ai eu un échange avec la société savante..." },
             "Bravo ! Bien joué !"
           ],
           effectsByTour: [
@@ -395,7 +395,7 @@ const GAME_DATA = {
           naomiMessages: [
             "Bonne idée !",
             "C'est bon, j'ai Le Quotidien.<br>Notre tribune va être publiée dans les colonnes du journal.<br>La rédaction devrait par ailleurs en profiter pour consacrer la Une du journal à notre sujet !<br>C'est dingue !",
-            { playerMsg: true, html: "Et voilà, on est en Une !<br><img src=\"images/Une_journal_2.jpg\" class=\"chat-img\">", text: "On est en Une !" },
+            { playerMsg: true, html: "Et voilà, on est en Une !<br><img src=\"images/Une_journal_2.jpg\" alt=\"Une du journal Le Quotidien. Pesticides : le cri d'alarme de l'ONG Antidote.\" class=\"chat-img\">", text: "On est en Une !" },
             "😍",
           ],
           effectsByTour: [
@@ -426,7 +426,7 @@ const GAME_DATA = {
             { resources: -20, public: 20, score: 20 },
           ],
           naomiCounterMessages: [
-            "Regarde !<br>Il y a une grosse campagne de communication menée par l'AIPP.<br>Leurs représentants sont partout sur les plateaux des chaînes et radios privées…<br>Le directeur général de l'AIPP était ce matin sur CNAZE.<br><img src=\"images/lelobby-se-defend.jpg\" class=\"chat-img\">"
+            "Regarde !<br>Il y a une grosse campagne de communication menée par l'AIPP.<br>Leurs représentants sont partout sur les plateaux des chaînes et radios privées…<br>Le directeur général de l'AIPP était ce matin sur CNAZE.<br><img src=\"images/lelobby-se-defend.jpg\" alt=\"Capture écran émission CNAZE avec comme invité, Marc Dupart, président du lobby des pesticides.\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -439,7 +439,7 @@ const GAME_DATA = {
           description: "ANTIDOTE dispose de documents montrant les liens entre certains industriels et des responsables politiques. Les révéler peut provoquer une onde de choc médiatique - mais cela coûte cher en ressources et l'industrie contre-attaquera violemment.",
           naomiMessages: [
             "Tu es sûr·e de vouloir aller sur ce terrain ? Ok.<br>On a des éléments solides.<br>On sait de source sûre que le nouveau conseiller de la ministre est l'ancien chargé des relations institutionnelles de l'AIPP.<br>On va rendre ça public, je transmets l'info à Mediapote.",
-            "Et voilà !<br><img src=\"images/mediapote.jpg\" class=\"chat-img\">"
+            "Et voilà !<br><img src=\"images/mediapote.jpg\" alt=\"Capture écran du site Mediapote : Le nouveau conseiller de la ministre chargé des relations institutionnelles du lobby des pesticides.\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -15, political: 20, public: 10, score: 20 },
@@ -468,7 +468,7 @@ const GAME_DATA = {
           description: "Mettre en avant des agriculteurs qui travaillent sans pesticides dangereux est un contre-récit puissant face à l'argument que \"les agriculteurs ont besoin de ces produits\". Des voix agricoles dans le débat changent la donne.",
           naomiMessages: [
             "Tu as raison.<br>Il faut éviter que notre mobilisation soit perçue comme une mobilisation contre les agriculteurs.<br>On ne s'oppose pas à l'agriculture, mais à certaines pratiques.<br>On publie des témoignages d'agriculteurs qui travaillent au contact des pesticides dangereux. Ce sont eux les premières victimes.",
-            "Et voilà !<br><img src=\"images/post-antidote-agri.png\" class=\"chat-img\">"
+            "Et voilà !<br><img src=\"images/post-antidote-agri.png\" alt=\"Capture écran d'une publication d'Antidote sur les réseaux sociaux. Vivre au contact des pesticides c'est dangereux. Les agriculteurs sont les premières victimes.\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 10, public: 10, score: 15 },
