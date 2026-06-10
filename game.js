@@ -444,7 +444,10 @@ function confirmQuit() {
   _leakJokerUsed    = false;
   _journalismShown  = false;
   document.body.classList.remove('notif-open');
-  flashToScreen('screen-welcome');
+  _resetChipAnimations();
+  flashToScreen('screen-welcome', function() {
+    setTimeout(_initChipAnimations, 120);
+  });
 }
 
 function calNav(dir) {
@@ -2390,6 +2393,40 @@ async function shareWithWebAPI() {
   } catch (e) { /* ignore */ }
   try { await navigator.share(shareData); } catch (e) { /* ignore */ }
 }
+
+/* ════════════════════════════════════════════
+   ANIMATION INDICATEURS ACCUEIL
+════════════════════════════════════════════ */
+let _chipObserver = null;
+
+function _resetChipAnimations() {
+  document.querySelectorAll('.indicator-chip').forEach(function(chip) {
+    chip.classList.remove('chip-visible');
+    chip.style.transitionDelay = '0ms';
+  });
+}
+
+function _initChipAnimations() {
+  const chips = Array.from(document.querySelectorAll('.indicator-chip'));
+  if (!chips.length) return;
+
+  if (_chipObserver) _chipObserver.disconnect();
+
+  _chipObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      _chipObserver.unobserve(entry.target);
+      entry.target.classList.add('chip-visible');
+    });
+  }, { threshold: 0.25 });
+
+  chips.forEach(function(chip, i) {
+    chip.style.transitionDelay = (i * 160) + 'ms';
+    _chipObserver.observe(chip);
+  });
+}
+
+_initChipAnimations();
 
 /* ════════════════════════════════════════════
    ACCESSIBILITÉ : gestion clavier globale
