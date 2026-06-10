@@ -477,7 +477,7 @@ const GAME_DATA = {
           ],
           naomiCounterMessages: [
             "L'AIPP vient de convaincre le syndicat agricole majoritaire d'entrer dans la danse.<br>D'après mes infos, ils vont faire intervenir plusieurs de leurs représentants sur les plateaux télés…",
-            "Regarde le cadrage…<br>Ils parlent de contraintes, de rendements, de survie économique.<br><img src=\"images/ITW_Agriculteur_FDMTV.jpg\" class=\"chat-img\">"
+            "Regarde le cadrage…<br>Ils parlent de contraintes, de rendements, de survie économique.<br><img src=\"images/ITW_Agriculteur_FDMTV.jpg\" alt=\"Capture d'une émission télé. Un agriculteur apparait avec le message suivant : Agriculture en détresse\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -5,  score: -10 },
@@ -540,7 +540,7 @@ const GAME_DATA = {
           description: "Des créateurs de contenu engagés peuvent toucher des millions de personnes jeunes peu habituées aux canaux traditionnels du militantisme. Mais cette visibilité peut attirer la critique sur le sérieux de la campagne.",
           naomiMessages: [
             "OK, on propose à plusieurs influenceurs de diffuser du contenu.",
-            "Bonne nouvelle !<br>Le Trauma accepte de relayer notre campagne.<br>Il est quand même suivi par 500k followers sur Instagram !<br><img src=\"images/letrauma.jpg\" class=\"chat-img\">"
+            "Bonne nouvelle !<br>Le Trauma accepte de relayer notre campagne.<br>Il est quand même suivi par 500k followers sur Instagram !<br><img src=\"images/letrauma.jpg\" alt=\"Capture écran d'une publication sur les réseaux sociaux avec l'influenceur Le Trauma : Non à la loi Pesticides\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -15, public: 15, score: 10 },
@@ -548,7 +548,7 @@ const GAME_DATA = {
             { resources: -15, public: 20, score: 15 },
           ],
           naomiCounterMessages: [
-            "Je suis dégoûtée, regarde ça.<br>Brout vient de publier une vidéo \"reportage\" générée par l'IA évidemment… et sponsorisée par l'AIPP.<br><img src=\"images/aipp-caricatures.jpg\" class=\"chat-img\">",
+            "Je suis dégoûtée, regarde ça.<br>Brout vient de publier une vidéo \"reportage\" générée par l'IA évidemment… et sponsorisée par l'AIPP.<br><img src=\"images/aipp-caricatures.jpg\" alt=\"Pesticides : ces caricatures qui ne sont pas vraies\" class=\"chat-img\">",
             "Un \"reportage vrai/faux\" sur les \"caricatures\" autour des pesticides. Ils se moquent vraiment du monde."
           ],
           counterEffectsByTour: [
@@ -570,7 +570,7 @@ const GAME_DATA = {
             { resources: -10, public: 25, score: 15 },
           ],
           naomiCounterMessages: [
-            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.<br>Ce sont des contenus générés avec l'IA.<br>Regarde ce faux podcast…<br><img src=\"images/faux-podcast.jpg\" class=\"chat-img\">"
+            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.<br>Ce sont des contenus générés avec l'IA.<br>Regarde ce faux podcast…<br><img src=\"images/faux-podcast.jpg\" alt=\"Émission spéciale : une loi agricole pour aider les agriculteurs ?\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -591,7 +591,7 @@ const GAME_DATA = {
             { resources: -20, political: 10, public: 15, score: 15 },
           ],
           naomiCounterMessages: [
-            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.<br>Ce sont des contenus générés avec l'IA.<br>Nos messages sont complètement dilués.<br>Regarde ce faux podcast…<br><img src=\"images/image1.png\" class=\"chat-img\">"
+            "Des centaines de contenus en faveur de la loi circulent sur les réseaux.<br>Ce sont des contenus générés avec l'IA.<br>Nos messages sont complètement dilués.<br>Regarde ce faux podcast…<br><img src=\"images/faux-podcast.jpg\" alt=\"Émission spéciale : une loi agricole pour aider les agriculteurs ?\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -5,  score: -10 },
@@ -613,7 +613,7 @@ const GAME_DATA = {
           naomiMessages: [
             "Bonne idée.<br>On lance une pétition nationale.",
             "Les signatures montent rapidement.<br>Le sujet parle aux gens.",
-            { playerMsg: true, html: "1 million de signatures ! C'est dingue !<br><img src=\"images/Petition_V2.jpg\" class=\"chat-img\">", text: "1 million de signatures ! C'est dingue !" }
+            { playerMsg: true, html: "1 million de signatures ! C'est dingue !<br><img src=\"images/Petition_V2.jpg\" alt=\"Pétitions Non à la loi Pesticides\" class=\"chat-img\">", text: "1 million de signatures ! C'est dingue !" }
           ],
           effectsByTour: [
             { resources: -20, public: 20, score: 15 },
@@ -621,7 +621,7 @@ const GAME_DATA = {
             { resources: -20, public: 20, score: 15 },
           ],
           naomiCounterMessages: [
-            "Un sondage vient d'être publié : \"78% des Français soutiennent les agriculteurs et sont favorables à la simplification des normes\".<br>Devine qui est derrière cette opération…<br>C'est une façon de décrédibiliser la pétition.<br><img src=\"images/Sondage_V2.jpg\" class=\"chat-img\">"
+            "Un sondage vient d'être publié : \"78% des Français soutiennent les agriculteurs et sont favorables à la simplification des normes\".<br>Devine qui est derrière cette opération…<br>C'est une façon de décrédibiliser la pétition.<br><img src=\"images/Sondage_V2.jpg\" alt=\"Saondage : 78% des français sont favorables à la simplification des normes pour soutenir les agriculteurs.\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { public: -10, score: -10 },
@@ -635,7 +635,7 @@ const GAME_DATA = {
           naomiMessages: [
             "On mobilise nos militants.<br>J'envoie un appel à manifestation sur notre newsletter et nos réseaux sociaux.",
             "Autorisation obtenue en préfecture !<br>Rendez-vous confirmé pour la manifestation à République.",
-            { playerMsg: true, html: "On est plein !<br>Ça fait plaisir !<br><img src=\"images/jean-baptiste-d-WJjxFd_3x0U-unsplash.jpg\" class=\"chat-img\">", text: "On est plein !" }
+            { playerMsg: true, html: "On est plein !<br>Ça fait plaisir !<br><img src=\"images/jean-baptiste-d-WJjxFd_3x0U-unsplash.jpg\" alt=\"Manifestation à République, Paris\" class=\"chat-img\">", text: "On est plein !" }
           ],
           effectsByTour: [
             { resources: -15, political: 15, public: 15, score: 15 },
@@ -656,7 +656,7 @@ const GAME_DATA = {
           description: "Un happening créatif et surprenant peut créer un buzz médiatique important. Son impact dépend beaucoup de l'exécution et du contexte - et la réaction du public peut être imprévisible.",
           naomiMessages: [
             "C'est ambitieux, mais d'accord !<br>On tente quelque chose de plus marquant.<br>Je propose qu'on manifeste avec des faux cercueils devant le siège de l'AIPP.<br>Ça va attirer l'attention.",
-            "Elle claque cette opération !<br><img src=\"images/happening.jpg\" class=\"chat-img\">"
+            "Elle claque cette opération !<br><img src=\"images/happening.jpg\" alt=\"Des cercueils posés devant le siède de l'AIPP avec des militants tenant des pancartes Stop aux pesticides\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 10, public: 15, score: 5 },
@@ -685,7 +685,7 @@ const GAME_DATA = {
           description: "Rédiger un amendement de suppression totale du texte en collaboration avec des parlementaires alliés et le transmettre officiellement. Si cet amendement est adopté, la proposition de loi tombe.",
           naomiMessages: [
             "Bonne idée.<br>Je te suggère de rédiger un amendement précis de suppression.<br>S'il est adopté, la proposition de loi tombe assez rapidement.",
-            "Le voici, on le transmet ensemble directement à plusieurs députés.<br><img src=\"images/Amendement.jpg\" class=\"chat-img\">"
+            "Le voici, on le transmet ensemble directement à plusieurs députés.<br><img src=\"images/Amendement.jpg\" alt=\"Amendement de suppression de la réintroduction des pesticides\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 10, score: 5 },
@@ -735,7 +735,7 @@ const GAME_DATA = {
             { resources: -10, political: 20, score: 15 },
           ],
           naomiCounterMessages: [
-            "L'AIPP a fait la même chose, appuyé par une \"note économique sur l'impact sur les filières\" produite par un grand cabinet de conseil…<br>Apparemment, le ministre de l'Économie et des Finances pousse en faveur du texte auprès des parlementaires.<br><img src=\"images/aipp-note-eco.jpg\" class=\"chat-img\">"
+            "L'AIPP a fait la même chose, appuyé par une \"note économique sur l'impact sur les filières\" produite par un grand cabinet de conseil…<br>Apparemment, le ministre de l'Économie et des Finances pousse en faveur du texte auprès des parlementaires.<br><img src=\"images/aipp-note-eco.jpg\" alt=\"Note économique de l'AIPP indiquant l'impact sur les filières agricoles et industrielles des restrictions sur les produits de protection des plantes\" class=\"chat-img\">"
           ],
           counterEffectsByTour: [
             { political: -5, score: -10 },
