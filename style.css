@@ -2022,7 +2022,6 @@ body.notif-open .chat-header {
 .share-label {
   font-size: 0.85rem;
   color: var(--black);
-  text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 700;
 }
