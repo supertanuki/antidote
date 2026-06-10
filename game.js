@@ -1914,19 +1914,19 @@ function _doShowEarlyEnd(zeroKey) {
   };
   const data = map[zeroKey];
 
-  document.getElementById('end-icon').textContent        = '❌';
-  document.getElementById('end-title').textContent       = data.title;
-  document.getElementById('end-subtitle').textContent    = data.subtitle;
-  document.getElementById('end-description').textContent = data.description;
-  document.getElementById('end-conclusion').textContent  = data.conclusion;
-  document.getElementById('end-cta').textContent         = data.cta;
-  document.getElementById('end-scores').innerHTML        = buildScoresSummary();
-  document.getElementById('end-graph').innerHTML         = buildScoreGraph();
-  document.getElementById('end-actions').innerHTML       = buildActionsList();
-  document.getElementById('end-hint').innerHTML          = buildHintAccordion();
+  document.getElementById('result-icon').textContent        = '❌';
+  document.getElementById('result-title').textContent       = data.title;
+  document.getElementById('result-subtitle').textContent    = data.subtitle;
+  document.getElementById('result-description').textContent = data.description;
+  document.getElementById('result-conclusion').textContent  = data.conclusion;
+  document.getElementById('result-cta').textContent         = data.cta;
+  document.getElementById('result-scores').innerHTML        = buildScoresSummary();
+  document.getElementById('result-graph').innerHTML         = buildScoreGraph();
+  document.getElementById('result-actions').innerHTML       = buildActionsList();
+  document.getElementById('result-hint').innerHTML          = buildHintAccordion();
   _initShareButtons(data.title);
 
-  setTimeout(() => flashToScreen('screen-end'), 60);
+  setTimeout(() => flashToScreen('screen-result'), 60);
 }
 
 function sendSorry() {
@@ -1981,6 +1981,7 @@ function _doShowFinalResult() {
 
   document.getElementById('result-icon').textContent        = result.icon;
   document.getElementById('result-title').textContent       = result.title;
+  document.getElementById('result-subtitle').textContent    = '';
   document.getElementById('result-description').textContent = result.description;
   document.getElementById('result-conclusion').textContent  = result.conclusion;
   document.getElementById('result-cta').textContent         = result.cta;
@@ -2220,10 +2221,8 @@ let _shareResultTitle = '';
 
 function _initShareButtons(resultTitle) {
   _shareResultTitle = resultTitle;
-  ['end-webshare-btn', 'result-webshare-btn'].forEach(function(id) {
-    const btn = document.getElementById(id);
-    if (btn) btn.style.display = navigator.share ? '' : 'none';
-  });
+  const wsBtn = document.getElementById('result-webshare-btn');
+  if (wsBtn) wsBtn.style.display = navigator.share ? '' : 'none';
 }
 
 function _wrapText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -2376,7 +2375,7 @@ async function shareWithWebAPI() {
   if (!navigator.share) return;
   const shareData = {
     title: 'ANTIDOTE - ' + _shareResultTitle,
-    text:  SHARE_TEXT + '\n\nRésultat : ' + _shareResultTitle,
+    text:  SHARE_TEXT + '\n' + _shareResultTitle,
     url:   SHARE_URL
   };
   try {

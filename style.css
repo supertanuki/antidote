@@ -97,13 +97,6 @@ a {
   letter-spacing: -.01em;
 }
 
-.welcome-box .tagline {
-  font-size: .82rem;
-  margin-bottom: 24px;
-  line-height: 1.6;
-  color: var(--red-dark);
-  letter-spacing: .1em;
-}
 
 .welcome-card {
   background: var(--off-white);
@@ -1262,7 +1255,7 @@ body.notif-open .notif-overlay { display: block; }
 /* ════════════════════════════════════════════
    END / RESULT SCREENS
 ════════════════════════════════════════════ */
-#screen-end, #screen-result {
+#screen-result {
   align-items: center;
   justify-content: flex-start;
   background: var(--yellow);
@@ -1319,17 +1312,6 @@ body.notif-open .notif-overlay { display: block; }
   font-weight: 900;
 }
 
-.actions-recap-list { list-style: decimal; padding-left: 20px; margin: 0; }
-
-.actions-recap-list li {
-  font-size: .88rem;
-  line-height: 1.7;
-  padding: 3px 0;
-  border-bottom: 1px solid var(--grey-light);
-}
-
-.actions-recap-list li:last-child { border-bottom: none; }
-.ar-phase { font-family: 'Arial Black', Arial, sans-serif; font-weight: 900; }
 
 /* ─── Récap détaillé des actions et événements (écran de fin) ─── */
 .actions-recap { display: flex; flex-direction: column; gap: 8px; }
@@ -1546,23 +1528,6 @@ body.notif-open .notif-overlay { display: block; }
   margin-bottom: 8px;
 }
 
-.result-type-badge { text-align: center; margin-bottom: 18px; }
-
-.result-type-badge span {
-  display: inline-block;
-  padding: 6px 20px;
-  font-family: 'Arial Black', Arial, sans-serif;
-  font-size: .8rem;
-  font-weight: 900;
-  letter-spacing: .1em;
-  border: 2px solid;
-  box-shadow: 3px 3px 0;
-}
-
-.badge-lobby-win    { background: var(--red);    color: var(--white); border-color: var(--red-dark); box-shadow: 3px 3px 0 var(--red-dark); }
-.badge-statu-quo    { background: var(--yellow);  color: var(--black); border-color: #aa9900;        box-shadow: 3px 3px 0 #aa9900; }
-.badge-partial-win  { background: #0055aa;        color: var(--white); border-color: #003a7a;        box-shadow: 3px 3px 0 #003a7a; }
-.badge-complete-win { background: var(--black);   color: var(--yellow); border-color: #333;          box-shadow: 3px 3px 0 #333; }
 
 /* ── Blocage interface pendant notification ── */
 body.notif-open .chat-messages,
@@ -1605,42 +1570,6 @@ body.notif-open .chat-header {
 .settings-inner .welcome-toggle input:checked + .wt-box { background: var(--black); border-color: var(--black); }
 .settings-inner .welcome-toggle input:checked + .wt-box::after { border-color: var(--yellow); }
 
-.settings-row { display: flex; flex-direction: column; gap: 8px; margin-top: 1rem; }
-
-.settings-row-label {
-  font-family: 'Arial Black', Arial, sans-serif;
-  font-size: .72rem;
-  letter-spacing: .08em;
-  color: var(--text-muted);
-  font-weight: 900;
-}
-
-.settings-zoom-group { display: flex; gap: 6px; flex-wrap: wrap; }
-
-.zoom-opt {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  cursor: pointer;
-}
-.zoom-opt input { display: none; }
-.zoom-opt {
-  font-size: .85rem;
-  color: var(--black);
-  background: var(--off-white);
-  border: 2px solid var(--grey-light);
-  padding: 5px 11px;
-  transition: background .12s, border-color .12s;
-  user-select: none;
-  font-weight: 700;
-}
-.zoom-opt:has(input:checked) {
-  background: var(--black);
-  border-color: var(--black);
-  color: var(--yellow);
-  font-weight: 900;
-}
-.zoom-opt:hover { border-color: var(--black); }
 
 /* ════════════════════════════════════════════
    LAYOUT GAME (mobile first)
@@ -1669,7 +1598,7 @@ body.notif-open .chat-header {
   /* Les écrans scrollables ont min-height: 100vh en mobile ;
      sur desktop la hauteur vient du flex et non du min-height,
      sinon min-height: 100vh dépasse la hauteur compensée du body. */
-  #screen-welcome, #screen-about, #screen-end, #screen-result { min-height: 0; }
+  #screen-welcome, #screen-about, #screen-result { min-height: 0; }
 
   #screen-game { overflow: hidden; }
 
