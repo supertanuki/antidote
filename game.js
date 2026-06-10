@@ -1340,12 +1340,13 @@ function sendActionChoice() {
 
         setTimeout(function() {
           // Mettre à jour le séparateur "tour start" avec la date du tour
-          const ph = GAME_DATA.phases[strategiesPlayed[strategiesPlayed.length - 1]];
-          if (ph && ph.tourDate) {
+          const phase = GAME_DATA.phases[strategiesPlayed.length - 1];
+          console.log(phase)
+          if (phase && phase.tourDate) {
             // le séparateur "Naomi est hors ligne" reste tel quel ;
             // le séparateur précédent (début de tour) prend la date du tour
             const seps = getChatEl().querySelectorAll('.chat-date-sep');
-            if (seps.length >= 2) seps[seps.length - 2].textContent = formatTourDate(ph.tourDate);
+            if (seps.length >= 2) seps[seps.length - 2].textContent = formatTourDate(phase.tourDate);
           }
 
           setNaomiOffline(false);
@@ -1636,7 +1637,7 @@ function askAction() {
   }
 
   // Tours suivants : d'abord "Merci Naomi" → calendrier → message Naomi
-  const prevPhase = GAME_DATA.phases[strategiesPlayed[strategiesPlayed.length - 1]];
+  const prevPhase = GAME_DATA.phases[strategiesPlayed.length - 1];
   const prevResultDateLabel = (prevPhase && prevPhase.tourDate)
     ? formatTourDate(addDaysToTourDate(prevPhase.tourDate, 2))
     : null;
@@ -1671,7 +1672,7 @@ function askAction() {
 
           // Au tour 4 : annoncer les jokers dans le même message
           if (strategiesPlayed.length === 3) {
-            unlockedActionsText += '<br>🔥 Des actions bonus viennent d\'être débloquées : l\'appel au don et la fuite de documents compromettants le lobby industriel. Chacune de ces actions ne peut être utilisée qu\'une seule fois ! Choisis bien le moment !';
+            unlockedActionsText += '<br><br>🔥 Des actions bonus viennent d\'être débloquées : <strong>l\'appel au don</strong> et <strong>la fuite de documents compromettants le lobby industriel</strong>. Chacune de ces actions ne peut être utilisée qu\'une seule fois ! Choisis bien le moment !<br>';
           }
 
           text = base.replace('(new_actions)', unlockedActionsText);

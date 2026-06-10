@@ -468,7 +468,7 @@ const GAME_DATA = {
           description: "Mettre en avant des agriculteurs qui travaillent sans pesticides dangereux est un contre-récit puissant face à l'argument que \"les agriculteurs ont besoin de ces produits\". Des voix agricoles dans le débat changent la donne.",
           naomiMessages: [
             "Tu as raison.<br>Il faut éviter que notre mobilisation soit perçue comme une mobilisation contre les agriculteurs.<br>On ne s'oppose pas à l'agriculture, mais à certaines pratiques.<br>On publie des témoignages d'agriculteurs qui travaillent au contact des pesticides dangereux. Ce sont eux les premières victimes.",
-            "Et voilà !<br><img src=\"images/post-antidote-agri.png\" alt=\"Capture écran d'une publication d'Antidote sur les réseaux sociaux. Vivre au contact des pesticides c'est dangereux. Les agriculteurs sont les premières victimes.\" class=\"chat-img\">"
+            "Et voilà !<br><img src=\"images/post-antidote-agri.jpg\" alt=\"Capture écran d'une publication d'Antidote sur les réseaux sociaux. Vivre au contact des pesticides c'est dangereux. Les agriculteurs sont les premières victimes.\" class=\"chat-img\">"
           ],
           effectsByTour: [
             { resources: -10, political: 10, public: 10, score: 15 },
